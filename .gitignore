@@ -1,0 +1,8 @@
+help/
+*.o
+lib/
+CHANGES.txt
+# vim #
+*.swp
+*.vim
+*.viminfo
