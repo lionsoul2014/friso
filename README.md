@@ -38,7 +38,7 @@ Friso官方主页: https://code.google.com/p/friso/ <br />
 Friso开源中国: http://www.oschina.net/p/friso <br />
 Friso开发帮助文档: http://git.oschina.net/lionsoul/friso/attach_files <br />
 
-<h3>四。Friso作者: </h3>
+<h3>四。联系作者: </h3>
 作者: 狮子的魂 <br />
 email: chenxin619315@gmail.com <br />
 qq: 1187582057 <br />
