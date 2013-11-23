@@ -236,6 +236,7 @@ __STATIC_API__ fstring indexOf( fstring __str, char delimiter )
  */
 FRISO_API void friso_dic_load( 
 	friso_t friso,
+	friso_config_t config,
 	friso_lex_t lex,
 	fstring lex_file,
 	uint_t length ) 
@@ -311,7 +312,7 @@ FRISO_API void friso_dic_load(
 	     * 	and put them in a array list if the synonyms is not NULL
 	     */
 	    sywords = NULL;
-	    if ( friso->add_syn && _syn != NULL ) 
+	    if ( config->add_syn && _syn != NULL ) 
 	    {
 		string_split_reset( &sse, ",", _sbuffer );
 		sywords = new_array_list_with_opacity(5);
@@ -396,6 +397,7 @@ __STATIC_API__ friso_lex_t get_lexicon_type_with_constant( fstring _key )
  */
 FRISO_API void friso_dic_load_from_ifile( 
 	friso_t friso, 
+	friso_config_t config,
 	fstring _path,
 	uint_t _limits  ) 
 {
@@ -465,7 +467,7 @@ FRISO_API void friso_dic_load_from_ifile(
 		    string_buffer_append( sb, _path );
 		    string_buffer_append( sb, __key__ );
 		    //printf("key=%s, type=%d\n", __key__, lex_t);
-		    friso_dic_load( friso, lex_t, sb->buffer, _limits );
+		    friso_dic_load( friso, config, lex_t, sb->buffer, _limits );
 		}
 
 	    } 

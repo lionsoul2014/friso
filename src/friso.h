@@ -2,8 +2,7 @@
  * main interface file for friso - free soul.
  * 		you could modify it and re-release it but never for commercial use.
  * 
- * @author	chenxin
- * @email	chenxin619315@gmail.com 
+ * @author	chenxin <chenxin619315@gmail.com>
  */
 #ifndef _friso_h
 #define _friso_h
@@ -75,11 +74,13 @@ typedef enum {
     __FRISO_COMPLEX_MODE__ 	= 2
 } friso_mode_t;
 
-/*
- * Type: friso_entry
- * -----------------
- * This type is used to set the configuration of friso. 
- */
+/* friso entry.*/
+typedef struct {
+    friso_dic_t dic;		//friso dictionary
+} friso_entry;
+typedef friso_entry * friso_t;
+
+/* task configuration entry.*/
 typedef struct {
     ushort_t max_len;		//the max match length (4 - 7).
     ushort_t r_name;		//1 for open chinese name recognition 0 for close it.
@@ -91,38 +92,33 @@ typedef struct {
     ushort_t spx_out;		//use sphinx output customize.
     uint_t nthreshold;		//the threshold value for a char to make up a chinese name.
     friso_mode_t mode;		//Complex mode or simple mode
-    friso_dic_t dic;		//friso dictionary
-} friso_entry;
-
-typedef friso_entry * friso_t;
+} friso_config_entry;
+typedef friso_config_entry * friso_config_t;
 
 
+/*the segmentation term entry.*/
 #define __HITS_WORD_LENGTH__ 128
-/*the segmentation term*/
 typedef struct {
     int offset;
     char word[__HITS_WORD_LENGTH__];
 } friso_hits_entry;
-
 typedef friso_hits_entry * friso_hits_t;
 
 /*
- * Type: friso_segment
+ * Type: friso_task_entry
  * This type used to represent the current segmentation content.
- * 		like the text to split, and the current index. 
+ * 		like the text to split, and the current index, hits buffer eg.... 
  */
 typedef struct {
-    fstring text;		//text to tokenize
-    uint_t idx;			//start offset index.
-    uint_t length;		//length of the text.
-    uint_t bytes;		//latest word bytes in C.
-    uint_t unicode;		//latest word unicode number.
-    //uint_t ce_check;		//check the CN and EN mixed word if it is 1.
+    fstring text;			//text to tokenize
+    uint_t idx;				//start offset index.
+    uint_t length;			//length of the text.
+    uint_t bytes;			//latest word bytes in C.
+    uint_t unicode;			//latest word unicode number.
     friso_link_t pool;		//task pool.
     friso_hits_t hits;		//token result hits.
-    char buffer[7];		//word buffer. (1-6 bytes for an utf-8 word in C).
+    char buffer[7];			//word buffer. (1-6 bytes for an utf-8 word in C).
 } friso_task_entry;
-
 typedef friso_task_entry * friso_task_t;
 
 
@@ -136,7 +132,8 @@ typedef friso_task_entry * friso_task_t;
 FRISO_API friso_t friso_new( void );
 
 //creat a friso entry with a default value from a configuratile file.
-FRISO_API friso_t friso_new_from_ifile( fstring );
+//@return 1 for successfully and 0 for failed.
+FRISO_API int friso_init_from_ifile( friso_t, friso_config_t, fstring );
 
 /*
  * Function: friso_free_vars;
@@ -155,7 +152,9 @@ FRISO_API void friso_free( friso_t );
  */
 //FRISO_API void friso_set_dic( friso_t, friso_dic_t );
 #define friso_set_dic(friso, dic)\
-    friso->dic = dic
+do {\
+	friso->dic = dic;\
+} while (0)
 
 /*
  * Function: friso_set_mode
@@ -165,7 +164,20 @@ FRISO_API void friso_free( friso_t );
  */
 //FRISO_API void friso_set_mode( friso_t, friso_mode_t );
 #define friso_set_mode( friso, mode )\
-    friso->mode = mode
+do {\
+	friso->mode = mode;\
+} while (0)
+
+/*create a new friso configuration entry and initialize 
+  it with the default value.*/
+FRISO_API friso_config_t friso_new_config( void );
+
+//initialize the specified friso config entry with default value.
+FRISO_API void friso_init_config( friso_config_t );
+
+//free the specified friso configuration entry.
+//FRISO_API void friso_free_config( friso_config_t );
+#define friso_free_config(cfg) FRISO_FREE(cfg)
 
 /*
  * Function: friso_new_task;
@@ -204,8 +216,9 @@ FRISO_API void friso_set_text( friso_task_t, fstring );
  * --------------------------------------
  * This function is used to get next word that friso segmented. 
  */
-FRISO_API friso_hits_t friso_next( friso_t, friso_mode_t, friso_task_t );
+FRISO_API friso_hits_t friso_next( friso_t, friso_config_t, friso_task_t );
 /* }}} friso main interface define :: end*/
+
 
 /* {{{ lexicon interface define :: start*/
 
@@ -242,13 +255,14 @@ FRISO_API void free_lex_entry( lex_entry_t );
  * This function is used to load dictionary from a given path.
  * 		no length limit when length less than 0.
  */
-FRISO_API void friso_dic_load( friso_t, friso_lex_t, fstring, uint_t );
+FRISO_API void friso_dic_load( friso_t, friso_config_t, 
+		friso_lex_t, fstring, uint_t );
 
 /*
  * load the lexicon configuration file.
  *	and load all the valid lexicon from the conf file.
  */
-FRISO_API void friso_dic_load_from_ifile( friso_t, fstring, uint_t );
+FRISO_API void friso_dic_load_from_ifile( friso_t, friso_config_t, fstring, uint_t );
 
 /*
  * Function: friso_dic_match

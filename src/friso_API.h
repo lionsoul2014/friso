@@ -12,10 +12,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef _WIN32
+#	define FRISO_API extern __declspec(dllexport)
+#	define __STATIC_API__ static
+#else
 /*platform shared library statement :: unix*/
-#define FRISO_API extern
-//#define FRISO_API extern __declspec(dllexport)
-#define __STATIC_API__ static inline
+#	define FRISO_API extern
+#	define __STATIC_API__ static inline
+#endif
 
 
 #define ___ALLOCATION_ERROR___ 							\
