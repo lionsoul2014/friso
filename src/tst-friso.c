@@ -66,6 +66,7 @@ int main(int argc, char **argv) {
     fstring __path__ = NULL;
 
     friso_t friso;
+    friso_config_t config;
     friso_task_t task;
 
     //get the lexicon directory
@@ -82,13 +83,16 @@ int main(int argc, char **argv) {
     s_time = clock();
 
     //initialize
-    /*	friso_t friso = friso_new();
-	friso_dic_t dic = friso_dic_new();
-
+    friso = friso_new();
+    config = friso_new_config();
+	/*friso_dic_t dic = friso_dic_new();
 	friso_dic_load_from_ifile( dic, __path__, __LENGTH__ );
 	friso_set_dic( friso, dic );
 	friso_set_mode( friso, __FRISO_COMPLEX_MODE__ );*/
-    friso = friso_new_from_ifile(__path__);
+    if ( friso_init_from_ifile(friso, config, __path__) != 1 ) {
+	printf("fail to initialize friso and config.");
+	goto err;
+    }
     //friso->mode = __FRISO_SIMPLE_MODE__;
     //printf("clr_stw=%d\n", friso->clr_stw);
     //printf("match c++?%d\n", friso_dic_match( friso->dic, __LEX_ENPUN_WORDS__, "c++" ));
@@ -116,7 +120,7 @@ int main(int argc, char **argv) {
 	println("分词结果:");
 
 	s_time = clock();
-	while ( ( friso_next( friso, friso->mode, task ) ) != NULL ) {
+	while ( ( friso_next( friso, config, task ) ) != NULL ) {
 	    //printf("%s[%d]/ ", task->hits->word, task->hits->offset );
 	    printf("%s/ ", task->hits->word );
 	}
@@ -127,7 +131,12 @@ int main(int argc, char **argv) {
     }
 
     friso_free_task( task );
+
+    //error block.
+err:
+    friso_free_config(config);
     friso_free(friso);
+    
 
     return 0;
 }
