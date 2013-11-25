@@ -110,14 +110,14 @@ typedef friso_hits_entry * friso_hits_t;
  * 		like the text to split, and the current index, hits buffer eg.... 
  */
 typedef struct {
-    fstring text;			//text to tokenize
-    uint_t idx;				//start offset index.
-    uint_t length;			//length of the text.
-    uint_t bytes;			//latest word bytes in C.
-    uint_t unicode;			//latest word unicode number.
+    fstring text;		//text to tokenize
+    uint_t idx;			//start offset index.
+    uint_t length;		//length of the text.
+    uint_t bytes;		//latest word bytes in C.
+    uint_t unicode;		//latest word unicode number.
     friso_link_t pool;		//task pool.
     friso_hits_t hits;		//token result hits.
-    char buffer[7];			//word buffer. (1-6 bytes for an utf-8 word in C).
+    char buffer[7];		//word buffer. (1-6 bytes for an utf-8 word in C).
 } friso_task_entry;
 typedef friso_task_entry * friso_task_t;
 
@@ -153,7 +153,7 @@ FRISO_API void friso_free( friso_t );
 //FRISO_API void friso_set_dic( friso_t, friso_dic_t );
 #define friso_set_dic(friso, dic)\
 do {\
-	friso->dic = dic;\
+    friso->dic = dic;\
 } while (0)
 
 /*
@@ -165,7 +165,7 @@ do {\
 //FRISO_API void friso_set_mode( friso_t, friso_mode_t );
 #define friso_set_mode( friso, mode )\
 do {\
-	friso->mode = mode;\
+    friso->mode = mode;\
 } while (0)
 
 /*create a new friso configuration entry and initialize 
@@ -218,7 +218,6 @@ FRISO_API void friso_set_text( friso_task_t, fstring );
  */
 FRISO_API friso_hits_t friso_next( friso_t, friso_config_t, friso_task_t );
 /* }}} friso main interface define :: end*/
-
 
 /* {{{ lexicon interface define :: start*/
 
@@ -304,6 +303,5 @@ FRISO_API lex_entry_t friso_dic_get( friso_dic_t, friso_lex_t, fstring );
 FRISO_API uint_t friso_spec_dic_size( friso_dic_t, friso_lex_t );
 FRISO_API uint_t friso_all_dic_size( friso_dic_t );
 /* }}} lexicon interface define :: end*/
-
 
 #endif /*end ifndef*/

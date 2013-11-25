@@ -136,7 +136,7 @@ FRISO_API void friso_free( friso_t friso )
 {
     //free the dictionary
     if ( friso->dic != NULL ) {
-	friso_dic_free( friso->dic );
+		friso_dic_free( friso->dic );
     }
     FRISO_FREE( friso );
 }
@@ -600,7 +600,6 @@ __STATIC_API__ friso_array_t get_next_match(
     return match;
 }
 /* }}} */
-
 
 /* {{{ chunk for mmseg defines and functions to handle them.*/
 typedef struct {
