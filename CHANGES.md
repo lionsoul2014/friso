@@ -8,7 +8,7 @@ friso-1.5:
 #7. 配对标点内容提取.
 4. 修复friso.c#next_basic_latin中"数字+空格+单位"组合中忽略空格直接组合数字和单位的bug	-done
 8. 修复friso.c#next_basic_latin中"数字+中文+空格"组合切分乱码的bug			-done
-6. 引入friso_config_t多配置使用避免全局配置带来的更改不便.
+6. 引入friso_config_t多配置使用避免全局配置带来的更改不便.				-done
 
 friso-1.4:
 1. 小数+单位无法识别的情况.更改friso_string#utf8_numeric_string()函数.
