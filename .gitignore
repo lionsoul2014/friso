@@ -1,6 +1,6 @@
 help/
 *.o
-lib/
+# lib/ #
 CHANGES.txt
 # vim #
 *.swp
