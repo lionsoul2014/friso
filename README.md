@@ -4,13 +4,13 @@ Friso完整版本(词库, 词库管理工具, winNT下的dll文件, 开发帮助
 friso中文分词器friso是使用c语言开发的一个开源中文分词器，使用流行的mmseg算法实现。完全基于模块化设计和实现，可以很方便的植入其他程序中，例如：MySQL，PHP，源码无需修改就能在各种平台下编译使用，加载完20万的词条，内存占用稳定为13.5M．
 
 
-1。目前最高版本：friso 1.4.0，只支持UTF-8编码。
+1。目前最高版本：friso 1.5.0，只支持UTF-8编码。
 
 2。mmseg四种过滤算法，分词准确率达到了98.41%，请参考本算法的原作：http://technology.chtsai.org/mmseg/。
 
 3。支持自定义词库。在dict文件夹下，可以随便添加/删除/更改词库和词库词条，并且对词库进行了分类。
 
-4。词库使用了friso的Java版本jcseg的简化词库。
+4。简体/繁体/简体混合支持, 词库使用了friso的Java版本jcseg的简化词库。
 
 5。支持中英/英中混合词的识别(维护词库可以识别任何一种组合)。例如：卡拉ok, 漂亮mm, c语言，IC卡，哆啦a梦。
 
@@ -24,7 +24,9 @@ friso中文分词器friso是使用c语言开发的一个开源中文分词器，
 
 11。自动中英文停止词过滤。(需要在friso.ini中开启friso.clr_stw选项)
 
-12。提供friso.ini配置文件, 可以配置自定义分词. 如何配置friso
+12. 多配置支持, 安全的应用于多进程/多线程环境.
+
+13。提供friso.ini配置文件, 可以配置自定义分词. 如何配置friso
 
 
 <h3>二。分词速度: </h3>
@@ -38,7 +40,6 @@ friso中文分词器friso是使用c语言开发的一个开源中文分词器，
 <h3>三。Friso其他主页: </h3> 
 Friso官方主页: https://code.google.com/p/friso/ <br />
 Friso开源中国: http://www.oschina.net/p/friso <br />
-Friso开发帮助文档: http://git.oschina.net/lionsoul/friso/attach_files <br />
 
 <h3>四。联系作者: </h3>
 作者: 狮子的魂 <br />
