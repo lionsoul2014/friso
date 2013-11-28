@@ -13,7 +13,6 @@ $
 ,
 -
 .
-/
 #0
 #1
 #2
@@ -142,8 +141,6 @@ _
 〟
 #中文
 的
-啊
-呀
 吗
 不
 我
@@ -269,7 +266,7 @@ _
 着
 诸
 自
-会
+啊
 #英文
 to
 can
@@ -497,6 +494,7 @@ notwithstanding
 of
 off
 on
+on to
 onto
 out
 out of
@@ -885,3 +883,4 @@ your
 yours
 yourself
 yourselves
+#other number

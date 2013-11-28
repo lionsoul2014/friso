@@ -56,11 +56,11 @@
 越策越开心/null
 超级男声/null
 超男/null
-超级女声/null
-超女/null
+超级女声/超女
+超女/超级女声
 好声音/null
-快乐男声/null
-快男/null
+快乐男声/快男
+快男/快乐男声
 快乐女声/null
 快女/null
 德克士/null

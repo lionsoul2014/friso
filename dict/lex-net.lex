@@ -12,7 +12,12 @@
 爆头哥/null
 楼主/null
 有两把刷子/null
-超女/超级女声
-快男/快乐男生
 非典/null
+微信/null
+微博/null
 吊丝/null
+高富帅/null
+矮穷挫/null
+白富美/null
+狮子的魂/null
+仓老师/仓井空
