@@ -495,7 +495,7 @@ FRISO_API int utf8_numeric_string( const fstring str )
 FRISO_API int utf8_decimal_string( const fstring str )
 {
     int len = strlen(str), i, p = 0;
-    int bytes, u;
+    int bytes = 0, u;
 
     if ( str[0] == '.' || str[len-1] == '.' ) return 0;
 
