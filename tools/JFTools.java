@@ -71,9 +71,18 @@ public class JFTools {
 				sb.append(splits[3]);
 			}
 			
+			//Append the single word degree.
+			if ( splits.length > 4 ) {
+				if ( sb.length() > 0 )
+					sb.append('/');
+				sb.append(splits[4]);
+			}
+			
 			//Write the item
 			writer.write(sb.toString());
 			writer.write('\n');
+			sb = null;
+			line = null;
 		}
 		
 		reader.close();
