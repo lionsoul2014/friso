@@ -405,8 +405,8 @@
 辽宁省/null
 辽宁/null
 辽宁人/null
-沉阳市/null
-沉阳/null
+沈阳市/null
+沈阳/null
 新民市/null
 法库县/null
 辽中县/null
@@ -1237,7 +1237,7 @@
 鹿邑县/null
 西华县/null
 扶沟县/null
-沉丘县/null
+沈丘县/null
 郸城县/null
 确山县/null
 新蔡县/null

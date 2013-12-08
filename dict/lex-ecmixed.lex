@@ -1,4 +1,4 @@
-#英文中文溷合字, 注意英文字符均为小写
+#英文中文混合字, 注意英文字符均为小写
 a咖/主角
 a片/毛片,av
 a座/null
@@ -9,7 +9,7 @@ a罩杯/a杯
 a计划/null
 aa制/null
 ab型/null
-ab档桉/null
+ab档案/null
 a美a/null
 a梦/null
 x-射线/null
