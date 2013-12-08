@@ -11,6 +11,10 @@
 #include <stdio.h>
 
 /* {{{ friso main interface define :: start*/
+#define FRISO_VERSION "1.6.0"
+#define friso_version() FRISO_VERSION
+
+
 #define DEFAULT_SEGMENT_LENGTH 	5
 #define DEFAULT_MIX_LENGTH	2
 #define DEFAULT_LNA_LENGTH 	1
@@ -64,6 +68,19 @@ typedef lex_entry_cdt * lex_entry_t;
 
 
 
+//charset that Friso now support.
+typedef enum {
+    FRISO_UTF8	= 0,		//UTF-8
+    FRISO_GBK	= 1		//GBK
+} friso_charset_t;
+
+/* friso entry.*/
+typedef struct {
+    friso_dic_t dic;		//friso dictionary
+    friso_charset_t charset;	//project charset.
+} friso_entry;
+typedef friso_entry * friso_t;
+
 /*
  * Type: friso_mode_t
  * ------------------
@@ -73,12 +90,6 @@ typedef enum {
     __FRISO_SIMPLE_MODE__ 	= 1,
     __FRISO_COMPLEX_MODE__ 	= 2
 } friso_mode_t;
-
-/* friso entry.*/
-typedef struct {
-    friso_dic_t dic;		//friso dictionary
-} friso_entry;
-typedef friso_entry * friso_t;
 
 /* task configuration entry.*/
 typedef struct {

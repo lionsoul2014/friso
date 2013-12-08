@@ -261,12 +261,13 @@ FRISO_API void friso_dic_load(
 	    //make sure the length of the line is greater than 1.
 	    //like the single '#' mark in stopwords dictionary.
 	    if ( _line[0] == '#' && strlen(_line) > 1 ) continue;
+	    if ( strcmp(_line, "混合") == 0 ) printf("fined\n");
 
 	    //handle the stopwords.
 	    if ( lex == __LEX_STOPWORDS__ )
 	    {
-		if ( get_utf8_bytes( _line[0] ) > 1 
-			&& strlen( _line ) > length ) continue;
+		//clean the chinese words that its length is greater than max length.
+		if ( ((int)_line[0]) < 0 && strlen( _line ) > length ) continue;
 		friso_dic_add( friso->dic, __LEX_STOPWORDS__, 
 			string_copy_heap( _line, strlen(_line) ), NULL ); 
 		continue;

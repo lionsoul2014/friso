@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
 
     e_time = clock();
 
-    printf("friso initialized in %fsec\n", (double) ( e_time - s_time ) / CLOCKS_PER_SEC );
+    printf("friso(version: %s) initialized in %fsec\n", friso_version(), (double) ( e_time - s_time ) / CLOCKS_PER_SEC );
     ___ABOUT___;
 
     //set the task.

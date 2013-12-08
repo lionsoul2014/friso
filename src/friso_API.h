@@ -1,9 +1,11 @@
 /*
- * main interface file for friso - free soul.
- * 		you could modify it and re-release it but never for commercial use.
+ * friso ADT application interface header source file.
+ * 1. string bufffer interface.
+ * 2. hashmap interface.
+ * 3. dynamaic array interface.
+ * 4. double link list interface.
  * 
- * @author	chenxin
- * @email	chenxin619315@gmail.com 
+ * @author chenxin <chenxin619315@gmail.com>
  */
 
 #ifndef _friso_api_h
@@ -42,7 +44,6 @@ typedef unsigned short ushort_t;
 typedef unsigned char uchar_t;
 typedef unsigned int uint_t;
 typedef char * fstring;
-
 
 
 
@@ -140,88 +141,6 @@ FRISO_API void free_string_split( string_split_t );
  * 		or there is no more segmentation)
  */
 FRISO_API fstring string_split_next( string_split_t, fstring );
-
-/* **********************************************
- *	utf-8 handle functions.						*
- ************************************************/
-
-//print the given integer in a binary style.
-FRISO_API void print_char_binary( char );
-
-//get the bytes of a utf-8 char.
-FRISO_API int get_utf8_bytes( char );
-
-//return the unicode serial number of a given string.
-FRISO_API int get_utf8_unicode( const fstring );
-
-//turn the unicode serial to a utf-8 string.
-FRISO_API int unicode_to_utf8( uint_t, fstring );
-
-//check if the given char is a CJK.
-FRISO_API int utf8_cjk_string( uint_t ) ;
-
-/*check the given char is a Basic Latin letter or not.
- * 		include all the letters and english puntuations.*/
-FRISO_API int utf8_halfwidth_en_char( uint_t );
-
-/*
- * check the given char is a full-width latain or not.
- *		include the full-width arabic numeber, letters.
- *		but not the full-width puntuations.
- */
-FRISO_API int utf8_fullwidth_en_char( uint_t );
-
-//check the given char is a upper case char or not.
-FRISO_API int utf8_uppercase_letter( uint_t );
-
-//check the given char is a lower case char or not.
-FRISO_API int utf8_lowercase_letter( uint_t );
-
-//check the given char is a numeric
-FRISO_API int utf8_numeric_letter( uint_t );
-
-/*
- * check if the given fstring is make up with numeric chars.
- both full-width,half-width numeric is ok.
- */
-FRISO_API int utf8_numeric_string( const fstring );
-
-FRISO_API int utf8_decimal_string( const fstring );
-
-//check the given char is a english char.
-//(full-width and half-width)
-//not the punctuation of course.
-FRISO_API int utf8_en_letter( uint_t );
-
-//check the given char is a whitespace or not.
-FRISO_API int utf8_whitespace( uint_t );
-
-/* check if the given char is a letter number 
- *		like 'ⅠⅡ'
- */
-FRISO_API int utf8_letter_number( uint_t );
-
-/*
- * check if the given char is a other number
- *		like '①⑩⑽㈩'
- */
-FRISO_API int utf8_other_number( uint_t );
-
-//check the given char is a english punctuation.
-FRISO_API int utf8_en_punctuation( uint_t ) ;
-
-//check the given char is a chinese punctuation.
-FRISO_API int utf8_cn_punctuation( uint_t u ); 
-
-//FRISO_API int is_en_punctuation( char );
-#define is_en_punctuation( c ) utf8_en_punctuation((uint_t) c) 
-
-FRISO_API int utf8_keep_punctuation( fstring );
-
-//check the given english char is a full-width char or not.
-FRISO_API int utf8_fullwidth_char( uint_t ) ;
-/* }}} fstring interface define::end*/
-
 
 
 /* {{{ dynamaic array interface define::start*/

@@ -21,7 +21,7 @@ LIBRARY_DIR = /usr/lib
 INSTALL_DIR = /usr/local/bin
 
 
-SOURCE = friso.o friso_array.o friso_hash.o friso_lexicon.o friso_link.o friso_string.o friso_split.o
+SOURCE = friso.o friso_array.o friso_hash.o friso_lexicon.o friso_link.o friso_string.o friso_ctype.o friso_UTF8.o friso_GBK.o
 
 all: share friso
 
@@ -55,8 +55,14 @@ friso_link.o: friso_link.c friso_API.h
 friso_string.o: friso_string.c friso_API.h
 	$(CC) $(FFLAGS) -c friso_string.c
 
-friso_split.o: friso_split.c friso_API.h
-	$(CC) $(FFLAGS) -c friso_split.c
+friso_ctype.o: friso_API.h friso_ctype.h friso_ctype.c
+	$(CC) $(FFLAGS) -c friso_ctype.c
+
+friso_UTF8.o: friso_API.h friso_ctype.h friso_UTF8.c
+	$(CC) $(FFLAGS) -c friso_UTF8.c
+
+friso_GBK.o: friso_API.h friso_ctype.h friso_GBK.c
+	$(CC) $(FFLAGS) -c friso_GBK.c
 
 #clean all the object files.
 .PHONY: clean
