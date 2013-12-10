@@ -23,8 +23,8 @@ FRISO_API int gbk_next_word(
     if ( *idx >= task->length ) return 0;
 
     c = (uchar_t)task->text[*idx];
-    if ( c >= 129 ) task->bytes = 2;
-    else task->bytes = 1;
+    if ( c <= 0x80 ) task->bytes = 1;
+    else task->bytes = 2;
 
     //copy the word to the buffer.
     memcpy(__word, task->text + (*idx), task->bytes);
@@ -122,14 +122,62 @@ FRISO_API int gbk_numeric_letter( char *str )
  * check if the given fstring is make up with numeric chars.
  * 	both full-width,half-width numeric is ok.
  */
-FRISO_API int gbk_numeric_string( const char *str )
+FRISO_API int gbk_numeric_string( char *str )
 {
-    return 0;
+    char *s = str;
+    int c1 = 0;
+    int c2 = 0;
+
+    while ( *s != '\0' )
+    {
+	c1 = (uchar_t) (*s++);
+	if ( c1 <= 0x80 ) 	//half-width
+	{
+	    if ( c1 < 48 || c2 > 57 ) return 0;
+	}
+	else 			//full-width
+	{
+	    if ( c1 != 0xa3 ) return 0;
+	    c2 = (uchar_t) (*s++);
+	    if ( c2 < 0xb0 || c2 > 0xb9 ) return 0;
+	}
+    }
+
+    return 1;
 }
 
-FRISO_API int gbk_decimal_string( const char *str )
+FRISO_API int gbk_decimal_string( char *str )
 {
-    return 0;
+    int c1 = 0;
+    int c2 = 0;
+    int len = strlen(str), i, p = 0;
+
+    //point header check.
+    if ( str[0] == '.' || str[len - 1] == '.' ) return 0;
+
+    for ( i = 0; i < len; )
+    {
+	c1 = (uchar_t) str[i++];
+	//count the number of the points.
+	if ( c1 == 46 ) 
+	{
+	    p++;
+	    continue;
+	}
+
+	if ( c1 <= 0x80 )	//half-width
+	{
+	    if ( c1 < 48 || c1 > 57 ) return 0;
+	}
+	else 			//full-width
+	{
+	    if ( c1 != 0xa3 ) return 0;
+	    c2 = (uchar_t) str[i++];
+	    if ( c2 < 0xb0 || c2 > 0xb9 ) return 0;
+	}
+    }
+
+    return (p == 1);
 }
 
 //check if the given char is a english(ASCII) letter.

@@ -111,9 +111,9 @@ FRISO_API int utf8_numeric_letter( uint_t );
  * check if the given fstring is make up with numeric chars.
  * 	both full-width,half-width numeric is ok.
  */
-FRISO_API int utf8_numeric_string( const fstring );
+FRISO_API int utf8_numeric_string( char * );
 
-FRISO_API int utf8_decimal_string( const fstring );
+FRISO_API int utf8_decimal_string( char * );
 
 //check the given char is a english char.
 //(full-width and half-width)
@@ -188,9 +188,9 @@ FRISO_API int gbk_numeric_letter( char * );
  * check if the given fstring is make up with numeric chars.
  * 	both full-width,half-width numeric is ok.
  */
-FRISO_API int gbk_numeric_string( const char * );
+FRISO_API int gbk_numeric_string( char * );
 
-FRISO_API int gbk_decimal_string( const char * );
+FRISO_API int gbk_decimal_string( char * );
 
 //check if the given char is a english(ASCII) char.
 //(full-width and half-width)

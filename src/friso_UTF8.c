@@ -315,7 +315,8 @@ FRISO_API int utf8_numeric_string( const fstring str )
     fstring s = str;
     int bytes, u;
 
-    while ( *s != '\0' ) {
+    while ( *s != '\0' ) 
+    {
 	//if ( ! utf8_numeric_letter( get_utf8_unicode( s++ ) ) ) {
 	//    return 0;
 	//} 
@@ -323,15 +324,13 @@ FRISO_API int utf8_numeric_string( const fstring str )
 	//new implemention.
 	//@date 2013-10-14
 	bytes = 1;
-	if ( *s < 0 ) {	
-	    //full-width chars.
+	if ( *s < 0 )  //full-width chars.
+	{	
 	    u = get_utf8_unicode(s);
 	    bytes = get_utf8_bytes(*s);
-	    if ( u < 65296 || u > 65305 ) 
-		return 0;
+	    if ( u < 65296 || u > 65305 ) return 0;
 	} 
-	else if ( *s < 48 || *s > 57 )
-	    return 0;
+	else if ( *s < 48 || *s > 57 ) return 0;
 
 	s += bytes;
     }
@@ -346,18 +345,24 @@ FRISO_API int utf8_decimal_string( const fstring str )
 
     if ( str[0] == '.' || str[len-1] == '.' ) return 0;
 
-    for ( i = 1; i < len; bytes = 1 ) {
+    for ( i = 1; i < len; bytes = 1 ) 
+    {
 	//count the number of char '.'
-	if ( str[i] == '.' ) p++;
+	if ( str[i] == '.' ) 
+	{
+	    i++;
+	    p++;
+	    continue;
+	}
+
 	//full-width numeric.
-	else if ( str[i] < 0 ) {
+	else if ( str[i] < 0 ) 
+	{
 	    u = get_utf8_unicode(str+i);
 	    bytes = get_utf8_bytes(str[i]);
-	    if ( u < 65296 || u > 65305 ) 
-		return 0;
+	    if ( u < 65296 || u > 65305 ) return 0;
 	}
-	else if ( str[i] < 48 || str[i] > 57 )
-	    return 0;
+	else if ( str[i] < 48 || str[i] > 57 ) return 0;
 
 	i += bytes;
     }
