@@ -46,7 +46,7 @@ FRISO_API int friso_en_letter(
     if ( charset == FRISO_UTF8 )
 	return utf8_en_letter( ( uint_t ) task->text[task->idx]);
     else if ( charset == FRISO_GBK )
-	return gbk_en_letter( task->text[task->idx] );
+	return gbk_en_letter( task->text + task->idx );
     return 0;
 }
 
@@ -70,9 +70,9 @@ FRISO_API int friso_fullwidth_en_char(
 	friso_task_t task )
 {
     if ( charset == FRISO_UTF8 )
-	return utf8_fullwidth_en_char(task->unicode);
+	return utf8_fullwidth_en_char( task->unicode );
     else if ( charset == FRISO_GBK )
-	return gbk_fullwidth_en_char(task->buffer[0]);
+	return gbk_fullwidth_en_char( task->buffer );
     return 0;
 }
 
@@ -162,13 +162,14 @@ FRISO_API int friso_decimal_string(
 }
 
 //check if the specified char is english uppercase letter.
-FRISO_API int friso_uppercase_en_char( 
+//	included full-width and half-width letters.
+FRISO_API int friso_uppercase_letter( 
 	friso_charset_t charset, 
 	friso_task_t task )
 {
     if ( charset == FRISO_UTF8 )
-	return utf8_uppercase_en_char( task->unicode );
+	return utf8_uppercase_letter( task->unicode );
     else if ( charset == FRISO_GBK )
-	return gbk_uppercase_en_char( task->buffer[0] );
+	return gbk_uppercase_letter( task->buffer );
     return 0;
 }

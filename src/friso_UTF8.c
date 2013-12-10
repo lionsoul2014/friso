@@ -256,33 +256,36 @@ FRISO_API int utf8_halfwidth_en_char( uint_t u )
 FRISO_API int utf8_fullwidth_en_char( uint_t u ) 
 {
     return ( (u >= 65296 && u <= 65305 ) 			//arabic number
-	    || ( u >= 65313 && u <= 65338 )			//upper case letters
+	    || ( u >= 65313 && u <= 65338 )				//upper case letters
 	    || ( u >= 65345 && u <= 65370 ) );			//lower case letters
 }
 
-//check the given char is a upper case char or not.
-FRISO_API int utf8_uppercase_en_char( uint_t u ) 
+//check the given char is a upper case letters or not.
+//	included the full-width and half-width letters.
+FRISO_API int utf8_uppercase_letter( uint_t u ) 
 {
     if ( u > 65280 ) u -= 65248;
     return ( u >= 65 && u <= 90 );
 }
 
-//check the given char is a upper case char or not.
-FRISO_API int utf8_lowercase_en_char( uint_t u )
+//check the given char is a upper case letters or not.
+//	included the full-width and half-width letters.
+FRISO_API int utf8_lowercase_letter( uint_t u )
 {
     if ( u > 65280 ) u -= 65248;
     return ( u >= 97 && u <= 122 );
 }
 
 //check the given char is a numeric
+//	included the full-width and half-width arabic numeric.
 FRISO_API int utf8_numeric_letter( uint_t u ) 
 {
     if ( u > 65280 ) u -= 65248;	//make full-width half-width.
     return ( ( u >= 48 && u <= 57 ) );
 }
 
-//check the given char is a english char.
-//not the punctuation of course.
+//check the given char is a english letter.(included the full-width)
+//	not the punctuation of course.
 FRISO_API int utf8_en_letter( uint_t u )
 {
     if ( u > 65280 ) u -= 65248;
@@ -442,23 +445,24 @@ FRISO_API int utf8_other_number( uint_t u )
    */
 static friso_hash_t __keep_punctuations_hash__ = NULL;
 
-/*check the given char is an english keep char.*/
+/*check the given char is an english keep punctuation.*/
 FRISO_API int utf8_keep_punctuation( fstring str ) 
 {
-    if ( __keep_punctuations_hash__ == NULL ) {
-	__keep_punctuations_hash__ = new_hash_table();
-	hash_put_mapping( __keep_punctuations_hash__, "@", NULL );
-	hash_put_mapping( __keep_punctuations_hash__, "$", NULL );
-	hash_put_mapping( __keep_punctuations_hash__, "%", NULL );
-	hash_put_mapping( __keep_punctuations_hash__, "^", NULL );
-	hash_put_mapping( __keep_punctuations_hash__, "&", NULL );
-	hash_put_mapping( __keep_punctuations_hash__, "-", NULL );
-	hash_put_mapping( __keep_punctuations_hash__, ":", NULL );
-	hash_put_mapping( __keep_punctuations_hash__, ".", NULL );
-	hash_put_mapping( __keep_punctuations_hash__, "/", NULL );
-	hash_put_mapping( __keep_punctuations_hash__, "'", NULL );
-	hash_put_mapping( __keep_punctuations_hash__, "#", NULL );
-	hash_put_mapping( __keep_punctuations_hash__, "+", NULL );
+    if ( __keep_punctuations_hash__ == NULL ) 
+	{
+		__keep_punctuations_hash__ = new_hash_table();
+		hash_put_mapping( __keep_punctuations_hash__, "@", NULL );
+		hash_put_mapping( __keep_punctuations_hash__, "$", NULL );
+		hash_put_mapping( __keep_punctuations_hash__, "%", NULL );
+		hash_put_mapping( __keep_punctuations_hash__, "^", NULL );
+		hash_put_mapping( __keep_punctuations_hash__, "&", NULL );
+		hash_put_mapping( __keep_punctuations_hash__, "-", NULL );
+		hash_put_mapping( __keep_punctuations_hash__, ":", NULL );
+		hash_put_mapping( __keep_punctuations_hash__, ".", NULL );
+		hash_put_mapping( __keep_punctuations_hash__, "/", NULL );
+		hash_put_mapping( __keep_punctuations_hash__, "'", NULL );
+		hash_put_mapping( __keep_punctuations_hash__, "#", NULL );
+		hash_put_mapping( __keep_punctuations_hash__, "+", NULL );
     }
     //check the hash.
     return hash_exist_mapping( __keep_punctuations_hash__, str );
