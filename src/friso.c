@@ -23,8 +23,12 @@ FRISO_API friso_t friso_new( void )
     } 
 
     e->dic	= NULL;
-    e->charset	= FRISO_UTF8;
-    //printf("version: %s\n", friso_version());
+    e->charset	= FRISO_UTF8;	//set default charset UTF8.
+
+	//invoke the friso_keep_punctuation. 
+	//	(or, it may cause thread problem)
+	utf8_keep_punctuation( "#" );
+	gbk_keep_punctuation ( "#" );
 
     return e;
 }
@@ -123,7 +127,9 @@ FRISO_API int friso_init_from_ifile(
 	if ( __hit__ != 0 ) 
 	{
 	    friso->dic = friso_dic_new();
-	    friso_dic_load_from_ifile( friso, config, __lexi__, config->max_len * 3 );
+	    //add charset check.
+	    friso_dic_load_from_ifile( friso, config, 
+		    __lexi__, config->max_len * (friso->charset == FRISO_UTF8 ? 3 : 2) );
 	}
 
 	fclose( __stream );
