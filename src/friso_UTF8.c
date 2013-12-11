@@ -454,20 +454,20 @@ static friso_hash_t __keep_punctuations_hash__ = NULL;
 FRISO_API int utf8_keep_punctuation( fstring str ) 
 {
     if ( __keep_punctuations_hash__ == NULL ) 
-	{
-		__keep_punctuations_hash__ = new_hash_table();
-		hash_put_mapping( __keep_punctuations_hash__, "@", NULL );
-		hash_put_mapping( __keep_punctuations_hash__, "$", NULL );
-		hash_put_mapping( __keep_punctuations_hash__, "%", NULL );
-		hash_put_mapping( __keep_punctuations_hash__, "^", NULL );
-		hash_put_mapping( __keep_punctuations_hash__, "&", NULL );
-		hash_put_mapping( __keep_punctuations_hash__, "-", NULL );
-		hash_put_mapping( __keep_punctuations_hash__, ":", NULL );
-		hash_put_mapping( __keep_punctuations_hash__, ".", NULL );
-		hash_put_mapping( __keep_punctuations_hash__, "/", NULL );
-		hash_put_mapping( __keep_punctuations_hash__, "'", NULL );
-		hash_put_mapping( __keep_punctuations_hash__, "#", NULL );
-		hash_put_mapping( __keep_punctuations_hash__, "+", NULL );
+    {
+	__keep_punctuations_hash__ = new_hash_table();
+	hash_put_mapping( __keep_punctuations_hash__, "@", NULL );
+	//hash_put_mapping( __keep_punctuations_hash__, "$", NULL );
+	hash_put_mapping( __keep_punctuations_hash__, "%", NULL );
+	//hash_put_mapping( __keep_punctuations_hash__, "^", NULL );
+	hash_put_mapping( __keep_punctuations_hash__, "&", NULL );
+	//hash_put_mapping( __keep_punctuations_hash__, "-", NULL );
+	//hash_put_mapping( __keep_punctuations_hash__, ":", NULL );
+	hash_put_mapping( __keep_punctuations_hash__, ".", NULL );
+	//hash_put_mapping( __keep_punctuations_hash__, "/", NULL );
+	hash_put_mapping( __keep_punctuations_hash__, "'", NULL );
+	hash_put_mapping( __keep_punctuations_hash__, "#", NULL );
+	hash_put_mapping( __keep_punctuations_hash__, "+", NULL );
     }
     //check the hash.
     return hash_exist_mapping( __keep_punctuations_hash__, str );
