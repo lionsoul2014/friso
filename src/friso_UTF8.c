@@ -177,7 +177,7 @@ FRISO_API int unicode_to_utf8( uint_t u, fstring __word )
  * 	2F00-2FDF 康熙字典部首
  * 	3000-303F CJK 符号和标点 				--ignore
  * 	31C0-31EF CJK 笔画
- * 	3200-32FF 封闭式 CJK 文字和月份 
+ * 	3200-32FF 封闭式 CJK 文字和月份 			--ignore.
  * 	3300-33FF CJK 兼容
  * 	3400-4DBF CJK 统一表意符号扩展 A 
  * 	4DC0-4DFF 易经六十四卦符号
@@ -203,8 +203,8 @@ FRISO_API int unicode_to_utf8( uint_t u, fstring __word )
 //Comment one of the following macro define
 //to clear the check of the specified language.
 #define FRISO_CJK_CHK_C
-#define FRISO_CJK_CHK_J
-#define FRISO_CJK_CHK_K
+//#define FRISO_CJK_CHK_J
+//#define FRISO_CJK_CHK_K
 FRISO_API int utf8_cjk_string( uint_t u ) 
 {
     int c = 0, j = 0, k = 0;
@@ -212,7 +212,7 @@ FRISO_API int utf8_cjk_string( uint_t u )
 #ifdef FRISO_CJK_CHK_C
     c = ( ( u >= 0x4E00 && u <= 0x9FBF )
 	    || ( u >= 0x2E80 && u <= 0x2EFF ) || ( u >= 0x2F00 && u <= 0x2FDF )  
-	    || ( u >= 0x31C0 && u <= 0x31EF ) || ( u >= 0x3200 && u <= 0x32FF )
+	    || ( u >= 0x31C0 && u <= 0x31EF ) //|| ( u >= 0x3200 && u <= 0x32FF )
 	    || ( u >= 0x3300 && u <= 0x33FF ) //|| ( u >= 0x3400 && u <= 0x4DBF )
 	    || ( u >= 0x4DC0 && u <= 0x4DFF ) || ( u >= 0xF900 && u <= 0xFAFF )
 	    || ( u >= 0xFE30 && u <= 0xFE4F ) ); 
@@ -220,7 +220,7 @@ FRISO_API int utf8_cjk_string( uint_t u )
 
     //Japanese.
 #ifdef FRISO_CJK_CHK_J
-    j = ( (u >= 0x3040 && u <= 0x309F)
+    j = ( ( u >= 0x3040 && u <= 0x309F )
 	    || ( u >= 0x30A0 && u <= 0x30FF ) || ( u >= 0x31F0 && u <= 0x31FF ) );
 #endif
 
