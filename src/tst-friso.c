@@ -1,8 +1,11 @@
 /*
- * friso test program.
+ * Friso test program.
+ * 	Of couse you can make it a perfect demo for friso.
+ * all threads or proccess share the same friso_t,
+ * 	defferent threads/proccess use defferent friso_task_t.
+ * and you could share the friso_config_t if you wish...
  *
- * @author	chenxin
- * @email	chenxin619315@gmail.com
+ * @author chenxin <chenxin619315@gmail.com>
  */
 #include "friso_API.h"
 #include "friso.h"
@@ -11,12 +14,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-
-/**
- * File Explain.
- * 
- * @author	chenxin<chenxin619315@gmail.com>
- */
 
 #define __LENGTH__ 15
 #define __INPUT_LENGTH__ 20480
@@ -100,7 +97,8 @@ int main(int argc, char **argv) {
 
     e_time = clock();
 
-    printf("friso(version: %s) initialized in %fsec\n", friso_version(), (double) ( e_time - s_time ) / CLOCKS_PER_SEC );
+    printf("Initialized in %fsec\n", (double) ( e_time - s_time ) / CLOCKS_PER_SEC );
+    printf("+-Version: %s (%s)\n", friso_version(), friso->charset == FRISO_UTF8 ? "UTF-8" : "GBK" );
     ___ABOUT___;
 
     //set the task.
