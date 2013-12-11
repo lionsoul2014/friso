@@ -1,11 +1,12 @@
 friso-1.6:
-1. 中文数字识别.
-2. 中文数字转阿拉伯数字.
-3. 词性标注.
-4. friso_stirng.c#utf8_decimal_string初始化bytes = 0, 
-		去除WinNT的Run-Time Check Failed.										-done
-5. 复杂英文和数字组合的二次切分. 例如: QQ2013会被切分成: qq2013, qq, 2013 			-done
-5. GBK编码支持.
+#1. 中文数字识别.
+#2. 中文数字转阿拉伯数字.
+#3. 词性标注.
+1. friso_stirng.c#utf8_decimal_string初始化bytes = 0, 
+		去除WinNT的Run-Time Check Failed.		-done
+2. 复杂英文和数字组合的二次切分. 例如: QQ2013会被切分成: qq2013, qq, 2013 
+3. GBK编码支持.							-done
+4. 去除了默认对^,/,-,^等标点的保留.				-done
 
 friso-1.5:
 1. 加入sphinx定制输出, 同义词使用"|"串接, 例如: 研究|琢磨|研讨|钻研 生命		-done
