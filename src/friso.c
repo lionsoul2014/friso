@@ -341,30 +341,31 @@ __STATIC_API__ lex_entry_t next_simple_cjk(
 //basic latin full-width change and upper lower case change quick accessor.
 #define latin_full_upper_convert( friso, task, convert ) \
 do {\
-    if ( friso_fullwidth_en_char( friso->charset, task ) ) {	\
-	if ( friso->charset == FRISO_UTF8 ) 		\
-	task->unicode -= 65248;					\
-	else if ( friso->charset == FRISO_GBK ) 	\
-	{\
-	    task->buffer[0] = ((uchar_t)task->buffer[1]) - 134;	\
-	    task->buffer[1] = '\0';					\
-	}\
-	convert = 1;								\
-	memset( task->buffer, 0x00, 7 );						\
-    }												\
-    if ( friso_uppercase_letter( friso->charset, task ) ) {		\
-	/*reset the buffer*/						\
-	if ( friso->charset == FRISO_UTF8 )			\
-	task->unicode += 32;					\
-	/*With the above logic, 					
-	 * here we just need to check half-width*/	\
-	else if ( friso->charset == FRISO_GBK )		\
-	    task->buffer[0] = task->buffer[0] + 32;	\
+	/*convert full-width char  to half-width*/ 		\
+	if ( friso_fullwidth_en_char( friso->charset, task ) ) {	\
+		if ( friso->charset == FRISO_UTF8 ) 		\
+			task->unicode -= 65248;					\
+		else if ( friso->charset == FRISO_GBK ) 	\
+		{\
+			task->buffer[0] = ((uchar_t)task->buffer[1]) - 128;	\
+			task->buffer[1] = '\0';					\
+		}\
 		convert = 1;								\
-    }												\
-    /* convert the unicode to utf-8 bytes. (FRISO_UTF8) */		\
+	}												\
+	/*convert uppercase char to lowercase char*/ 	\
+	if ( friso_uppercase_letter( friso->charset, task ) ) {		\
+		if ( friso->charset == FRISO_UTF8 )			\
+			task->unicode += 32;					\
+		/*With the above logic, 					
+		 * here we just need to check half-width*/	\
+		else if ( friso->charset == FRISO_GBK )		\
+			task->buffer[0] = task->buffer[0] + 32;	\
+		convert = 1;								\
+	}												\
+	/* convert the unicode to utf-8 bytes. (FRISO_UTF8) */		\
 	if ( convert == 1 && friso->charset == FRISO_UTF8 ) {		\
-	    unicode_to_utf8( task->unicode, task->buffer );			\
+		memset( task->buffer, 0x00, 7 );						\
+		unicode_to_utf8( task->unicode, task->buffer );			\
 		convert = 0;											\
 	} \
 } while ( 0 )
