@@ -1031,12 +1031,13 @@ __STATIC_API__ lex_entry_t next_complex_cjk(
 /* {{{ A macro function to check and free
  * 	the lex_entry_t with type of __LEX_OTHER_WORDS__.
  */
-#define check_free_otlex_entry( lex )		\
-	if ( lex->type == __LEX_OTHER_WORDS__ )		\
-{						\
-	FRISO_FREE( lex->word );			\
-	free_lex_entry( lex );			\
-}
+#define check_free_otlex_entry( lex ) \
+do { \
+	if ( lex->type == __LEX_OTHER_WORDS__ )	{	\
+		FRISO_FREE( lex->word );				\
+		free_lex_entry( lex );					\
+	}\
+} while (0)
 /* }}} */
 
 /* {{{ get the next segmentation.
@@ -1184,6 +1185,7 @@ FRISO_API friso_hits_t friso_next(
 					memcpy(task->hits->word + len, _word, j);		\
 					len += j;						\
 				}\
+				task->hits->word[len] = '\0';		\
 			} while (0)
 			/* }}} */
 
@@ -1208,28 +1210,81 @@ FRISO_API friso_hits_t friso_next(
 			 */
 			len = (int) lex->length;
 			memcpy(task->hits->word, lex->word, lex->length);
+			task->hits->word[len] = '\0';
 
 			//check and append the synonyms words
-			if ( config->add_syn && lex->syn != NULL ) {
+			if ( config->add_syn && lex->syn != NULL ) 
+			{
 				if ( config->spx_out == 1 )
 					hits_sphinx_output(lex);
 				else hits_normal_output(lex);
 			}
-			task->hits->word[len] = '\0';
 
-			/*
-			 * here: handle the newly found basic latin created when 
+			/* {{{ here: handle the newly found basic latin created when 
 			 * we try to find a CE word.
 			 *
 			 * @reader:
 			 * when tmp is not NULL and sb will not be NULL too
 			 * 	except a CE word is found.
+			 *
+			 * @TODO: finished append the synonyms words on 23013-12-19.
 			 */
 			if ( tmp != NULL && sb != NULL ) 
 			{
-				free_string_buffer( sb );
-				link_list_add( task->pool, tmp );
+				lex = NULL;
+				//check the synoyums words.
+				if ( config->add_syn == 1 ) 
+					lex = friso_dic_get( friso->dic, 
+							__LEX_EN_WORDS__, tmp->word );
+
+				//append the synoyums words.
+				if ( config->add_syn != 1 ) 
+				{
+					free_string_buffer( sb );
+					link_list_add( task->pool, tmp );
+				}
+				//Sphinx output style.
+			   	else if ( config->spx_out == 1 ) 
+				{
+					if ( lex != NULL && lex->syn != NULL ) 
+					{
+						//append the tmp and all its synoyums words.
+						//	to one buffer.
+						string_buffer_clear(sb);
+						string_buffer_append(sb, tmp->word);
+						for (  i = 0; i < lex->syn->length; i++ )
+						{
+							_word = (fstring)lex->syn->items[i];
+							string_buffer_append(sb, "|");
+							string_buffer_append(sb, _word);
+						}
+
+						//append the item to the pool.
+						//the type should be __LEX_OTHER_WORDS__
+						//	so the pool checker will free its memory.
+						_word = string_buffer_devote(sb);
+						link_list_add( task->pool, new_lex_entry( 
+									_word, NULL, 0, strlen(_word), 
+									__LEX_OTHER_WORDS__ ) );
+
+						//check and free the tmp lex_entry_t.
+						check_free_otlex_entry(tmp);
+					} 
+					else {
+						free_string_buffer( sb );
+						link_list_add( task->pool, tmp );
+					}
+				} 
+				//Mormal style output.
+				else 
+				{
+					free_string_buffer( sb );
+					link_list_add( task->pool, tmp );
+					if ( lex != NULL && lex->syn != NULL )
+						hits_normal_output(lex);
+				}
 			}
+			/* }}} */
 
 			return task->hits;
 		} 
@@ -1283,18 +1338,20 @@ FRISO_API friso_hits_t friso_next(
 			//copy the word to the task hits buffer.
 			if ( lex->length >= __HITS_WORD_LENGTH__ ) continue;
 			memcpy(task->hits->word, lex->word, lex->length);
-			len = lex->length;
+			len = (uint_t)lex->length;
+			task->hits->word[len] = '\0';
 
 			//check and add the synonyms words.
 			//@date 2013-10-15
-			if ( config->add_syn && ( 
-						tmp = friso_dic_get( friso->dic,
-							__LEX_EN_WORDS__, lex->word) ) != NULL ) {
+			if ( config->add_syn && ( tmp = 
+						friso_dic_get( friso->dic, 
+							__LEX_EN_WORDS__, lex->word ) ) != NULL 
+					&& tmp->syn != NULL ) 
+			{
 				if ( config->spx_out == 1 ) 
 					hits_sphinx_output(tmp);
 				else hits_normal_output(tmp);
 			}
-			task->hits->word[len] = '\0';
 
 			//free the newly create lex_entry_t
 			check_free_otlex_entry( lex );
