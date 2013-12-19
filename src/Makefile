@@ -16,7 +16,7 @@ FFLAGS = -O2 -Wall -fPIC
 #extension libs for friso
 ELIB = m
 LIB_FILE = libfriso.so
-#STA_FILE = libfriso.a
+STA_FILE = libfriso.a
 LIBRARY_DIR = /usr/lib
 INSTALL_DIR = /usr/local/bin
 
@@ -25,8 +25,8 @@ SOURCE = friso.o friso_array.o friso_hash.o friso_lexicon.o friso_link.o friso_s
 
 all: share friso
 
-#static: $(SOURCE)
-#	ar -cr $(STA_FILE) $(SOURCE)
+static: $(SOURCE)
+	ar -cr $(STA_FILE) $(SOURCE)
 
 share: $(SOURCE)
 	$(CC) $(FFLAGS) $(SOURCE) -fPIC -shared -l$(ELIB) -o $(LIB_FILE)
