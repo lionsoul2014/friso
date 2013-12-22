@@ -173,3 +173,35 @@ FRISO_API int friso_uppercase_letter(
 	return gbk_uppercase_letter( task->buffer );
     return 0;
 }
+
+/* get the type of the specified char.
+ * 	the type will be the constants defined above.
+ * (include the fullwidth english char.)
+ */
+FRISO_API friso_enchar_t friso_enchar_type( 
+	friso_charset_t charset, 
+	friso_task_t task )
+{
+    //Unicode or ASCII.(Both UTF-8 and GBK are valid)
+    uint_t u = 0;
+
+    if ( charset == FRISO_UTF8 )
+    {
+	u = task->unicode;
+	//if ( u >= 65280 ) u = 65280 - 65248;
+    } 
+    else if ( charset == FRISO_GBK )
+    {
+	u = (uchar_t)task->buffer[0];
+	//if ( u == 0xa3 ) ; //full-width.
+    }
+
+    //range check.
+    if ( u > 126 )		return FRISO_EN_UNKNOW;
+    if ( u == 32 )		return FRISO_EN_WHITESPACE;
+    if ( u >= 48 && u <= 57  )	return FRISO_EN_NUMERIC;
+    if ( u >= 65 && u <= 90  )	return FRISO_EN_LETTER;
+    if ( u >= 97 && u <= 122 )	return FRISO_EN_LETTER;
+
+    return FRISO_EN_PUNCTUATION;
+}

@@ -59,6 +59,27 @@ FRISO_API int friso_decimal_string( friso_charset_t, char * );
 //	included full-width and half-width letters.
 FRISO_API int friso_uppercase_letter( friso_charset_t, friso_task_t );
 
+
+//en char type.
+//#define FRISO_EN_LETTER 	0 	//a-z && A-Z
+//#define FRISO_EN_NUMERIC	1	//0-9
+//#define FRISO_EN_PUNCTUATION	2	//english punctuations
+//#define FRISO_EN_WHITESPACE	3	//whitespace
+//#define FRISO_EN_UNKNOW		-1	//beyond 32-122
+typedef enum {
+    FRISO_EN_LETTER		= 0,	//A-Z, a-z
+    FRISO_EN_NUMERIC		= 1,	//0-9
+    FRISO_EN_PUNCTUATION	= 2,	//english punctuations
+    FRISO_EN_WHITESPACE		= 3,	//whitespace
+    FRISO_EN_UNKNOW		= -1	//unkow(beyond 32-126)
+} friso_enchar_t;
+
+/* get the type of the specified char.
+ * 	the type will be the constants defined above.
+ * (include the fullwidth english char.)
+ */
+FRISO_API friso_enchar_t friso_enchar_type( friso_charset_t, friso_task_t );
+
 /* }}} */
 
 
