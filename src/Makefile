@@ -18,6 +18,7 @@ ELIB = m
 LIB_FILE = libfriso.so
 STA_FILE = libfriso.a
 LIBRARY_DIR = /usr/lib
+INCLUDE_DIR = /usr/include/friso
 INSTALL_DIR = /usr/local/bin
 
 
@@ -70,25 +71,29 @@ clean:
 	find . -name \*.so | xargs rm -f
 	find . -name \*.o  | xargs rm -f
 	@if [ -f friso ];\
-		then\
-		    rm -f friso;\
+	    then\
+	    rm -f friso;\
 	fi
 
 #install friso
 install: friso
 	@if [ -d $(INSTALL_DIR) ] && [ -d $(LIBRARY_DIR) ];\
-		then\
-			cp friso $(INSTALL_DIR);\
-			chmod a+x $(INSTALL_DIR)/friso;\
-			chmod og-w $(INSTALL_DIR)/friso;\
-			cp $(LIB_FILE) $(LIBRARY_DIR);\
-			chmod a+x $(LIBRARY_DIR)/$(LIB_FILE);\
-			chmod og-w $(LIBRARY_DIR)/$(LIB_FILE);\
-			#cp $(STA_FILE) $(LIBRARY_DIR);\
-			#chmod a+x $(LIBRARY_DIR)/$(STA_FILE);\
-			#chmod og-w $(LIBRARY_DIR)/$(STA_FILE);\
-			echo "install friso successfully.";\
-			echo "Usage: friso -init friso configuration file path.";\
-		else\
-			echo "Sorry, $(INSTALL_DIR) or $(LIBRARY_DIR) does not exits.";\
+	    then\
+	    cp friso $(INSTALL_DIR);\
+	    chmod a+x $(INSTALL_DIR)/friso;\
+	    chmod og-w $(INSTALL_DIR)/friso;\
+	    cp $(LIB_FILE) $(LIBRARY_DIR);\
+	    chmod a+x $(LIBRARY_DIR)/$(LIB_FILE);\
+	    chmod og-w $(LIBRARY_DIR)/$(LIB_FILE);\
+	    echo "install friso successfully.";\
+	    echo "Usage: friso -init friso configuration file path.";\
+	    else\
+	    echo "Sorry, $(INSTALL_DIR) or $(LIBRARY_DIR) does not exits.";\
 	fi
+	@if [ ! -d $(INCLUDE_DIR) ];\
+	    then\
+	    mkdir $(INCLUDE_DIR);\
+	fi
+	@cp *.h $(INCLUDE_DIR);\
+	chmod a+r $(INCLUDE_DIR)/*.h;\
+	chmod a+x $(INCLUDE_DIR)/*.h;
