@@ -41,11 +41,22 @@ Friso是使用c语言开发的一款开源的高性能中文分词器，使用�
 
 复杂模式：1.8M/秒
 
-<h3>三。Friso其他主页: </h3> 
+<h3>三。分词测试：</h3>
+
+文本：
+
+歧义和同义词:研究生命起源，混合词: 做B超检查身体，x射线本质是什么，今天去奇都ktv唱卡拉ok去，哆啦a梦是一个动漫中的主角，单位和全角: 2009年８月６日开始大学之旅，岳阳今天的气温为38.6℃, 也就是101.48℉, 英文数字: bug report chenxin619315@gmail.com or visit http://code.google.com/p/jcseg, we all admire the hacker spirit!特殊数字: ① ⑩ ⑽ ㈩.
+
+分词结果：
+
+歧义 和 同义词 : 研究 琢磨 研讨 钻研 生命 起源 ， 混合词 : 做 b超 检查 身体 ， x射线 本质 是 什么 ， 今天 去 奇都ktv 唱 卡拉ok 去 ， 哆啦a梦 是 一个 动漫 中 的 主角 ， 单位 和 全角 : 2009年 8月 6日 开始 大学 之旅 ， 岳阳 今天 的 气温 为 38.6℃ , 也就是 101.48℉ , 英文 英语 数字 : bug report chenxin 619315 gmail com chenxin619315@gmail.com or visit http : / / code google com code.google.com / p / jcseg , we all admire appreciate like love enjoy the hacker spirit mind ! 特殊 数字 : ① ⑩ ⑽ ㈩ .
+
+
+<h3>四。Friso其他主页: </h3> 
 Friso官方主页: https://code.google.com/p/friso/ <br />
 Friso开源中国: http://www.oschina.net/p/friso <br />
 
-<h3>四。联系作者: </h3>
+<h3>五。联系作者: </h3>
 作者: 狮子的魂 <br />
 email: chenxin619315@gmail.com <br />
 qq: 1187582057 <br />
