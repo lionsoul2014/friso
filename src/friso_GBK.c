@@ -264,7 +264,8 @@ FRISO_API int gbk_cn_punctuation( char *str )
 
 //static friso_hash_t __keep_punctuations_hash__ = NULL;
 
-/*check the given char is an english keep punctuation.*/
+/* @Deprecated
+ * check the given char is an english keep punctuation.*/
 //FRISO_API int gbk_keep_punctuation( char *str )
 //{
 //    if ( __keep_punctuations_hash__ == NULL ) {

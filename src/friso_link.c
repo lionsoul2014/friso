@@ -61,7 +61,8 @@ FRISO_API void free_link_list( friso_link_t link )
 }
 
 //clear all nodes in the link list.
-FRISO_API friso_link_t link_list_clear( friso_link_t link ) 
+FRISO_API friso_link_t link_list_clear( 
+	friso_link_t link ) 
 {
     link_node_t node, next;
     //free all the middle nodes.
@@ -164,7 +165,8 @@ __STATIC_API__ void * remove_node(
 
 
 //add a new node to the link list.(insert just before the tail)
-FRISO_API void link_list_add( friso_link_t link, void * value ) 
+FRISO_API void link_list_add( 
+	friso_link_t link, void * value ) 
 {
     insert_before( link, link->tail, value );
 }
@@ -184,7 +186,8 @@ FRISO_API void link_list_insert_before(
  * 
  * @return the value of the node.
  */
-FRISO_API void * link_list_get( friso_link_t link, uint_t idx ) 
+FRISO_API void * link_list_get( 
+	friso_link_t link, uint_t idx ) 
 {
     link_node_t node = get_node( link, idx );
     if ( node != NULL ) {
@@ -201,7 +204,8 @@ FRISO_API void * link_list_get( friso_link_t link, uint_t idx )
  * @return the old value.
  */
 FRISO_API void *link_list_set( 
-	friso_link_t link, uint_t idx, void * value ) 
+	friso_link_t link, 
+	uint_t idx, void * value ) 
 {
     link_node_t node = get_node( link, idx );
     void * _value = NULL;
@@ -220,7 +224,8 @@ FRISO_API void *link_list_set(
  * @see remove_node
  * @return the value of the node removed.
  */
-FRISO_API void *link_list_remove( friso_link_t link, uint_t idx ) 
+FRISO_API void *link_list_remove( 
+	friso_link_t link, uint_t idx ) 
 {
     link_node_t node = get_node( link, idx );
 
@@ -238,39 +243,44 @@ FRISO_API void *link_list_remove( friso_link_t link, uint_t idx )
  * @see remove_node.
  * @return the value of the node removed.
  */
-FRISO_API void *link_list_remove_node( friso_link_t link, link_node_t node ) 
+FRISO_API void *link_list_remove_node( 
+	friso_link_t link, 
+	link_node_t node ) 
 {
     return remove_node( link, node );
 }
 
 //remove the first node after the head
-FRISO_API void *link_list_remove_first( friso_link_t link ) 
+FRISO_API void *link_list_remove_first( 
+	friso_link_t link ) 
 {
     if ( link->size > 0 ) {
 	return remove_node( link, link->head->next );
     }
-
     return NULL;
 }
 
 //remove the last node just before the tail.
-FRISO_API void *link_list_remove_last( friso_link_t link ) 
+FRISO_API void *link_list_remove_last( 
+	friso_link_t link ) 
 {
     if ( link->size > 0 ) {
 	return remove_node( link, link->tail->prev );
     }
-
     return NULL;
 }
 
 //append a node from the tail.
-FRISO_API void link_list_add_last( friso_link_t link, void * value ) 
+FRISO_API void link_list_add_last( 
+	friso_link_t link, 
+	void *value ) 
 {
     insert_before( link, link->tail, value );
 }
 
 //append a note just after the head.
-FRISO_API void link_list_add_frist( friso_link_t link, void * value ) 
+FRISO_API void link_list_add_first( 
+	friso_link_t link, void *value ) 
 {
     insert_before( link, link->head->next, value );
 }

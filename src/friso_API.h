@@ -23,7 +23,6 @@
 #	define __STATIC_API__ static inline
 #endif
 
-
 #define ___ALLOCATION_ERROR___ 							\
     printf("Unable to do the memory allocation, program will now exit\n" );	\
 exit(1);
@@ -61,7 +60,8 @@ typedef struct {
 typedef string_buffer_entry * string_buffer_t;
 
 //FRISO_API string_buffer_t new_string_buffer( void );
-#define new_string_buffer() new_string_buffer_with_opacity( __DEFAULT_ARRAY_LIST_OPACITY__ );
+#define new_string_buffer() \
+    new_string_buffer_with_opacity( __DEFAULT_ARRAY_LIST_OPACITY__ );
 FRISO_API string_buffer_t new_string_buffer_with_opacity( uint_t );
 FRISO_API string_buffer_t new_string_buffer_with_string( fstring str );
 
@@ -71,6 +71,7 @@ FRISO_API string_buffer_t new_string_buffer_with_string( fstring str );
  * this may cause the resize action of the buffer.
  */
 FRISO_API void string_buffer_append( string_buffer_t, fstring );
+FRISO_API void string_buffer_append_char( string_buffer_t, char );
 
 //insert the given fstring from the specified position.
 FRISO_API void string_buffer_insert( string_buffer_t, uint_t idx, fstring );
@@ -141,6 +142,9 @@ FRISO_API void free_string_split( string_split_t );
  * 		or there is no more segmentation)
  */
 FRISO_API fstring string_split_next( string_split_t, fstring );
+/* }}} */
+
+
 
 
 /* {{{ dynamaic array interface define::start*/
@@ -218,7 +222,7 @@ FRISO_API friso_array_t array_list_clear( friso_array_t );
 
 /* {{{ link list interface define::start*/
 struct friso_link_node {
-    void * value;
+    void *value;
     struct friso_link_node *prev;
     struct friso_link_node *next;
 };

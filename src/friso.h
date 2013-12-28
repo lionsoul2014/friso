@@ -40,7 +40,9 @@ typedef enum {
     __LEX_ENPUN_WORDS__ = 10,
     __LEX_EN_WORDS__ = 11,
     __LEX_OTHER_WORDS__ = 15,
-    __LEX_NCSYN_WORDS__ = 16
+    __LEX_NCSYN_WORDS__ = 16,
+    __LEX_PUNC_WORDS__ = 17,		//punctuations
+    __LEX_UNKNOW_WORDS__ = 18		//unrecognized words.
 } friso_lex_t;
 
 typedef friso_hash_t * friso_dic_t;
@@ -56,13 +58,17 @@ typedef struct {
      * the type of the lexicon item.
      * available value is all the elements in friso_lex_t enum.
      *	and if it is __LEX_OTHER_WORDS__, we need to free it after use it.
-     *	here use char as its data type not int.
      */
-    uint_t length;
-    uint_t type;					
+    uchar_t length;	//the length of the token.(after the convertor of Friso.)
+    uchar_t rlen;	//the real length of the token.(before any convert)
+    uchar_t type;
+    uchar_t ctrlMask;	//function control mask, like append the synoyums words.
+    uint_t offset;		//offset index.
     fstring word;
-    friso_array_t syn;
-    uint_t fre;
+    //fstring py;		//pinyin of the word.(invalid)
+    friso_array_t syn;		//synoyums words.
+    friso_array_t pos;		//part of speech.
+    uint_t fre;			//single word frequency.
 } lex_entry_cdt;
 typedef lex_entry_cdt * lex_entry_t;
 
@@ -92,6 +98,7 @@ typedef enum {
 } friso_mode_t;
 
 /* task configuration entry.*/
+#define friso_en_kpunc(config, ch) (strchr(config->kpuncs, ch) != 0)
 typedef struct {
     ushort_t max_len;		//the max match length (4 - 7).
     ushort_t r_name;		//1 for open chinese name recognition 0 for close it.
@@ -101,19 +108,44 @@ typedef struct {
     ushort_t clr_stw;		//clear the stopwords.
     ushort_t keep_urec;		//keep the unrecongnized words.
     ushort_t spx_out;		//use sphinx output customize.
+    ushort_t en_sseg;		//start the secondary segmentation.
+    ushort_t st_minl;		//min length of the secondary segmentation token.
     uint_t nthreshold;		//the threshold value for a char to make up a chinese name.
     friso_mode_t mode;		//Complex mode or simple mode
+#define _FRISO_KEEP_PUNC_LEN 13
+    char kpuncs[_FRISO_KEEP_PUNC_LEN]; //keep punctuations buffer.
 } friso_config_entry;
 typedef friso_config_entry * friso_config_t;
 
 
+
+//control mask for #LEX_ENTRY_T#.
+#define _LEX_APPENSYN_MASK (1 << 0)	//append synoyums words.
+#define lex_appensyn_open(e)	e->ctrlMask |= _LEX_APPENSYN_MASK
+#define lex_appensyn_close(e)	e->ctrlMask &= ~_LEX_APPENSYN_MASK
+#define lex_appensyn_check(e)	((e->ctrlMask & _LEX_APPENSYN_MASK) != 0)
+
 /*the segmentation term entry.*/
 #define __HITS_WORD_LENGTH__ 128
+
 typedef struct {
-    int offset;
+    uchar_t type;	//type of the word. (item of friso_lex_t)
+    uchar_t length;	//length of the token.
+    uchar_t rlen;	//the real length of the token.(in orgin strng)
+    char pos;		//part of speech.
+    int offset;		//start offset of the word.
     char word[__HITS_WORD_LENGTH__];
+    //char py[0];
 } friso_hits_entry;
 typedef friso_hits_entry * friso_hits_t;
+
+
+//action control mask for #FRISO_TASK_T#.
+#define _TASK_CHECK_CF_MASK (1 << 0) 	//Wether to check the chinese fraction.
+#define _TASK_START_SS_MASK (1 << 1)	//Wether to start the secondary segmentation.
+#define task_ssseg_open(task)	task->ctrlMask |= _TASK_START_SS_MASK
+#define task_ssseg_close(task)	task->ctrlMask &= ~_TASK_START_SS_MASK
+#define task_ssseg_check(task)	((task->ctrlMask & _TASK_START_SS_MASK) != 0)
 
 /*
  * Type: friso_task_entry
@@ -126,7 +158,9 @@ typedef struct {
     uint_t length;		//length of the text.
     uint_t bytes;		//latest word bytes in C.
     uint_t unicode;		//latest word unicode number.
+    uint_t ctrlMask;		//action control mask.
     friso_link_t pool;		//task pool.
+    string_buffer_t sbuf;	//string buffer.
     friso_hits_t hits;		//token result hits.
     char buffer[7];		//word buffer. (1-6 bytes for an utf-8 word in C).
 } friso_task_entry;

@@ -47,7 +47,8 @@ FRISO_API int friso_letter_number( friso_charset_t, friso_task_t );
 FRISO_API int friso_other_number( friso_charset_t, friso_task_t );
 
 //check if the word is a keep punctuation.
-FRISO_API int friso_keep_punctuation( friso_charset_t, friso_task_t );
+//@Deprecated
+//FRISO_API int friso_keep_punctuation( friso_charset_t, friso_task_t );
 
 //check the specified string is numeric string.
 FRISO_API int friso_numeric_string( friso_charset_t, char * );
@@ -79,6 +80,12 @@ typedef enum {
  * (include the fullwidth english char.)
  */
 FRISO_API friso_enchar_t friso_enchar_type( friso_charset_t, friso_task_t );
+
+/* get the type of the specified en char.
+ * 	the type will be the constants defined above.
+ * (the char should be half-width english char only)
+ */
+FRISO_API friso_enchar_t get_enchar_type( char );
 
 /* }}} */
 
@@ -162,7 +169,8 @@ FRISO_API int utf8_cn_punctuation( uint_t u );
 FRISO_API int is_en_punctuation( friso_charset_t, char );
 //#define is_en_punctuation( c ) utf8_en_punctuation((uint_t) c) 
 
-FRISO_API int utf8_keep_punctuation( fstring );
+//@Deprecated
+//FRISO_API int utf8_keep_punctuation( fstring );
 /* }}} */
 
 
@@ -239,7 +247,8 @@ FRISO_API int gbk_cn_punctuation( char * );
 //cause the logic handle is the same as the utf8.
 //	here invoke the utf8 interface directly.
 //FRISO_API int gbk_keep_punctuation( char * );
-#define gbk_keep_punctuation( str ) utf8_keep_punctuation(str)
+//@Deprecated
+//#define gbk_keep_punctuation( str ) utf8_keep_punctuation(str)
 
 //check if the given english char is a full-width char or not.
 //FRISO_API int gbk_fullwidth_char( char * ) ;

@@ -81,10 +81,15 @@ FRISO_API lex_entry_t new_lex_entry(
 
     //initialize.
     e->word	= word;
-    e->syn	= syn;
+    e->syn	= syn;			//synoyum words array list.
+    e->pos	= NULL;			//part of speech array list.
+    //e->py	= NULL; //set to NULL first.
     e->fre	= fre;
-    e->length	= length;
-    e->type 	= type;
+    e->length	= (uchar_t) length;	//length
+    e->rlen	= (uchar_t) length;	//set to length by default.
+    e->type 	= (uchar_t) type;	//type
+    e->ctrlMask	= 0;			//control mask.
+    e->offset	= -1;
 
     return e;
 }
@@ -94,7 +99,8 @@ FRISO_API lex_entry_t new_lex_entry(
  * you have to do three thing maybe:
  * 1. free where its syn items points to. (not implemented)
  * 2. free its syn. (friso_array_t)
- * 3. free the lex_entry_t.
+ * 3. free its pos. (friso_array_t)
+ * 4. free the lex_entry_t.
  */
 FRISO_API void free_lex_entry( lex_entry_t e ) 
 {

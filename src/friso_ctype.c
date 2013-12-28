@@ -115,16 +115,17 @@ FRISO_API int friso_other_number(
 }
 
 //check if the word is a keep punctuation.
-FRISO_API int friso_keep_punctuation( 
-	friso_charset_t charset, 
-	friso_task_t task )
-{
-    if ( charset == FRISO_UTF8 )
-	return utf8_keep_punctuation( task->buffer );
-    else if ( charset == FRISO_GBK )
-	return gbk_keep_punctuation( task->buffer );
-    return 0;
-}
+//@Deprecated
+//FRISO_API int friso_keep_punctuation( 
+//	friso_charset_t charset, 
+//	friso_task_t task )
+//{
+//    if ( charset == FRISO_UTF8 )
+//	return utf8_keep_punctuation( task->buffer );
+//    else if ( charset == FRISO_GBK )
+//	return gbk_keep_punctuation( task->buffer );
+//    return 0;
+//}
 
 //check if the specified char is en english punctuation.
 //	this function is the same as friso_en_punctuation.
@@ -197,7 +198,25 @@ FRISO_API friso_enchar_t friso_enchar_type(
     }
 
     //range check.
-    if ( u > 126 )		return FRISO_EN_UNKNOW;
+    if ( u > 126 || u < 32 )	return FRISO_EN_UNKNOW;
+    if ( u == 32 )		return FRISO_EN_WHITESPACE;
+    if ( u >= 48 && u <= 57  )	return FRISO_EN_NUMERIC;
+    if ( u >= 65 && u <= 90  )	return FRISO_EN_LETTER;
+    if ( u >= 97 && u <= 122 )	return FRISO_EN_LETTER;
+
+    return FRISO_EN_PUNCTUATION;
+}
+
+/* get the type of the specified en char.
+ * 	the type will be the constants defined above.
+ * (the char should be half-width english char only)
+ */
+FRISO_API friso_enchar_t get_enchar_type( char ch )
+{
+    uint_t u = (uchar_t) ch;
+
+    //range check.
+    if ( u > 126 || u < 32 )	return FRISO_EN_UNKNOW;
     if ( u == 32 )		return FRISO_EN_WHITESPACE;
     if ( u >= 48 && u <= 57  )	return FRISO_EN_NUMERIC;
     if ( u >= 65 && u <= 90  )	return FRISO_EN_LETTER;

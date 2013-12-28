@@ -112,6 +112,17 @@ FRISO_API void string_buffer_append(
     sb->length += __len__;
 }
 
+FRISO_API void string_buffer_append_char( 
+	string_buffer_t sb, char ch ) 
+{
+    //check the necessity to resize the buffer.
+    if ( sb->length + 1 > sb->allocs ) {
+	sb = resize_buffer( sb, sb->length * 2 + 1 );
+    }
+
+    sb->buffer[sb->length++] = ch;
+}
+
 FRISO_API void string_buffer_insert( 
 	string_buffer_t sb, 
 	uint_t idx, 
