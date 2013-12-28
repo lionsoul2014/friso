@@ -119,8 +119,9 @@ int main(int argc, char **argv) {
 
 	s_time = clock();
 	while ( ( friso_next( friso, config, task ) ) != NULL ) {
-	    //printf("%s[%d]/ ", task->hits->word, task->hits->offset );
-	    printf("%s/ ", task->hits->word );
+	    //printf("%s[%d, %d] ", task->hits->word, 
+	    //	    task->hits->offset, task->hits->length );
+	    printf("%s ", task->hits->word );
 	}
 	//}
 	e_time = clock();
