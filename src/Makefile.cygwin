@@ -16,11 +16,11 @@ FFLAGS = -O2 -Wall
 #extension libs for friso
 ELIB = m
 SH_FILE = friso.dll
-LB_FILE = friso.a
+LB_FILE = friso.lib
 
 
-OBJS = friso.o friso_array.o friso_hash.o friso_lexicon.o friso_link.o friso_string.o friso_split.o
-SRCS = friso.c friso_array.c friso_hash.c friso_lexicon.c friso_link.c friso_string.c friso_split.c
+OBJS = friso.o friso_array.o friso_hash.o friso_lexicon.o friso_link.o friso_string.o friso_ctype.o friso_UTF8.o friso_GBK.o
+SRCS = friso.c friso_array.c friso_hash.c friso_lexicon.c friso_link.c friso_string.c friso_ctype.c friso_UTF8.c friso_GBK.c
 
 all: share friso
 
@@ -59,4 +59,10 @@ friso_split.o: friso_split.c friso_API.h
 #clean all the object files.
 .PHONY: clean
 clean:
-	-rm friso $(SH_FILE) $(LB_FILE) $(OBJS) tst-friso.o
+	find . -name \*.dll | xargs rm -f
+	find . -name \*.lib | xargs rm -f
+	find . -name \*.o  | xargs rm -f
+	@if [ -f friso ];\
+	    then\
+	    rm -f friso;\
+	fi
