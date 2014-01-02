@@ -26,7 +26,7 @@ all: share friso
 
 #$(CC) $(FFLAGS) -shared $(SOURCE) -l$(ELIB) --mno-cygwin -o $(SH_FILE)
 share: $(OBJS)
-	$(CC) $(FFLAGS) -shared $(SRCS) -mno-cygwin -o $(SH_FILE) -Wl,--output-def,friso.def,--out-implib,$(LB_FILE)
+	$(CC) $(FFLAGS) -shared $(SRCS) --mno-cygwin -o $(SH_FILE) -Wl,--output-def,friso.def,--out-implib,$(LB_FILE)
 
 #--mno-cygwin
 friso: tst-friso.o
