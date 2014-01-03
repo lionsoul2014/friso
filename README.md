@@ -56,8 +56,3 @@ Friso是使用c语言开发的一款开源的高性能中文分词器，使用�
 Friso官方主页: https://code.google.com/p/friso/ <br />
 Friso开源中国: http://www.oschina.net/p/friso <br />
 
-<h3>五。联系作者: </h3>
-作者: 狮子的魂 <br />
-email: chenxin619315@gmail.com <br />
-qq: 1187582057 <br />
-
