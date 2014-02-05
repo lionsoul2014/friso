@@ -1,8 +1,14 @@
 <pre>
+friso-1.6.1:
+1. friso.ini中friso.lex_dir增加相对friso.ini的路径支持。
+2. 修复两处内存泄漏bug.
+3. 中文词性标注。
+4. 中文数字识别。
+5. 中文数字转阿拉伯数字。
+6. 中文姓名识别。
+7. 词库更新自动加载。
+
 friso-1.6:
-#1. 中文数字识别.
-#2. 中文数字转阿拉伯数字.
-#3. 词性标注.
 1. friso_stirng.c#utf8_decimal_string初始化bytes = 0, 
 	去除WinNT的Run-Time Check Failed.											-done
 2. 复杂英文和数字组合的二次切分. 例如: QQ2013会被切分成: qq2013, qq, 2013.		-done
@@ -18,14 +24,9 @@ friso-1.6:
 friso-1.5:
 1. 加入sphinx定制输出, 同义词使用"|"串接, 例如: 研究|琢磨|研讨|钻研 生命
 2. 修正了全部的tst-xxx源文件. friso API更改后测试样本文件没更改.
-#3. 中文数字/中文数字+单字单位识别
-#4. 中文姓名识别.
-#5. 中文词性标注
-#6. 词库更新自动加载.
-#7. 配对标点内容提取.
-4. 修复friso.c#next_basic_latin中"数字+空格+单位"组合中忽略空格直接组合数字和单位的bug
-8. 修复friso.c#next_basic_latin中"数字+中文+空格"组合切分乱码的bug
-6. 引入friso_config_t多配置使用避免全局配置带来的更改不便.
+3. 修复friso.c#next_basic_latin中"数字+空格+单位"组合中忽略空格直接组合数字和单位的bug
+4. 修复friso.c#next_basic_latin中"数字+中文+空格"组合切分乱码的bug
+5. 引入friso_config_t多配置使用避免全局配置带来的更改不便.
 
 friso-1.4:
 1. 小数+单位无法识别的情况.更改friso_string#utf8_numeric_string()函数.
