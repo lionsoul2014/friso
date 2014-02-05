@@ -1312,7 +1312,7 @@ FRISO_API friso_hits_t friso_next(
 	string_buffer_t sb = NULL;
 	lex_entry_t lex = NULL, tmp = NULL, sword = NULL;
 
-	/* {{{ task buffer check */
+	/* {{{ task word pool check */
 	if ( ! link_list_empty( task->pool ) ) {
 		/*
 		 * load word from the word poll if it is not empty.

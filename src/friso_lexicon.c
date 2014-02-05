@@ -51,6 +51,10 @@ __STATIC_API__ void default_fdic_callback( hash_entry_t e )
 	}
 	free_array_list( syn );
     }
+
+    //free the e->_val
+    //@date 2014-01-28 posted by mlemay@gmail.com
+    FRISO_FREE(lex);
 }
 
 FRISO_API void friso_dic_free( friso_dic_t dic ) 
@@ -300,7 +304,11 @@ FRISO_API void friso_dic_load(
 	     * 	and __LEX_CEM_WORDS__.
 	     */
 	    if ( ! ( lex == __LEX_ECM_WORDS__ || lex == __LEX_CEM_WORDS__ )
-		    && strlen( _word ) > length ) continue;
+		    && strlen( _word ) > length ) 
+	    {
+	    	FRISO_FREE(_word);
+	  		continue;
+	    }
 
 	    //2. get the synonyms words.
 	    _syn = NULL;

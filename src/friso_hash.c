@@ -188,13 +188,14 @@ FRISO_API void free_hash_table(
 
 //put a new mapping insite.
 //the value cannot be NULL.
-FRISO_API void hash_put_mapping( 
+FRISO_API void *hash_put_mapping( 
 	friso_hash_t _hash, 
 	fstring key, 
 	void * value ) 
 {
     uint_t bucket = ( key == NULL ) ? 0 : hash( key, _hash->length );
     hash_entry_t e = *( _hash->table + bucket );
+    void *oval = NULL;
 
     //check the given key is already exists or not.
     for ( ; e != NULL; e = e->_next ) 
@@ -203,8 +204,9 @@ FRISO_API void hash_put_mapping(
 		|| ( key != NULL && e->_key != NULL 
 		    && strcmp( key, e->_key ) == 0 ) ) 
 	{
+        oval = e->_val;     //bak the old value
 	    e->_val = value;
-	    return;
+	    return oval;
 	}
     }
 
@@ -216,6 +218,7 @@ FRISO_API void hash_put_mapping(
     if ( _hash->size >= _hash->threshold ) 
 	rebuild_hash( _hash );
 
+    return oval;
 }
 
 //check the existence of the mapping associated with the given key.

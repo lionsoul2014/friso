@@ -337,7 +337,7 @@ FRISO_API void free_hash_table( friso_hash_t, fhash_callback_fn_t );
  * ----------------------------------------
  * the function associates the specified key with the given value.
  */
-FRISO_API void hash_put_mapping( friso_hash_t, fstring, void * );
+FRISO_API void *hash_put_mapping( friso_hash_t, fstring, void * );
 
 /*
  * Function: is_mapping_exists
