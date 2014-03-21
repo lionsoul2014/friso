@@ -1,12 +1,18 @@
 <pre>
 friso-1.6.1:
 1. friso.ini中friso.lex_dir增加相对friso.ini的路径支持。
-2. 修复两处内存泄漏bug.
-3. 中文词性标注。
-4. 中文数字识别。
-5. 中文数字转阿拉伯数字。
-6. 中文姓名识别。
-7. 词库更新自动加载。
+2. 修复两处内存泄漏bug.									-done
+3. autotools支持。
+4. friso deb | rmp支持：
+   Debian & Ubuntu:
+	sudo apt-get install libfriso0 libfriso-dev
+   CentOS & Fedora:
+	sudo yum install libfriso libfriso-devel
+5. 中文词性标注。
+6. 中文数字识别。
+7. 中文数字转阿拉伯数字。
+8. 中文姓名识别。
+9. 词库更新自动加载。
 
 friso-1.6:
 1. friso_stirng.c#utf8_decimal_string初始化bytes = 0, 
