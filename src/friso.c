@@ -278,8 +278,8 @@ FRISO_API void friso_set_text(
 /* }}} */
 
 /* **************************************************************
- * the static functions:										*
- * 		to assist the friso_next finish the work.				*
+ * the static functions:					*
+ * 		to assist the friso_next finish the work.	*
  ****************************************************************/
 /* {{{ read the next word from the current position.
  * 
@@ -649,7 +649,7 @@ __STATIC_API__ lex_entry_t next_basic_latin(
 /* }}} */
 
 /* **************************************************************
- * 	mmseg algorithm implemented functions :: start  			*
+ * 	mmseg algorithm implemented functions :: start  	*
  ****************************************************************/
 
 /* {{{ get the next match from the current position,
@@ -1117,7 +1117,7 @@ __STATIC_API__ lex_entry_t next_complex_cjk(
 /* }}} */
 
 /* **********************************************************
- * mmseg algorithm implemented functions : end  	    	*
+ * mmseg algorithm implemented functions : end  	    *
  ************************************************************/
 
 /* {{{ A macro function to check and free
