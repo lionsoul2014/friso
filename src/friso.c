@@ -1422,12 +1422,14 @@ FRISO_API friso_hits_t friso_next(
 			 * 		to the pool, and it should after the append of synonyms words.
 			 * 5. do not use the task->buffer and task->unicode as the check 
 			 * 		condition for the CE word identify.
+			 * 6. Add friso_numeric_letter check so can get work like '高3'
 			 *
 			 * @date 2013-09-02
 			 */
 			if ( ( task->idx < task->length ) 
 					&& ((int)task->text[task->idx]) > 0 
-					&& friso_en_letter( friso->charset, task ) )
+					&& ( friso_en_letter( friso->charset, task ) 
+						|| friso_numeric_letter(friso->charset, task) ) )
 			{
 				//create a string buffer
 				sb = new_string_buffer_with_string(lex->word);

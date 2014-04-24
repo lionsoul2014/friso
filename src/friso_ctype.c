@@ -38,7 +38,19 @@ FRISO_API int friso_whitespace(
     return 0;
 }
 
-//check if the specified word is a english letter.
+//check if the specifiled word is a numeric letter.
+FRISO_API int friso_numeric_letter(
+    friso_charset_t charset,
+    friso_task_t task)
+{
+    if ( charset == FRISO_UTF8 )
+        return utf8_numeric_letter((uint_t) task->text[task->idx]);
+    else if ( charset == FRISO_GBK )
+        return gbk_numeric_letter(task->text + task->idx);
+    return 0;
+}
+
+//check if the specified word is aa english letter.
 FRISO_API int friso_en_letter( 
 	friso_charset_t charset, 
 	friso_task_t task )

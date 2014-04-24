@@ -26,6 +26,9 @@ FRISO_API int friso_cn_string( friso_charset_t, friso_task_t );
 //check if the specified word is a whitespace.
 FRISO_API int friso_whitespace( friso_charset_t, friso_task_t );
 
+//check if the specifiled word is a numeric letter.
+FRISO_API int friso_numeric_letter(friso_charset_t, friso_task_t);
+
 //check if the specified word is a english letter.
 FRISO_API int friso_en_letter( friso_charset_t, friso_task_t );
 
