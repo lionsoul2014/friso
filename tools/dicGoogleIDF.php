@@ -64,7 +64,9 @@ foreach ( $lexFiles as $file )
 		continue;
 	}
 
+
 	//-------------------------------------------------------------
+	//create the output file and analysis the lexicon file
 
 	$dstFile 	= $outputDir . $file;
 	$output 	= fopen($dstFile, 'wb');
@@ -89,7 +91,8 @@ foreach ( $lexFiles as $file )
 		$splits 	= explode('/', $line);
 		$word 		= $splits[0];
 
-		echo '+--Analysis word ' . $word . "...\n";
+		//printf("+--Analysis word %s...\n", $word);
+		color_println("+--Analysis word {$word}...");
 
 		$number 	= getDocumentsNumber($word);
 		if ( $number == false ) 
@@ -109,8 +112,10 @@ foreach ( $lexFiles as $file )
 		fputs($output, $line."/{$idf}\n");
 
 		//yat, sleep for while, or google will get angry
-		usleep(500000);
+		usleep(1000000);
 	}
+
+	echo "\n";
 
 	fclose($handler);
 	fclose($output);
@@ -136,19 +141,19 @@ EOF;
 	$api_url	.= '&q=' . urlencode($word);*/
 	$api_url 	= 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q='.urlencode($word);
 
-	//$curl 		= curl_init();
-	//curl_setopt($curl, CURLOPT_HTTPGET, 			1);
-	//curl_setopt($curl, CURLOPT_URL, 				$api_url);  
-	//curl_setopt($curl, CURLOPT_HEADER, 				false);  
-	//curl_setopt($curl, CURLOPT_RETURNTRANSFER, 		1);
-	//curl_setopt($curl, CURLOPT_DNS_USE_GLOBAL_CACHE,1);
-	//curl_setopt($curl, CURLOPT_USERAGENT, 			$userAgent);
+	$curl 		= curl_init();
+	curl_setopt($curl, CURLOPT_HTTPGET, 			1);
+	curl_setopt($curl, CURLOPT_URL, 				$api_url);  
+	curl_setopt($curl, CURLOPT_HEADER, 				false);  
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 		1);
+	curl_setopt($curl, CURLOPT_DNS_USE_GLOBAL_CACHE,1);
+	curl_setopt($curl, CURLOPT_USERAGENT, 			$userAgent);
 
 	//get the http response
-	//$ret 		= curl_exec($curl);
-	//curl_close($curl);
+	$ret 		= curl_exec($curl);
+	curl_close($curl);
 
-	$ret 		= file_get_contents($api_url);
+	//$ret 		= file_get_contents($api_url);
 
 	$data 		= json_decode($ret);
 	unset($ret);
@@ -157,5 +162,12 @@ EOF;
 	if ( $data->responseStatus != 200 ) return false;
 
 	return $data->responseData->cursor->estimatedResultCount;
+}
+
+
+//terminal color print
+function color_println( $str )
+{
+	printf("\033[36m%s\033[0m\n", $str);
 }
 ?>
