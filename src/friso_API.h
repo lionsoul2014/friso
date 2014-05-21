@@ -27,8 +27,8 @@
     printf("Unable to do the memory allocation, program will now exit\n" );	\
 exit(1);
 
-//#define print(str) printf("%s", str )
-//#define println(str) printf("%s\n", str )
+#define print(str) printf("%s", str )
+#define println(str) printf("%s\n", str )
 
 /*
  * memory allocation macro definition.
