@@ -1,6 +1,6 @@
 <pre>
 friso-1.6.1:
-1. friso.ini中friso.lex_dir增加相对friso.ini的路径支持
+1. friso.ini中friso.lex_dir增加相对friso.ini的路径支持			-done
 2. 修复两处内存泄漏bug.											-done
 3. 改善中英混合词的识别, 可以识别更多情况, 例如:高3				-done
 4. 词库优化, 加入了一些新词条.									-done

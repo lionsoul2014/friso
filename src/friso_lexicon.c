@@ -407,6 +407,7 @@ __STATIC_API__ friso_lex_t get_lexicon_type_with_constant( fstring _key )
  *		and load all the valid lexicon from the configuration file.
  *
  * @param friso		friso instance
+ * @param	config	friso_config instance
  * @param _path		dictionary directory
  * @param _limitts	words length limit	
  */
@@ -418,7 +419,7 @@ FRISO_API void friso_dic_load_from_ifile(
 {
 
 	//1.parse the configuration file.
-	FILE * __stream;
+	FILE *__stream;
 	char __chars__[1024], __key__[30], *__line__;
 	uint_t __length__, i, t;
 	friso_lex_t lex_t;
@@ -427,9 +428,8 @@ FRISO_API void friso_dic_load_from_ifile(
 	//get the lexicon configruation file path
 	sb = new_string_buffer();
 	string_buffer_append( sb, _path );
-	if ( _path[ strlen(_path) - 1 ] != '/' ) 
-		string_buffer_append( sb, "/" );
 	string_buffer_append( sb, __FRISO_LEX_IFILE__ );
+	//printf("%s\n", sb->buffer);
 
 	if ( ( __stream = fopen( sb->buffer, "rb" ) ) != NULL ) 
 	{

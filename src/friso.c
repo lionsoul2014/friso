@@ -40,10 +40,21 @@ FRISO_API int friso_init_from_ifile(
 	char __chars__[256], __key__[128], *__line__, __lexi__[128];
 	uint_t i, t, __hit__ = 0, __length__;
 
-	if ( ( __stream = fopen( __ifile, "rb" ) ) != NULL ) {
+	char *slimiter = NULL;
+	uint_t flen = 0;
 
+	//get the base part of the path of the __ifile
+	if ( (slimiter = strrchr(__ifile, '/')) != NULL )
+	{
+		flen = slimiter - __ifile + 1;
+	}
+
+	//yat, start to parse the friso.ini configuration file
+	if ( ( __stream = fopen( __ifile, "rb" ) ) != NULL ) 
+	{
 		//initialize the entry with the value from the ifile.
-		while ( ( __line__ = file_get_line( __chars__, __stream ) ) != NULL ) {
+		while ( ( __line__ = file_get_line( __chars__, __stream ) ) != NULL ) 
+		{
 			//comments filter.
 			if ( __line__[0] == '#' ) continue;
 			if ( __line__[0] == '\t' ) continue; 
@@ -124,13 +135,38 @@ FRISO_API int friso_init_from_ifile(
 
 		/*
 		 * intialize the friso dictionary here.
-		 *		use the setting from the ifile parse above.
-		 *	we copied the value in the __lexi__.
+		 *		use the setting from the ifile parse above
+		 *	we copied the value in the __lexi__
 		 */
 		if ( __hit__ != 0 ) 
 		{
+			//add relative path search support
+			//@added: 2014-05-24
+			//convert the relative path to absolute path base on the path of friso.ini
+#ifdef FRISO_WINNT
+			if ( __lexi__[1] != ':' && flen != 0 )
+			{
+				memcpy(__lexi__ + flen, __lexi__, __hit__);
+				memcpy(__lexi__, __ifile, flen);
+				//count the new length
+				flen = flen + __hit__;
+				if ( __lexi__[flen-1] != '/'  ) __lexi__[flen] = '/';
+				__lexi__[flen+1] = '\0';
+			}
+#else
+			if ( __lexi__[0] != '/' && flen != 0 )
+			{
+				memcpy(__lexi__ + flen, __lexi__, __hit__);
+				memcpy(__lexi__, __ifile, flen);
+				//count the new length
+				flen = flen + __hit__;
+				if ( __lexi__[flen-1] != '/'  ) __lexi__[flen] = '/';
+				__lexi__[flen+1] = '\0';
+			}
+#endif
+
 			friso->dic = friso_dic_new();
-			//add charset check.
+			//add charset check for max word length counting
 			friso_dic_load_from_ifile( friso, config, 
 					__lexi__, config->max_len * (friso->charset == FRISO_UTF8 ? 3 : 2) );
 		}
