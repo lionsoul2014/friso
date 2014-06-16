@@ -4,6 +4,7 @@ friso-1.6.1:
 2. 修复两处内存泄漏bug.											-done
 3. 改善中英混合词的识别, 可以识别更多情况, 例如:高3				-done
 4. 词库优化, 加入了一些新词条.									-done
+5. 修复friso_dic_add & array_list_insert的两处代码bug			-done
 5. 复杂中文的二次切分
 6. autotools支持
 7. friso deb | rmp支持：

@@ -124,7 +124,7 @@ FRISO_API void friso_dic_add(
 		fstring word, 
 		friso_array_t syn ) 
 {
-	if ( lex >= 0 || lex < __FRISO_LEXICON_LENGTH__ ) 
+	if ( lex >= 0 && lex < __FRISO_LEXICON_LENGTH__ ) 
 	{
 		//printf("lex=%d, word=%s, syn=%s\n", lex, word, syn);
 		hash_put_mapping( dic[lex], word, 
