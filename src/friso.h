@@ -11,7 +11,7 @@
 #include <stdio.h>
 
 /* {{{ friso main interface define :: start*/
-#define FRISO_VERSION "1.6.0"
+#define FRISO_VERSION "1.6.1"
 #define friso_version() FRISO_VERSION
 
 
@@ -48,11 +48,42 @@ typedef enum {
 typedef friso_hash_t * friso_dic_t;
 #define __FRISO_LEXICON_LENGTH__ 12 
 
+
+//charset that Friso now support.
+typedef enum {
+    FRISO_UTF8	= 0,		//UTF-8
+    FRISO_GBK	= 1		//GBK
+} friso_charset_t;
+
+/*
+ * Type: friso_mode_t
+ * ------------------
+ * use to identidy the mode that the friso use. 
+ */
+typedef enum {
+    __FRISO_SIMPLE_MODE__ 	= 1,
+    __FRISO_COMPLEX_MODE__ 	= 2,
+	__FRISO_DETECT_MODE__	= 3
+} friso_mode_t;
+
+/* friso entry.*/
+typedef struct {
+    friso_dic_t dic;		//friso dictionary
+    friso_charset_t charset;	//project charset.
+} friso_entry;
+typedef friso_entry * friso_t;
+
+
+
 /*
  * Type: lex_entry_cdt
  * -------------------
  * This type used to represent the lexicon entry struct. 
  */
+#define _LEX_APPENSYN_MASK (1 << 0)	//append synoyums words.
+#define lex_appensyn_open(e)	e->ctrlMask |= _LEX_APPENSYN_MASK
+#define lex_appensyn_close(e)	e->ctrlMask &= ~_LEX_APPENSYN_MASK
+#define lex_appensyn_check(e)	((e->ctrlMask & _LEX_APPENSYN_MASK) != 0)
 typedef struct {
     /*
      * the type of the lexicon item.
@@ -73,59 +104,7 @@ typedef struct {
 typedef lex_entry_cdt * lex_entry_t;
 
 
-
-//charset that Friso now support.
-typedef enum {
-    FRISO_UTF8	= 0,		//UTF-8
-    FRISO_GBK	= 1		//GBK
-} friso_charset_t;
-
-/* friso entry.*/
-typedef struct {
-    friso_dic_t dic;		//friso dictionary
-    friso_charset_t charset;	//project charset.
-} friso_entry;
-typedef friso_entry * friso_t;
-
-/*
- * Type: friso_mode_t
- * ------------------
- * use to identidy the mode that the friso use. 
- */
-typedef enum {
-    __FRISO_SIMPLE_MODE__ 	= 1,
-    __FRISO_COMPLEX_MODE__ 	= 2
-} friso_mode_t;
-
-/* task configuration entry.*/
-#define friso_en_kpunc(config, ch) (strchr(config->kpuncs, ch) != 0)
-typedef struct {
-    ushort_t max_len;		//the max match length (4 - 7).
-    ushort_t r_name;		//1 for open chinese name recognition 0 for close it.
-    ushort_t mix_len;		//the max length for the CJK words in a mix string.
-    ushort_t lna_len;		//the max length for the chinese last name adron.
-    ushort_t add_syn;		//append synonyms tokenizer words.
-    ushort_t clr_stw;		//clear the stopwords.
-    ushort_t keep_urec;		//keep the unrecongnized words.
-    ushort_t spx_out;		//use sphinx output customize.
-    ushort_t en_sseg;		//start the secondary segmentation.
-    ushort_t st_minl;		//min length of the secondary segmentation token.
-    uint_t nthreshold;		//the threshold value for a char to make up a chinese name.
-    friso_mode_t mode;		//Complex mode or simple mode
-#define _FRISO_KEEP_PUNC_LEN 13
-    char kpuncs[_FRISO_KEEP_PUNC_LEN]; //keep punctuations buffer.
-} friso_config_entry;
-typedef friso_config_entry * friso_config_t;
-
-
-
-//control mask for #LEX_ENTRY_T#.
-#define _LEX_APPENSYN_MASK (1 << 0)	//append synoyums words.
-#define lex_appensyn_open(e)	e->ctrlMask |= _LEX_APPENSYN_MASK
-#define lex_appensyn_close(e)	e->ctrlMask &= ~_LEX_APPENSYN_MASK
-#define lex_appensyn_check(e)	((e->ctrlMask & _LEX_APPENSYN_MASK) != 0)
-
-/*the segmentation term entry.*/
+/*the segmentation token entry.*/
 #define __HITS_WORD_LENGTH__ 128
 
 typedef struct {
@@ -136,22 +115,21 @@ typedef struct {
     int offset;		//start offset of the word.
     char word[__HITS_WORD_LENGTH__];
     //char py[0];
-} friso_hits_entry;
-typedef friso_hits_entry * friso_hits_t;
+} friso_token_entry;
+typedef friso_token_entry * friso_token_t;
 
 
+/*
+ * Type: friso_task_entry
+ * This type used to represent the current segmentation content.
+ * 		like the text to split, and the current index, token buffer eg.... 
+ */
 //action control mask for #FRISO_TASK_T#.
 #define _TASK_CHECK_CF_MASK (1 << 0) 	//Wether to check the chinese fraction.
 #define _TASK_START_SS_MASK (1 << 1)	//Wether to start the secondary segmentation.
 #define task_ssseg_open(task)	task->ctrlMask |= _TASK_START_SS_MASK
 #define task_ssseg_close(task)	task->ctrlMask &= ~_TASK_START_SS_MASK
 #define task_ssseg_check(task)	((task->ctrlMask & _TASK_START_SS_MASK) != 0)
-
-/*
- * Type: friso_task_entry
- * This type used to represent the current segmentation content.
- * 		like the text to split, and the current index, hits buffer eg.... 
- */
 typedef struct {
     fstring text;		//text to tokenize
     uint_t idx;			//start offset index.
@@ -161,10 +139,41 @@ typedef struct {
     uint_t ctrlMask;		//action control mask.
     friso_link_t pool;		//task pool.
     string_buffer_t sbuf;	//string buffer.
-    friso_hits_t hits;		//token result hits.
+    friso_token_t token;		//token result token;
     char buffer[7];		//word buffer. (1-6 bytes for an utf-8 word in C).
 } friso_task_entry;
 typedef friso_task_entry * friso_task_t;
+
+
+/* task configuration entry.*/
+#define _FRISO_KEEP_PUNC_LEN 13
+#define friso_en_kpunc(config, ch) (strchr(config->kpuncs, ch) != 0)
+//typedef friso_token_t ( * friso_next_hit_fn ) ( friso_t, void *, friso_task_t );
+//typedef lex_entry_t  ( * friso_next_lex_fn ) ( friso_t, void *, friso_task_t );
+struct friso_config_struct {
+    ushort_t max_len;			//the max match length (4 - 7).
+    ushort_t r_name;			//1 for open chinese name recognition 0 for close it.
+    ushort_t mix_len;			//the max length for the CJK words in a mix string.
+    ushort_t lna_len;			//the max length for the chinese last name adron.
+    ushort_t add_syn;			//append synonyms tokenizer words.
+    ushort_t clr_stw;			//clear the stopwords.
+    ushort_t keep_urec;			//keep the unrecongnized words.
+    ushort_t spx_out;			//use sphinx output customize.
+    ushort_t en_sseg;			//start the secondary segmentation.
+    ushort_t st_minl;			//min length of the secondary segmentation token.
+    uint_t nthreshold;			//the threshold value for a char to make up a chinese name.
+    friso_mode_t mode;			//Complex mode or simple mode
+
+	//pointer to the function to get the next token
+	friso_token_t (*next_token) (friso_t, struct friso_config_struct *, friso_task_t);
+	//pointer to the function to get the next cjk lex_entry_t
+	lex_entry_t   (*next_cjk  ) (friso_t, struct friso_config_struct *, friso_task_t);		
+
+    char kpuncs[_FRISO_KEEP_PUNC_LEN]; //keep punctuations buffer.
+};
+typedef struct friso_config_struct friso_config_entry;
+typedef friso_config_entry * friso_config_t;
+
 
 
 /*
@@ -207,11 +216,7 @@ do {\
  * ------------------------------------
  * This function is used to set the mode(complex or simple) that you want to friso to use.
  */
-//FRISO_API void friso_set_mode( friso_t, friso_mode_t );
-#define friso_set_mode( friso, mode )\
-do {\
-    friso->mode = mode;\
-} while (0)
+FRISO_API void friso_set_mode( friso_config_t, friso_mode_t );
 
 /*create a new friso configuration entry and initialize 
   it with the default value.*/
@@ -240,12 +245,12 @@ FRISO_API friso_task_t friso_new_task( void );
  */
 FRISO_API void friso_free_task( friso_task_t );
 
-//create a new friso hits
-FRISO_API friso_hits_t friso_new_hits( void );
+//create a new friso token
+FRISO_API friso_token_t friso_new_token( void );
 
-//free the given friso hits
-//FRISO_API void friso_free_hits( friso_hits_t );
-#define friso_free_hits(hits) FRISO_FREE(hits)
+//free the given friso token
+//FRISO_API void friso_free_token( friso_token_t );
+#define friso_free_token(token) FRISO_FREE(token)
 
 /*
  * Function: friso_set_text
@@ -255,13 +260,24 @@ FRISO_API friso_hits_t friso_new_hits( void );
  */
 FRISO_API void friso_set_text( friso_task_t, fstring );
 
+
+//get the next cjk word with mmseg simple mode
+FRISO_API lex_entry_t next_simple_cjk( friso_t, friso_config_t, friso_task_t );
+
+//get the next cjk word with mmseg complex mode(mmseg core algorithm)
+FRISO_API lex_entry_t next_complex_cjk( friso_t, friso_config_t, friso_task_t );
+
 /*
- * Function: friso_next
- * Usage: word = friso_next( vars, seg );
+ * Function: next_mmseg_token
+ * Usage: word = next_mmseg_token( vars, seg );
  * --------------------------------------
- * This function is used to get next word that friso segmented. 
+ * This function is used to get next word that friso segmented
+ * 	with a split mode of __FRISO_SIMPLE_MODE__ or __FRISO_COMPLEX_MODE__
  */
-FRISO_API friso_hits_t friso_next( friso_t, friso_config_t, friso_task_t );
+FRISO_API friso_token_t next_mmseg_token( friso_t, friso_config_t, friso_task_t );
+
+//__FRISO_DETECT_MODE__
+FRISO_API friso_token_t next_detect_token( friso_t, friso_config_t, friso_task_t );
 /* }}} friso main interface define :: end*/
 
 /* {{{ lexicon interface define :: start*/

@@ -13,6 +13,8 @@
 #include "friso_ctype.h"
 #include "friso.h"
 
+//-----------------------------------------------------------------
+//friso instance about function
 /* {{{ create a new friso configuration variable.
 */
 FRISO_API friso_t friso_new( void ) 
@@ -119,7 +121,8 @@ FRISO_API int friso_init_from_ifile(
 			} else if ( strcmp( __key__, "friso.nthreshold" ) == 0 ) {
 				config->nthreshold = atoi( __line__ );
 			} else if ( strcmp( __key__, "friso.mode" ) == 0 ) {
-				config->mode = ( friso_mode_t ) atoi( __line__ );
+				//config->mode = ( friso_mode_t ) atoi( __line__ );
+				friso_set_mode(config, (friso_mode_t) atoi( __line__ ));
 			} else if ( strcmp( __key__, "friso.charset" ) == 0 ) {
 				friso->charset = (friso_charset_t) atoi( __line__ );
 			} else if ( strcmp( __key__, "friso.en_sseg") == 0 ) {
@@ -192,6 +195,30 @@ FRISO_API void friso_free( friso_t friso )
 }
 /* }}} */
 
+/* {{{ set the current split mode
+ *	view the friso.h#friso_mode_t
+ */
+FRISO_API void friso_set_mode( friso_config_t config, friso_mode_t mode )
+{
+	config->mode = mode;
+
+	switch ( config->mode )
+	{
+		case __FRISO_SIMPLE_MODE__:
+			config->next_token = next_mmseg_token;
+			config->next_cjk = next_simple_cjk;
+			break;
+		case __FRISO_DETECT_MODE__:
+			config->next_token = next_detect_token;
+			break;
+		default:
+			config->next_token = next_mmseg_token;
+			config->next_cjk = next_complex_cjk;
+			break;
+	}
+}
+/* }}} */
+
 /* {{{ create a new friso configuration entry and initialize 
  * it with default value.*/
 FRISO_API friso_config_t friso_new_config( void )
@@ -225,6 +252,8 @@ FRISO_API void friso_init_config( friso_config_t cfg )
 	cfg->nthreshold 	= DEFAULT_NTHRESHOLD;
 	cfg->mode 		= ( friso_mode_t ) DEFAULT_SEGMENT_MODE;
 
+	friso_set_mode(cfg, cfg->mode);
+
 	//Zero fill the kpuncs buffer.
 	memset(cfg->kpuncs, 0x00, sizeof(cfg->kpuncs));
 }
@@ -248,7 +277,7 @@ FRISO_API friso_task_t friso_new_task()
 	task->ctrlMask = 0;
 	task->pool	= new_link_list();
 	task->sbuf	= new_string_buffer();
-	task->hits = friso_new_hits();
+	task->token = friso_new_token();
 
 	return task;
 }
@@ -267,33 +296,33 @@ FRISO_API void friso_free_task( friso_task_t task )
 		free_string_buffer(task->sbuf);
 	}
 
-	//free the allocations of the hits.
-	if ( task->hits != NULL ) {
-		friso_free_hits( task->hits );
+	//free the allocations of the token.
+	if ( task->token != NULL ) {
+		friso_free_token( task->token );
 	}
 
 	FRISO_FREE( task );
 }
 /* }}} */
 
-/* {{{ create a new friso hits */
-FRISO_API friso_hits_t friso_new_hits( void ) 
+/* {{{ create a new friso token */
+FRISO_API friso_token_t friso_new_token( void ) 
 {
-	friso_hits_t hits = ( friso_hits_t ) 
-		FRISO_MALLOC( sizeof( friso_hits_entry ) );
-	if ( hits == NULL ) {
+	friso_token_t token = ( friso_token_t ) 
+		FRISO_MALLOC( sizeof( friso_token_entry ) );
+	if ( token == NULL ) {
 		___ALLOCATION_ERROR___
 	}
 
 	//initialize
-	hits->type = (uchar_t) __LEX_OTHER_WORDS__;
-	hits->length = 0;
-	hits->rlen = 0;
-	hits->pos = '\0';
-	hits->offset = -1;
-	memset(hits->word, 0x00, __HITS_WORD_LENGTH__);
+	token->type = (uchar_t) __LEX_OTHER_WORDS__;
+	token->length = 0;
+	token->rlen = 0;
+	token->pos = '\0';
+	token->offset = -1;
+	memset(token->word, 0x00, __HITS_WORD_LENGTH__);
 
-	return hits;
+	return token;
 }
 /* }}} */
 
@@ -313,10 +342,8 @@ FRISO_API void friso_set_text(
 }
 /* }}} */
 
-/* **************************************************************
- * the static functions:					*
- * 		to assist the friso_next finish the work.	*
- ****************************************************************/
+//--------------------------------------------------------------------
+//friso core part 1: simple mode tokenize handler functions
 /* {{{ read the next word from the current position.
  * 
  * @return	int the bytes of the readed word.
@@ -340,7 +367,7 @@ __STATIC_API__ uint_t readNextWord(
 
 /* {{{ get the next cjk word from the current position, with simple mode.
 */
-__STATIC_API__ lex_entry_t next_simple_cjk( 
+FRISO_API lex_entry_t next_simple_cjk( 
 		friso_t friso, 
 		friso_config_t config,
 		friso_task_t task ) 
@@ -351,7 +378,7 @@ __STATIC_API__ lex_entry_t next_simple_cjk(
 			__LEX_CJK_WORDS__, sb->buffer );
 
 	/*
-	 * here bak the e->length in the task->hits->type.
+	 * here bak the e->length in the task->token->type.
 	 *		we will use it to count the task->idx.
 	 * for the sake of use less variable.
 	 */
@@ -393,6 +420,8 @@ __STATIC_API__ lex_entry_t next_simple_cjk(
 }
 /* }}} */
 
+//-------------------------------------------------------------------
+//friso core part 2: basic latin handler functions
 /* {{{ basic latin segmentation*/
 /*convert full-width char  to half-width*/ 
 #define convert_full_to_half( friso, task, convert ) \
@@ -684,9 +713,10 @@ __STATIC_API__ lex_entry_t next_basic_latin(
 }
 /* }}} */
 
-/* **************************************************************
- * 	mmseg algorithm implemented functions :: start  	*
- ****************************************************************/
+
+//-------------------------------------------------------------------
+//friso core part 3: mmseg tokenize implements functions
+//mmseg algorithm implemented functions - start 
 
 /* {{{ get the next match from the current position,
  *		throught the dictionary this will return all the matchs.
@@ -1018,7 +1048,7 @@ __STATIC_API__ friso_chunk_t mmseg_core_invoke( friso_array_t chunks )
  *
  * @see mmseg_core_invoke( chunks );
  */
-__STATIC_API__ lex_entry_t next_complex_cjk( 
+FRISO_API lex_entry_t next_complex_cjk( 
 		friso_t friso,
 		friso_config_t config,
 		friso_task_t task ) 
@@ -1151,11 +1181,11 @@ __STATIC_API__ lex_entry_t next_complex_cjk(
 	return fe;
 }
 /* }}} */
+//----------------end of mmseg core
 
-/* **********************************************************
- * mmseg algorithm implemented functions : end  	    *
- ************************************************************/
 
+//-------------------------------------------------------------------------------------
+//mmseg core logic controller, output style controller and macro defines
 /* {{{ A macro function to check and free
  * 	the lex_entry_t with type of __LEX_OTHER_WORDS__.
  */
@@ -1173,7 +1203,7 @@ __STATIC_API__ lex_entry_t next_complex_cjk(
  * @param	task
  * @param	lex
  * */
-__STATIC_API__ void hits_sphinx_output( 
+__STATIC_API__ void token_sphinx_output( 
 		friso_task_t task, 
 		lex_entry_t lex )
 {
@@ -1187,14 +1217,14 @@ __STATIC_API__ void hits_sphinx_output(
 		_word = ( fstring ) lex->syn->items[i];
 		j = strlen(_word);
 		if ( ( len + j + 1 ) >= __HITS_WORD_LENGTH__ ) break;
-		memcpy(task->hits->word + len, "|", 1);
+		memcpy(task->token->word + len, "|", 1);
 		len += 1;
-		memcpy(task->hits->word + len, _word, j);
+		memcpy(task->token->word + len, _word, j);
 		len += j;
 	} 
 
 	//set the new end of the buffer.
-	task->hits->word[len] = '\0';
+	task->token->word[len] = '\0';
 }
 /* }}} */
 
@@ -1205,7 +1235,7 @@ __STATIC_API__ void hits_sphinx_output(
  * @param	front	1 for add the synoyum words from the head and 
  * 					0 for append from the tail.
  * */
-__STATIC_API__ void hits_normal_output( 
+__STATIC_API__ void token_normal_output( 
 		friso_task_t task,
 		lex_entry_t lex, 
 		int front )
@@ -1322,11 +1352,11 @@ __STATIC_API__ lex_entry_t en_second_seg(
 				&& (tmp->syn) != NULL ) 		\
 		{\
 			if ( config->spx_out == 1 )			\
-			hits_sphinx_output(task, tmp);		\
+			token_sphinx_output(task, tmp);		\
 			else \
 			{\
 				tmp->offset = lex->offset;		\
-				hits_normal_output(task, tmp, front);	\
+				token_normal_output(task, tmp, front);	\
 			}\
 		}\
 	} while (0)
@@ -1339,7 +1369,7 @@ __STATIC_API__ lex_entry_t en_second_seg(
  * @param	config.
  * @return	task.
  */
-FRISO_API friso_hits_t friso_next( 
+FRISO_API friso_token_t next_mmseg_token( 
 		friso_t friso, 
 		friso_config_t config, 
 		friso_task_t task ) 
@@ -1356,12 +1386,12 @@ FRISO_API friso_hits_t friso_next(
 		 * 	often synonyms, newly created word will be stored in the poll.
 		 */
 		lex = ( lex_entry_t ) link_list_remove_first( task->pool );
-		memcpy(task->hits->word, lex->word, lex->length);
-		task->hits->type = lex->type;
-		task->hits->length = lex->length;
-		task->hits->rlen = lex->rlen;
-		task->hits->offset = lex->offset;
-		task->hits->word[lex->length] = '\0';
+		memcpy(task->token->word, lex->word, lex->length);
+		task->token->type = lex->type;
+		task->token->length = lex->length;
+		task->token->rlen = lex->rlen;
+		task->token->offset = lex->offset;
+		task->token->word[lex->length] = '\0';
 
 		/* check and handle the english synonyms words append mask.
 		 * 	Also we have to close the mask after finish the operation.
@@ -1404,7 +1434,7 @@ FRISO_API friso_hits_t friso_next(
 				break;
 		}
 
-		return task->hits;
+		return task->token;
 	}
 	/* }}} */
 
@@ -1426,20 +1456,20 @@ FRISO_API friso_hits_t friso_next(
 			if ( ! friso_dic_match( friso->dic, 
 						__LEX_CJK_WORDS__, task->buffer) )
 			{
-				memcpy(task->hits->word, task->buffer, task->bytes );
-				task->hits->type = __LEX_PUNC_WORDS__;
-				task->hits->length = task->bytes;
-				task->hits->rlen = task->bytes;
-				task->hits->offset = task->idx - task->bytes;
-				task->hits->word[(int)task->bytes] = '\0';
-				return task->hits;
+				memcpy(task->token->word, task->buffer, task->bytes );
+				task->token->type = __LEX_PUNC_WORDS__;
+				task->token->length = task->bytes;
+				task->token->rlen = task->bytes;
+				task->token->offset = task->idx - task->bytes;
+				task->token->word[(int)task->bytes] = '\0';
+				return task->token;
 			}
 
-			//complex mode.
-			if ( config->mode == __FRISO_COMPLEX_MODE__ ) 
-				lex = next_complex_cjk( friso, config, task );
-			//simple  mode.
-			else lex = next_simple_cjk( friso, config, task );
+			//specifield mode split.
+			//if ( config->mode == __FRISO_COMPLEX_MODE__ ) 
+			//	lex = next_complex_cjk( friso, config, task );
+			//else lex = next_simple_cjk( friso, config, task );
+			lex = config->next_cjk(friso, config, task);
 
 			if ( lex == NULL ) continue;	//find a stopwrod.
 			lex->offset = task->idx - lex->rlen;
@@ -1492,26 +1522,26 @@ FRISO_API friso_hits_t friso_next(
 			}
 
 			/*
-			 * copy the lex_entry to the result hits
+			 * copy the lex_entry to the result token
 			 *
 			 * @reader: (boodly lession, added 2013-08-31):
-			 * 	don't bother to handle the task->hits->offset problem.
+			 * 	don't bother to handle the task->token->offset problem.
 			 * 		is has been sovled perfectly above. 
 			 */
 			len = (int) lex->length;
-			memcpy(task->hits->word, lex->word, lex->length);
-			task->hits->type = lex->type;
-			task->hits->length = lex->length;
-			task->hits->rlen = lex->rlen;
-			task->hits->offset = lex->offset;
-			task->hits->word[len] = '\0';
+			memcpy(task->token->word, lex->word, lex->length);
+			task->token->type = lex->type;
+			task->token->length = lex->length;
+			task->token->rlen = lex->rlen;
+			task->token->offset = lex->offset;
+			task->token->word[len] = '\0';
 
 			//check and append the synonyms words
 			if ( config->add_syn && lex->syn != NULL ) 
 			{
 				if ( config->spx_out == 1 )
-					hits_sphinx_output(task, lex);
-				else hits_normal_output(task, lex, 0);
+					token_sphinx_output(task, lex);
+				else token_normal_output(task, lex, 0);
 			}
 
 			/* {{{ here: handle the newly found basic latin created when 
@@ -1539,7 +1569,7 @@ FRISO_API friso_hits_t friso_next(
 			}
 			/* }}} */
 
-			return task->hits;
+			return task->token;
 		} 
 		/* }}} */
 
@@ -1568,13 +1598,13 @@ FRISO_API friso_hits_t friso_next(
 							__LEX_STOPWORDS__, task->buffer) )
 					continue;
 				//count the punctuation in.
-				task->hits->word[0] = task->buffer[0];
-				task->hits->type = __LEX_PUNC_WORDS__;
-				task->hits->length = task->bytes;
-				task->hits->rlen = task->bytes;
-				task->hits->offset = task->idx - task->bytes;
-				task->hits->word[1] = '\0';
-				return task->hits;
+				task->token->word[0] = task->buffer[0];
+				task->token->type = __LEX_PUNC_WORDS__;
+				task->token->length = task->bytes;
+				task->token->rlen = task->bytes;
+				task->token->offset = task->idx - task->bytes;
+				task->token->word[1] = '\0';
+				return task->token;
 
 				//continue
 			}	
@@ -1615,14 +1645,14 @@ FRISO_API friso_hits_t friso_next(
 			}
 
 			//if the token is longer than __HITS_WORD_LENGTH__, drop it 
-			//copy the word to the task hits buffer.
+			//copy the word to the task token buffer.
 			if ( lex->length >= __HITS_WORD_LENGTH__ ) continue;
-			memcpy(task->hits->word, lex->word, lex->length);
-			task->hits->type = lex->type;
-			task->hits->length = lex->length;
-			task->hits->rlen = lex->rlen;
-			task->hits->offset = lex->offset;
-			task->hits->word[lex->length] = '\0';
+			memcpy(task->token->word, lex->word, lex->length);
+			task->token->type = lex->type;
+			task->token->length = lex->length;
+			task->token->rlen = lex->rlen;
+			task->token->offset = lex->offset;
+			task->token->word[lex->length] = '\0';
 
 			/* If sword is NULL, continue to check and append 
 			 * tye synoyums words for the current lex_entry_t.
@@ -1633,7 +1663,7 @@ FRISO_API friso_hits_t friso_next(
 			//free the newly create lex_entry_t
 			check_free_otlex_entry( lex );
 
-			return task->hits;
+			return task->token;
 		} 
 		/* }}} */
 
@@ -1646,12 +1676,12 @@ FRISO_API friso_hits_t friso_next(
 						__LEX_STOPWORDS__, task->buffer) )
 				continue;
 			//count the punctuation in.
-			memcpy(task->hits->word, task->buffer, task->bytes);
-			task->hits->type = __LEX_PUNC_WORDS__;
-			task->hits->length = task->bytes;
-			task->hits->offset = task->idx - task->bytes;
-			task->hits->word[task->bytes] = '\0';
-			return task->hits;
+			memcpy(task->token->word, task->buffer, task->bytes);
+			task->token->type = __LEX_PUNC_WORDS__;
+			task->token->length = task->bytes;
+			task->token->offset = task->idx - task->bytes;
+			task->token->word[task->bytes] = '\0';
+			return task->token;
 		}
 		/* }}} */
 		//else if ( friso_letter_number( friso->charset, task ) ) 
@@ -1665,14 +1695,101 @@ FRISO_API friso_hits_t friso_next(
 		//@date 2013-10-14 */
 		else if ( config->keep_urec ) 
 		{
-			memcpy(task->hits->word, task->buffer, task->bytes);
-			task->hits->type = __LEX_UNKNOW_WORDS__;
-			task->hits->length = task->bytes;
-			task->hits->offset = task->idx - task->bytes;
-			task->hits->word[task->bytes] = '\0';
-			return task->hits;
+			memcpy(task->token->word, task->buffer, task->bytes);
+			task->token->type = __LEX_UNKNOW_WORDS__;
+			task->token->length = task->bytes;
+			task->token->offset = task->idx - task->bytes;
+			task->token->word[task->bytes] = '\0';
+			return task->token;
 		}
 		/* }}} */
+	}
+
+	return NULL;
+}
+/* }}} */
+
+//----------------------------------------------------------------------
+//detect core logic controller: detect tokenize mode handler functions
+/** {{{ get the next splited token with detect mode
+ *	detect mode will only return the words in the dictionary
+ *		with simple forward maximum matching algorithm
+ */
+FRISO_API friso_token_t next_detect_token( 
+		friso_t friso, friso_config_t config, friso_task_t task )
+{
+	lex_entry_t lex = NULL;
+	int i, __convert = 0, tbytes, wbytes;
+
+	while ( task->idx < task->length ) 
+	{
+		lex = NULL;
+
+		//read the next word from the current position.
+		task->bytes = readNextWord( friso, task, &task->idx, task->buffer );
+		if ( task->bytes == 0 ) break;
+
+		//clear up the whitespace.
+		if ( friso_whitespace( friso->charset, task ) ) continue;
+
+		//convert full-width to half-width
+		// and uppercase to lowercase for english chars
+		wbytes = 0;
+		tbytes = task->bytes;
+		convert_full_to_half( friso, task, __convert );
+		convert_upper_to_lower( friso, task, __convert );
+		convert_work_apply( friso, task, __convert );
+
+
+		string_buffer_clear(task->sbuf);
+		string_buffer_append(task->sbuf, task->buffer);
+		if ( friso_dic_match(friso->dic, __LEX_CJK_WORDS__, task->sbuf->buffer) )
+		{
+			lex = friso_dic_get(friso->dic, __LEX_CJK_WORDS__, task->sbuf->buffer);
+			wbytes = tbytes;
+		}
+
+		for ( i = 1; i < config->max_len; i++ )
+		{
+			task->bytes = readNextWord( friso, task, &task->idx, task->buffer );
+			if ( task->bytes == 0 ) break;
+
+			//convert full-width to half-width
+			// and uppercase to lowercase for english chars
+			tbytes += task->bytes;
+			convert_full_to_half( friso, task, __convert );
+			convert_upper_to_lower( friso, task, __convert );
+			convert_work_apply( friso, task, __convert );
+			string_buffer_append(task->sbuf, task->buffer);
+
+			if ( friso_dic_match(friso->dic, __LEX_CJK_WORDS__, task->sbuf->buffer) )
+			{
+				lex = friso_dic_get(friso->dic, __LEX_CJK_WORDS__, task->sbuf->buffer);
+				wbytes = tbytes;
+			}
+		}
+
+		/*
+		 * matches no word in the dictionary
+		 * 		reset the task->idx to the correct value
+		 */
+		if ( lex == NULL ) 
+		{
+			task->idx -= (tbytes - 1);
+			continue;
+		}
+
+		//yat, matched a item and tanke it to initialize the returning token
+		//	also we need to push back the none-matched part by reset the task->idx
+		task->idx -= (tbytes - wbytes);
+
+		memcpy(task->token->word, lex->word, lex->length);
+		task->token->type = __LEX_CJK_WORDS__;
+		task->token->length = lex->length;
+		task->token->rlen = wbytes;
+		task->token->offset = task->idx - wbytes;
+		task->token->word[(int)lex->length] = '\0';
+		return task->token;
 	}
 
 	return NULL;
