@@ -36,7 +36,7 @@ friso-1.6.1:
 
 6. 增加检测模式切分, 只返回词库中有的词条						-done
 
-7. 增加sphinx token plugin
+7. 集成了php扩展绑定，完美支持PHP分词						-done
 
 
 
