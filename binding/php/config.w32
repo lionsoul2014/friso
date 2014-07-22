@@ -1,0 +1,13 @@
+// $Id$
+// vim:ft=javascript
+
+// If your extension references something external, use ARG_WITH
+// ARG_WITH("friso", "for friso support", "no");
+
+// Otherwise, use ARG_ENABLE
+// ARG_ENABLE("friso", "enable friso support", "no");
+
+if (PHP_FRISO != "no") {
+	EXTENSION("friso", "friso.c");
+}
+
