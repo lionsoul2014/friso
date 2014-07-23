@@ -1,6 +1,8 @@
 <pre>
 friso-1.6.2:
 
+1. sphinx token filter
+
 1. 复杂中文的二次切分
 
 2. autotools支持
