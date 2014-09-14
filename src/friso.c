@@ -1721,6 +1721,38 @@ FRISO_API friso_token_t next_detect_token(
 	lex_entry_t lex = NULL;
 	int i, __convert = 0, tbytes, wbytes;
 
+	/* {{{ task word pool check */
+	if ( ! link_list_empty( task->pool ) ) 
+	{
+		/*
+		 * load word from the word poll if it is not empty.
+		 *  this will make the next word more convenient and efficient.
+		 * 	often synonyms, newly created word will be stored in the poll.
+		 */
+		lex = ( lex_entry_t ) link_list_remove_first( task->pool );
+		memcpy(task->token->word, lex->word, lex->length);
+		task->token->type = lex->type;
+		task->token->length = lex->length;
+		task->token->rlen = lex->rlen;
+		task->token->offset = lex->offset;
+		task->token->word[lex->length] = '\0';
+
+		/*
+		 * __LEX_NCSYN_WORDS__:
+		 *  these lex_entry_t was created to store the the synonyums words.
+		 * 	and its word pointed to the lex_entry_t's synonyms word of
+		 * 		friso->dic, so :
+		 * 	free the lex_entry_t but not its word here.
+		 */
+		if ( lex->type == __LEX_NCSYN_WORDS__ ) 
+		{
+			free_lex_entry( lex );
+		}
+
+		return task->token;
+	}
+	/* }}} */
+
 	while ( task->idx < task->length ) 
 	{
 		lex = NULL;
@@ -1789,6 +1821,15 @@ FRISO_API friso_token_t next_detect_token(
 		task->token->rlen = wbytes;
 		task->token->offset = task->idx - wbytes;
 		task->token->word[(int)lex->length] = '\0';
+
+		//check and append the synonyms words
+		if ( config->add_syn && lex->syn != NULL ) 
+		{
+			if ( config->spx_out == 1 )
+				token_sphinx_output(task, lex);
+			else token_normal_output(task, lex, 0);
+		}
+
 		return task->token;
 	}
 

@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 	clock_t s_time, e_time;
 	char line[__INPUT_LENGTH__] = {0};
 	int i;
-	fstring __path__ = NULL;
+	fstring __path__ = NULL, mode = NULL;
 
 	friso_t friso;
 	friso_config_t config;
@@ -93,6 +93,19 @@ int main(int argc, char **argv)
 		goto err;
 	}
 
+	switch ( config->mode ) 
+	{
+		case __FRISO_SIMPLE_MODE__:
+			mode = "Simple";
+			break;
+		case __FRISO_COMPLEX_MODE__:
+			mode = "Complex";
+			break;
+		case __FRISO_DETECT_MODE__:
+			mode = "Detect";
+			break;
+	}
+
 	//friso_set_mode( config, __FRISO_DETECT_MODE__ );
 	//printf("clr_stw=%d\n", friso->clr_stw);
 	//printf("match c++?%d\n", friso_dic_match( friso->dic, __LEX_ENPUN_WORDS__, "c++" ));
@@ -101,6 +114,7 @@ int main(int argc, char **argv)
 	e_time = clock();
 
 	printf("Initialized in %fsec\n", (double) ( e_time - s_time ) / CLOCKS_PER_SEC );
+	printf("Mode: %s\n", mode);
 	printf("+-Version: %s (%s)\n", friso_version(), friso->charset == FRISO_UTF8 ? "UTF-8" : "GBK" );
 	___ABOUT___;
 
