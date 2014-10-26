@@ -13,14 +13,23 @@
 /* ******************************************
  * fstring buffer functions implements.		*
  ********************************************/
+/**
+ * create a new buffer
+ * @Note:
+ * 1. it's real length is 1 byte greater than the specifield value
+ * 2. we did not do any optimization for the memory allocation to ...
+ * 	avoid the memory defragmentation.
+ *
+ * @date: 2014-10-16
+ */
 __STATIC_API__ fstring create_buffer( uint_t length ) 
 {
-    fstring buffer = ( fstring ) FRISO_MALLOC( length );
+    fstring buffer = ( fstring ) FRISO_MALLOC( length + 1 );
     if ( buffer == NULL ) {
 	___ALLOCATION_ERROR___
     }
 
-    memset( buffer, 0x00, length );
+    memset( buffer, 0x00, length + 1 );
 
     return buffer;
 }
