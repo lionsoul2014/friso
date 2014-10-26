@@ -39,7 +39,8 @@ FRISO_API int friso_init_from_ifile(
 		friso_t friso, friso_config_t config, fstring __ifile ) 
 {
 	FILE *__stream;
-	char __chars__[256], __key__[128], *__line__, __lexi__[128];
+	char __chars__[256], __key__[128], *__line__;
+	char __lexi__[160], lexpath[160];
 	uint_t i, t, __hit__ = 0, __length__;
 
 	char *slimiter = NULL;
@@ -146,32 +147,45 @@ FRISO_API int friso_init_from_ifile(
 			//add relative path search support
 			//@added: 2014-05-24
 			//convert the relative path to absolute path base on the path of friso.ini
+			//improved at @date: 2014-10-26
+
 #ifdef FRISO_WINNT
 			if ( __lexi__[1] != ':' && flen != 0 )
-			{
-				memcpy(__lexi__ + flen, __lexi__, __hit__);
-				memcpy(__lexi__, __ifile, flen);
-				//count the new length
-				flen = flen + __hit__;
-				if ( __lexi__[flen-1] != '/'  ) __lexi__[flen] = '/';
-				__lexi__[flen+1] = '\0';
-			}
 #else
 			if ( __lexi__[0] != '/' && flen != 0 )
-			{
-				memcpy(__lexi__ + flen, __lexi__, __hit__);
-				memcpy(__lexi__, __ifile, flen);
-				//count the new length
-				flen = flen + __hit__;
-				if ( __lexi__[flen-1] != '/'  ) __lexi__[flen] = '/';
-				__lexi__[flen+1] = '\0';
-			}
 #endif
+			{
+				if ( (flen + __hit__) > sizeof(lexpath) - 1 )
+				{
+					printf("[Error]: Buffer is not long enough to hold the final lexicon path");
+					printf(" with a length of {%d} at function friso.c#friso_init_from_ifile", flen + __hit__);
+					return 0;
+				}
+
+				memcpy(lexpath, __ifile, flen);
+				memcpy(lexpath + flen, __lexi__, __hit__ - 1);
+				//count the new length
+				flen = flen + __hit__ - 1;
+				if ( lexpath[flen-1] != '/'  ) lexpath[flen] = '/';
+				lexpath[flen+1] = '\0';
+			}
+			else
+			{
+				memcpy(lexpath, __lexi__, __hit__);
+				lexpath[__hit__] = '\0';
+				if ( lexpath[__hit__ - 1] != '/'  ) 
+				{
+					lexpath[__hit__] = '/';
+					lexpath[__hit__+1] = '\0';
+				}
+			}
+
+			//printf("lexpath=%s\n", lexpath);
 
 			friso->dic = friso_dic_new();
 			//add charset check for max word length counting
 			friso_dic_load_from_ifile( friso, config, 
-					__lexi__, config->max_len * (friso->charset == FRISO_UTF8 ? 3 : 2) );
+					lexpath, config->max_len * (friso->charset == FRISO_UTF8 ? 3 : 2) );
 		}
 
 		fclose( __stream );
