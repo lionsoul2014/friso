@@ -1,0 +1,3 @@
+SUBDIRS = GBK	\
+	  UTF-8
+
