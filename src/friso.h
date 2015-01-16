@@ -105,7 +105,7 @@ typedef lex_entry_cdt * lex_entry_t;
 
 
 /*the segmentation token entry.*/
-#define __HITS_WORD_LENGTH__ 128
+#define __HITS_WORD_LENGTH__ 64
 
 typedef struct {
     uchar_t type;	//type of the word. (item of friso_lex_t)

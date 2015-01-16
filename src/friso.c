@@ -547,6 +547,14 @@ __STATIC_API__ lex_entry_t next_basic_latin(
 		//upper-lower case convert
 		convert_upper_to_lower( friso, task, __convert );
 		convert_work_apply( friso, task, __convert );
+
+		//sound a little crazy, i did't limit the length of this
+		//@Added: 2015-01-16 night
+		if ( (wlen + task->bytes) >= __HITS_WORD_LENGTH__ )
+		{
+			break;
+		}
+
 		string_buffer_append( sb, task->buffer );
 		wlen += task->bytes;
 		task->idx += task->bytes;
@@ -1565,7 +1573,7 @@ FRISO_API friso_token_t next_mmseg_token(
 			 * when tmp is not NULL and sb will not be NULL too
 			 * 	except a CE word is found.
 			 *
-			 * @TODO: finished append the synonyms words on 23013-12-19.
+			 * @TODO: finished append the synonyms words on 2013-12-19.
 			 */
 			if ( tmp != NULL && sb != NULL ) 
 			{
@@ -1660,7 +1668,7 @@ FRISO_API friso_token_t next_mmseg_token(
 
 			//if the token is longer than __HITS_WORD_LENGTH__, drop it 
 			//copy the word to the task token buffer.
-			if ( lex->length >= __HITS_WORD_LENGTH__ ) continue;
+			//if ( lex->length >= __HITS_WORD_LENGTH__ ) continue;
 			memcpy(task->token->word, lex->word, lex->length);
 			task->token->type = lex->type;
 			task->token->length = lex->length;

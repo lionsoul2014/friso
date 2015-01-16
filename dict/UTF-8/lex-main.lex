@@ -15076,7 +15076,7 @@
 作答/null
 作罢/null
 作美/null
-作者/null
+作者/编剧
 作者不详/null
 作者未详/null
 作者权/null
