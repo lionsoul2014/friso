@@ -484,7 +484,7 @@ __STATIC_API__ lex_entry_t next_basic_latin(
 		friso_config_t config,
 		friso_task_t task ) 
 {
-	int __convert = 0, t = 0;
+	int __convert = 0, t = 0, blen = 0;
 	int chkecm = 0, chkunits = 1, wspace = 0;
 
 	/* cause friso will convert full-width numeric and letters
@@ -614,9 +614,10 @@ __STATIC_API__ lex_entry_t next_basic_latin(
 	//check the tokenize loop is break by whitespace.
 	//	no need for all the following work if it is. 
 	//@added 2013-11-19
-	if ( wspace == 1 || task->idx == task->length ) {
-		e = new_lex_entry( string_buffer_devote(sb), 
-				NULL, 0, sb->length, __LEX_OTHER_WORDS__ );
+	if ( wspace == 1 || task->idx == task->length )
+	{
+		blen = sb->length;
+		e = new_lex_entry( string_buffer_devote(sb), NULL, 0, blen, __LEX_OTHER_WORDS__ );
 		e->rlen = wlen;
 		//set the secondary mask.
 		if ( ssseg ) task_ssseg_open(task);
@@ -654,8 +655,8 @@ __STATIC_API__ lex_entry_t next_basic_latin(
 		if ( fdunits != 1 && ssseg ) task_ssseg_open(task);
 
 		//creat the lexicon entry and return it.
-		e = new_lex_entry( string_buffer_devote(sb), 
-				NULL, 0, sb->length, __LEX_OTHER_WORDS__ );
+		blen = sb->length;
+		e = new_lex_entry( string_buffer_devote(sb), NULL, 0, blen, __LEX_OTHER_WORDS__ );
 		e->rlen = wlen;
 
 		return e;
@@ -727,8 +728,8 @@ __STATIC_API__ lex_entry_t next_basic_latin(
 	if ( fdunits != 1 && ssseg ) task_ssseg_open(task); 
 
 	//create the lexicon entry and return it.
-	e = new_lex_entry( string_buffer_devote(sb), 
-			NULL, 0, sb->length, __LEX_OTHER_WORDS__  );
+	blen = sb->length;
+	e = new_lex_entry( string_buffer_devote(sb), NULL, 0, blen, __LEX_OTHER_WORDS__ );
 	e->rlen = wlen;
 
 	return e;
