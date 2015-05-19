@@ -1,0 +1,7 @@
+name= "friso"
+version = "0.1"
+description = "mmseg chinese sentence"
+requires="unix"
+archive(byte)= "friso.cma"
+archive(native)= "friso.cmxa"
+
