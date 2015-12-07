@@ -16,22 +16,22 @@
 
 //yat, just take it as this way, 99 percent you will find no problem
 #if ( defined(_WIN32) || defined(_WINDOWS_) || defined(__WINDOWS_) )
-#	define FRISO_WINNT
+#    define FRISO_WINNT
 #else
-#	define FRISO_LINUX
+#    define FRISO_LINUX
 #endif
 
 #ifdef FRISO_WINNT
-#	define FRISO_API extern __declspec(dllexport)
-#	define __STATIC_API__ static
+#    define FRISO_API extern __declspec(dllexport)
+#    define __STATIC_API__ static
 #else
 /*platform shared library statement :: unix*/
-#	define FRISO_API extern
-#	define __STATIC_API__ static inline
+#    define FRISO_API extern
+#    define __STATIC_API__ static inline
 #endif
 
-#define ___ALLOCATION_ERROR___ 							\
-    printf("Unable to do the memory allocation, program will now exit\n" );	\
+#define ___ALLOCATION_ERROR___                             \
+    printf("Unable to do the memory allocation, program will now exit\n" );    \
 exit(1);
 
 #define print(str) printf("%s", str )
@@ -39,12 +39,12 @@ exit(1);
 
 /*
  * memory allocation macro definition.
- * 		cause we should use emalloc,ecalloc .ege. in php.
+ *         cause we should use emalloc,ecalloc .ege. in php.
  * so you could make it better apdat the php environment.
  */
-#define FRISO_CALLOC(_bytes, _blocks) 	calloc(_bytes, _blocks)
-#define FRISO_MALLOC(_bytes) 		malloc(_bytes)
-#define FRISO_FREE( _ptr )		free( _ptr )
+#define FRISO_CALLOC(_bytes, _blocks)     calloc(_bytes, _blocks)
+#define FRISO_MALLOC(_bytes)         malloc(_bytes)
+#define FRISO_FREE( _ptr )        free( _ptr )
 
 typedef unsigned short ushort_t;
 typedef unsigned char uchar_t;
@@ -74,7 +74,7 @@ FRISO_API string_buffer_t new_string_buffer_with_string( fstring str );
 
 /*
  * this function will copy the chars that the fstring pointed.
- *		to the buffer.
+ *        to the buffer.
  * this may cause the resize action of the buffer.
  */
 FRISO_API void string_buffer_append( string_buffer_t, fstring );
@@ -88,21 +88,21 @@ FRISO_API fstring string_buffer_remove( string_buffer_t, uint_t idx, uint_t );
 
 /*
  * turn the string_buffer to a string.
- *		or return the buffer of the string_buffer.
+ *        or return the buffer of the string_buffer.
  */
 FRISO_API string_buffer_t string_buffer_trim( string_buffer_t );
 
 /*
  * free the given fstring buffer.
- *		and this function will not free the allocations of the 
- *		the string_buffer_t->buffer, we return it to you, if there is
- * 	a necessary you could free it youself by calling free();
+ *        and this function will not free the allocations of the 
+ *        the string_buffer_t->buffer, we return it to you, if there is
+ *     a necessary you could free it youself by calling free();
  */
 FRISO_API fstring string_buffer_devote( string_buffer_t );
 
 /*
  * clear the given fstring buffer.
- *		reset its buffer with 0 and reset its length to 0.
+ *        reset its buffer with 0 and reset its length to 0.
  */
 FRISO_API void string_buffer_clear( string_buffer_t );
 
@@ -126,8 +126,8 @@ typedef string_split_entry * string_split_t;
 /**
  * create a new string_split_entry.
  *
- * @param	source
- * @return	string_split_t;	
+ * @param    source
+ * @return    string_split_t;    
  */
 FRISO_API string_split_t new_string_split( fstring, fstring );
 
@@ -141,12 +141,12 @@ FRISO_API void free_string_split( string_split_t );
 
 /**
  * get the next split fstring, and copy the 
- * 	splited fstring into the __dst buffer . 
+ *     splited fstring into the __dst buffer . 
  *
- * @param	string_split_t
- * @param	__dst
- * @return	fstring (NULL if reach the end of the source 
- * 		or there is no more segmentation)
+ * @param    string_split_t
+ * @param    __dst
+ * @return    fstring (NULL if reach the end of the source 
+ *         or there is no more segmentation)
  */
 FRISO_API fstring string_split_next( string_split_t, fstring );
 /* }}} */
@@ -175,7 +175,7 @@ FRISO_API friso_array_t new_array_list_with_opacity( uint_t );
 
 /*
  * free the given friso array.
- * 	and its items, but never where the items's item to pointed to . 
+ *     and its items, but never where the items's item to pointed to . 
  */
 FRISO_API void free_array_list( friso_array_t );
 
@@ -190,13 +190,13 @@ FRISO_API void *array_list_get( friso_array_t, uint_t );
 
 /*
  * set the item at a specified position.
- * 	this will return the old value.
+ *     this will return the old value.
  */
 FRISO_API void *array_list_set( friso_array_t, uint_t, void * );
 
 /*
  * remove the given item at a specified position.
- *	this will return the value of the removed item.
+ *    this will return the value of the removed item.
  */
 FRISO_API void *array_list_remove( friso_array_t, uint_t );
 
@@ -205,9 +205,9 @@ FRISO_API friso_array_t array_list_trim( friso_array_t );
 
 /*
  * clear the array list.
- * 	this function will free all the allocations that the pointer pointed.
- *		but will not free the point array allocations,
- *		and will reset the length of it.
+ *     this function will free all the allocations that the pointer pointed.
+ *        but will not free the point array allocations,
+ *        and will reset the length of it.
  */
 FRISO_API friso_array_t array_list_clear( friso_array_t );
 
@@ -300,8 +300,8 @@ FRISO_API void link_list_add_first( friso_link_t, void * );
 
 /* {{{ hashtable interface define :: start*/
 struct hash_entry {
-    fstring _key;					//the node key
-    void * _val;					//the node value
+    fstring _key;                    //the node key
+    void * _val;                    //the node value
     struct hash_entry * _next;
 };
 typedef struct hash_entry friso_hash_entry;
@@ -319,8 +319,8 @@ typedef struct {
 typedef friso_hash_cdt * friso_hash_t;
 
 //default value for friso_hash_cdt
-#define DEFAULT_LENGTH 	31
-#define DEFAULT_FACTOR	0.85f
+#define DEFAULT_LENGTH     31
+#define DEFAULT_FACTOR    0.85f
 
 /*
  * Function: new_hash_table
@@ -359,7 +359,7 @@ FRISO_API int hash_exist_mapping( friso_hash_t, fstring );
  * Usage: value = get_mapping_value( table, key );
  * -----------------------------------------------
  * this function return the value associated with the given key.
- * 		UNDEFINED will be return if the mapping is not exists.
+ *         UNDEFINED will be return if the mapping is not exists.
  */
 FRISO_API void * hash_get_value( friso_hash_t, fstring );
 

@@ -6,11 +6,11 @@ extern zend_module_entry friso_module_entry;
 #define phpext_friso_ptr &friso_module_entry
 
 #ifdef PHP_WIN32
-#	define PHP_FRISO_API __declspec(dllexport)
+#    define PHP_FRISO_API __declspec(dllexport)
 #elif defined(__GNUC__) && __GNUC__ >= 4
-#	define PHP_FRISO_API __attribute__ ((visibility("default")))
+#    define PHP_FRISO_API __attribute__ ((visibility("default")))
 #else
-#	define PHP_FRISO_API
+#    define PHP_FRISO_API
 #endif
 
 #ifdef ZTS
@@ -36,12 +36,12 @@ PHP_FUNCTION(friso_utf8_ucode);
 PHP_FUNCTION(friso_ucode_utf8);
 
 /* 
-  	Declare any global variables you may need between the BEGIN
-	and END macros here:     
+      Declare any global variables you may need between the BEGIN
+    and END macros here:     
 
 ZEND_BEGIN_MODULE_GLOBALS(friso)
-	long  global_value;
-	char *global_string;
+    long  global_value;
+    char *global_string;
 ZEND_END_MODULE_GLOBALS(friso)
 */
 
@@ -66,5 +66,5 @@ typedef struct {
 #define FRISO_G(v) (friso_globals.v)
 #endif
 
-#endif	/* PHP_FRISO_H */
+#endif    /* PHP_FRISO_H */
 

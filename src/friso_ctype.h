@@ -1,9 +1,9 @@
 /**
  * Friso charset about function interface header file.
- * 	@package src/friso_charset.h .
+ *     @package src/friso_charset.h .
  * Available charset for now:
- * 1. UTF8	- function start with utf8
- * 2. GBK	- function start with gbk
+ * 1. UTF8    - function start with utf8
+ * 2. GBK    - function start with gbk
  *
  * @author chenxin <chenxin619315@gmail.com>
  */
@@ -33,11 +33,11 @@ FRISO_API int friso_numeric_letter(friso_charset_t, friso_task_t);
 FRISO_API int friso_en_letter( friso_charset_t, friso_task_t );
 
 //check if the specified word is a half-width letter.
-//	punctuations are inclued.
+//    punctuations are inclued.
 FRISO_API int friso_halfwidth_en_char( friso_charset_t, friso_task_t );
 
 //check if the specified word is a full-width letter.
-//	full-width punctuations are not included.
+//    full-width punctuations are not included.
 FRISO_API int friso_fullwidth_en_char( friso_charset_t, friso_task_t );
 
 //check if the specified word is an english punctuations.
@@ -60,32 +60,32 @@ FRISO_API int friso_numeric_string( friso_charset_t, char * );
 FRISO_API int friso_decimal_string( friso_charset_t, char * );
 
 //check if the specified char is english uppercase letter.
-//	included full-width and half-width letters.
+//    included full-width and half-width letters.
 FRISO_API int friso_uppercase_letter( friso_charset_t, friso_task_t );
 
 
 //en char type.
-//#define FRISO_EN_LETTER 	0 	//a-z && A-Z
-//#define FRISO_EN_NUMERIC	1	//0-9
-//#define FRISO_EN_PUNCTUATION	2	//english punctuations
-//#define FRISO_EN_WHITESPACE	3	//whitespace
-//#define FRISO_EN_UNKNOW		-1	//beyond 32-122
+//#define FRISO_EN_LETTER     0     //a-z && A-Z
+//#define FRISO_EN_NUMERIC    1    //0-9
+//#define FRISO_EN_PUNCTUATION    2    //english punctuations
+//#define FRISO_EN_WHITESPACE    3    //whitespace
+//#define FRISO_EN_UNKNOW        -1    //beyond 32-122
 typedef enum {
-    FRISO_EN_LETTER		= 0,	//A-Z, a-z
-    FRISO_EN_NUMERIC		= 1,	//0-9
-    FRISO_EN_PUNCTUATION	= 2,	//english punctuations
-    FRISO_EN_WHITESPACE		= 3,	//whitespace
-    FRISO_EN_UNKNOW		= -1	//unkow(beyond 32-126)
+    FRISO_EN_LETTER        = 0,    //A-Z, a-z
+    FRISO_EN_NUMERIC        = 1,    //0-9
+    FRISO_EN_PUNCTUATION    = 2,    //english punctuations
+    FRISO_EN_WHITESPACE        = 3,    //whitespace
+    FRISO_EN_UNKNOW        = -1    //unkow(beyond 32-126)
 } friso_enchar_t;
 
 /* get the type of the specified char.
- * 	the type will be the constants defined above.
+ *     the type will be the constants defined above.
  * (include the fullwidth english char.)
  */
 FRISO_API friso_enchar_t friso_enchar_type( friso_charset_t, friso_task_t );
 
 /* get the type of the specified en char.
- * 	the type will be the constants defined above.
+ *     the type will be the constants defined above.
  * (the char should be half-width english char only)
  */
 FRISO_API friso_enchar_t get_enchar_type( char );
@@ -99,7 +99,7 @@ FRISO_API friso_enchar_t get_enchar_type( char );
 
 /* read the next utf-8 word from the specified position.
  *
- * @return int	the bytes of the current readed word.
+ * @return int    the bytes of the current readed word.
  */
 FRISO_API int utf8_next_word( friso_task_t, uint_t *, fstring );
 
@@ -116,31 +116,31 @@ FRISO_API int unicode_to_utf8( uint_t, fstring );
 FRISO_API int utf8_cjk_string( uint_t ) ;
 
 /*check the given char is a Basic Latin letter or not.
- * 		include all the letters and english puntuations.*/
+ *         include all the letters and english puntuations.*/
 FRISO_API int utf8_halfwidth_en_char( uint_t );
 
 /*
  * check the given char is a full-width latain or not.
- *	include the full-width arabic numeber, letters.
- *		but not the full-width puntuations.
+ *    include the full-width arabic numeber, letters.
+ *        but not the full-width puntuations.
  */
 FRISO_API int utf8_fullwidth_en_char( uint_t );
 
 //check the given char is a upper case letter or not.
-//	included all the full-width and half-width letters.
+//    included all the full-width and half-width letters.
 FRISO_API int utf8_uppercase_letter( uint_t );
 
 //check the given char is a lower case letter or not.
-//	included all the full-width and half-width letters.
+//    included all the full-width and half-width letters.
 FRISO_API int utf8_lowercase_letter( uint_t );
 
 //check the given char is a numeric.
-//	included the full-width and half-width arabic numeric.
+//    included the full-width and half-width arabic numeric.
 FRISO_API int utf8_numeric_letter( uint_t );
 
 /*
  * check if the given fstring is make up with numeric chars.
- * 	both full-width,half-width numeric is ok.
+ *     both full-width,half-width numeric is ok.
  */
 FRISO_API int utf8_numeric_string( char * );
 
@@ -183,7 +183,7 @@ FRISO_API int is_en_punctuation( friso_charset_t, char );
 
 /* read the next GBK word from the specified position.
  *
- * @return int	the bytes of the current readed word.
+ * @return int    the bytes of the current readed word.
  */
 FRISO_API int gbk_next_word( friso_task_t, uint_t *, fstring );
 
@@ -194,31 +194,31 @@ FRISO_API int get_gbk_bytes( char );
 FRISO_API int gbk_cn_string( char * ) ;
 
 /*check if the given char is a ASCII letter
- * 	include all the letters and english puntuations.*/
+ *     include all the letters and english puntuations.*/
 FRISO_API int gbk_halfwidth_en_char( char );
 
 /*
  * check if the given char is a full-width latain.
- *	include the full-width arabic numeber, letters.
- *		but not the full-width puntuations.
+ *    include the full-width arabic numeber, letters.
+ *        but not the full-width puntuations.
  */
 FRISO_API int gbk_fullwidth_en_char( char * );
 
 //check if the given char is a upper case char.
-//	included all the full-width and half-width letters.
+//    included all the full-width and half-width letters.
 FRISO_API int gbk_uppercase_letter( char * );
 
 //check if the given char is a lower case char.
-//	included all the full-width and half-width letters.
+//    included all the full-width and half-width letters.
 FRISO_API int gbk_lowercase_letter( char * );
 
 //check if the given char is a numeric.
-//	included the full-width and half-width arabic numeric.
+//    included the full-width and half-width arabic numeric.
 FRISO_API int gbk_numeric_letter( char * );
 
 /*
  * check if the given fstring is make up with numeric chars.
- * 	both full-width,half-width numeric is ok.
+ *     both full-width,half-width numeric is ok.
  */
 FRISO_API int gbk_numeric_string( char * );
 
@@ -248,7 +248,7 @@ FRISO_API int gbk_en_punctuation( char ) ;
 FRISO_API int gbk_cn_punctuation( char * ); 
 
 //cause the logic handle is the same as the utf8.
-//	here invoke the utf8 interface directly.
+//    here invoke the utf8 interface directly.
 //FRISO_API int gbk_keep_punctuation( char * );
 //@Deprecated
 //#define gbk_keep_punctuation( str ) utf8_keep_punctuation(str)
@@ -257,4 +257,4 @@ FRISO_API int gbk_cn_punctuation( char * );
 //FRISO_API int gbk_fullwidth_char( char * ) ;
 /* }}}*/
 
-#endif	/*end _friso_charset_h*/
+#endif    /*end _friso_charset_h*/

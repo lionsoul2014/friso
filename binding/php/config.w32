@@ -8,6 +8,6 @@
 // ARG_ENABLE("friso", "enable friso support", "no");
 
 if (PHP_FRISO != "no") {
-	EXTENSION("friso", "friso.c");
+    EXTENSION("friso", "friso.c");
 }
 
