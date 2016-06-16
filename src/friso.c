@@ -47,17 +47,14 @@ FRISO_API int friso_init_from_ifile(
     uint_t flen = 0;
 
     //get the base part of the path of the __ifile
-    if ( (slimiter = strrchr(__ifile, '/')) != NULL )
-    {
+    if ( (slimiter = strrchr(__ifile, '/')) != NULL ) {
         flen = slimiter - __ifile + 1;
     }
 
     //yat, start to parse the friso.ini configuration file
-    if ( ( __stream = fopen( __ifile, "rb" ) ) != NULL ) 
-    {
+    if ( ( __stream = fopen( __ifile, "rb" ) ) != NULL ) {
         //initialize the entry with the value from the ifile.
-        while ( ( __line__ = file_get_line( __chars__, __stream ) ) != NULL ) 
-        {
+        while ( ( __line__ = file_get_line( __chars__, __stream ) ) != NULL ) {
             //comments filter.
             if ( __line__[0] == '#' ) continue;
             if ( __line__[0] == '\t' ) continue; 
@@ -66,37 +63,42 @@ FRISO_API int friso_init_from_ifile(
             __length__ = strlen( __line__ );
             for ( i = 0; i < __length__; i++ ) {
                 if ( __line__[i] == ' ' 
-                        || __line__[i] == '\t' || __line__[i] == '=' ) break;
+                        || __line__[i] == '\t' || __line__[i] == '=' ) {
+                    break;
+                }
                 __key__[i] = __line__[i];
             }
             __key__[i] = '\0';
 
             //position the euqals char '='.
             if ( __line__[i] == ' ' || __line__[i] == '\t' ) {
-                for ( i++ ; i < __length__; i++ ) 
-                    if ( __line__[i] == '=' ) break; 
+                for ( i++ ; i < __length__; i++ ) {
+                    if ( __line__[i] == '=' ) {
+                        break; 
+                    }
+                }
             } 
 
             //clear the left whitespace of the value.
             for ( i++; i < __length__ 
                     && ( __line__[i] == ' ' || __line__[i] == '\t' ); i++ );
             for ( t = 0; i < __length__; i++, t++ ) {
-                if ( __line__[i] == ' ' || __line__[i] == '\t' ) break;
+                if ( __line__[i] == ' ' || __line__[i] == '\t' ) {
+                    break;
+                }
                 __line__[t] = __line__[i]; 
             } 
             __line__[t] = '\0';
 
             //printf("key=%s, value=%s\n", __key__, __line__ );
-            if ( strcmp( __key__, "friso.lex_dir" ) == 0 ) 
-            {
+            if ( strcmp( __key__, "friso.lex_dir" ) == 0 ) {
                 /*
                  * here copy the value of the lex_dir.
                  *        cause we need the value of friso.max_len to finish all
                  *    the work when we call function friso_dic_load_from_ifile to
                  *    initiliaze the friso dictionary.
                  */
-                if ( __hit__ == 0 ) 
-                {
+                if ( __hit__ == 0 ) {
                     __hit__ = t;
                     for ( t = 0; t < __hit__; t++ ) {
                         __lexi__[t] = __line__[t];
@@ -142,21 +144,18 @@ FRISO_API int friso_init_from_ifile(
          *        use the setting from the ifile parse above
          *    we copied the value in the __lexi__
          */
-        if ( __hit__ != 0 ) 
-        {
+        if ( __hit__ != 0 ) {
             //add relative path search support
             //@added: 2014-05-24
             //convert the relative path to absolute path base on the path of friso.ini
             //improved at @date: 2014-10-26
 
 #ifdef FRISO_WINNT
-            if ( __lexi__[1] != ':' && flen != 0 )
+            if ( __lexi__[1] != ':' && flen != 0 ) {
 #else
-            if ( __lexi__[0] != '/' && flen != 0 )
+            if ( __lexi__[0] != '/' && flen != 0 ) {
 #endif
-            {
-                if ( (flen + __hit__) > sizeof(lexpath) - 1 )
-                {
+                if ( (flen + __hit__) > sizeof(lexpath) - 1 ) {
                     printf("[Error]: Buffer is not long enough to hold the final lexicon path");
                     printf(" with a length of {%d} at function friso.c#friso_init_from_ifile", flen + __hit__);
                     return 0;
@@ -168,13 +167,10 @@ FRISO_API int friso_init_from_ifile(
                 flen = flen + __hit__ - 1;
                 if ( lexpath[flen-1] != '/'  ) lexpath[flen] = '/';
                 lexpath[flen+1] = '\0';
-            }
-            else
-            {
+            } else {
                 memcpy(lexpath, __lexi__, __hit__);
                 lexpath[__hit__] = '\0';
-                if ( lexpath[__hit__ - 1] != '/'  ) 
-                {
+                if ( lexpath[__hit__ - 1] != '/'  ) {
                     lexpath[__hit__] = '/';
                     lexpath[__hit__+1] = '\0';
                 }
@@ -216,19 +212,18 @@ FRISO_API void friso_set_mode( friso_config_t config, friso_mode_t mode )
 {
     config->mode = mode;
 
-    switch ( config->mode )
-    {
-        case __FRISO_SIMPLE_MODE__:
-            config->next_token = next_mmseg_token;
-            config->next_cjk = next_simple_cjk;
-            break;
-        case __FRISO_DETECT_MODE__:
-            config->next_token = next_detect_token;
-            break;
-        default:
-            config->next_token = next_mmseg_token;
-            config->next_cjk = next_complex_cjk;
-            break;
+    switch ( config->mode ) {
+    case __FRISO_SIMPLE_MODE__:
+        config->next_token = next_mmseg_token;
+        config->next_cjk = next_simple_cjk;
+        break;
+    case __FRISO_DETECT_MODE__:
+        config->next_token = next_detect_token;
+        break;
+    default:
+        config->next_token = next_mmseg_token;
+        config->next_cjk = next_complex_cjk;
+        break;
     }
 }
 /* }}} */
@@ -253,18 +248,18 @@ FRISO_API friso_config_t friso_new_config( void )
 /* {{{ initialize the specified friso config entry with default value.*/
 FRISO_API void friso_init_config( friso_config_t cfg )
 {
-    cfg->max_len     = DEFAULT_SEGMENT_LENGTH;
+    cfg->max_len    = DEFAULT_SEGMENT_LENGTH;
     cfg->r_name     = 1;
-    cfg->mix_len     = DEFAULT_MIX_LENGTH;
-    cfg->lna_len     = DEFAULT_LNA_LENGTH;
+    cfg->mix_len    = DEFAULT_MIX_LENGTH;
+    cfg->lna_len    = DEFAULT_LNA_LENGTH;
     cfg->add_syn    = 1;
     cfg->clr_stw    = 0;
-    cfg->keep_urec    = 0;
+    cfg->keep_urec  = 0;
     cfg->spx_out    = 0;
     cfg->en_sseg    = 1;    //default start the secondary segmentaion.
     cfg->st_minl    = 1;    //min length for secondary split sub token.
-    cfg->nthreshold     = DEFAULT_NTHRESHOLD;
-    cfg->mode         = ( friso_mode_t ) DEFAULT_SEGMENT_MODE;
+    cfg->nthreshold = DEFAULT_NTHRESHOLD;
+    cfg->mode       = ( friso_mode_t ) DEFAULT_SEGMENT_MODE;
 
     friso_set_mode(cfg, cfg->mode);
 
@@ -283,15 +278,15 @@ FRISO_API friso_task_t friso_new_task()
     }
 
     //initliaze the segment.
-    task->text     = NULL;
-    task->idx     = 0;
+    task->text   = NULL;
+    task->idx    = 0;
     task->length = 0;
-    task->bytes = 0;
-    task->unicode = 0;
+    task->bytes  = 0;
+    task->unicode  = 0;
     task->ctrlMask = 0;
-    task->pool    = new_link_list();
-    task->sbuf    = new_string_buffer();
-    task->token = friso_new_token();
+    task->pool   = new_link_list();
+    task->sbuf   = new_string_buffer();
+    task->token  = friso_new_token();
 
     return task;
 }
@@ -368,12 +363,13 @@ __STATIC_API__ uint_t readNextWord(
         uint_t *idx,             //current index.
         fstring __word )         //work buffer.
 {
-    if ( friso->charset == FRISO_UTF8 )
+    if ( friso->charset == FRISO_UTF8 ) {
         //@reader: task->unicode = get_utf8_unicode(task->buffer) is moved insite
         //    function utf8_next_word from friso 1.6.0 .
         return utf8_next_word( task, idx, __word );
-    else if ( friso->charset == FRISO_GBK )
+    } else if ( friso->charset == FRISO_GBK ) {
         return gbk_next_word( task, idx, __word );
+    }
 
     return 0;        //unknow charset.
 }
@@ -388,8 +384,7 @@ FRISO_API lex_entry_t next_simple_cjk(
 {
     uint_t t, idx = task->idx, __length__;
     string_buffer_t sb = new_string_buffer_with_string( task->buffer );
-    lex_entry_t e = friso_dic_get( friso->dic, 
-            __LEX_CJK_WORDS__, sb->buffer );
+    lex_entry_t e = friso_dic_get( friso->dic, __LEX_CJK_WORDS__, sb->buffer );
 
     /*
      * here bak the e->length in the task->token->type.
@@ -400,8 +395,7 @@ FRISO_API lex_entry_t next_simple_cjk(
 
     for ( t = 1; t < config->max_len 
             && ( task->bytes = readNextWord( 
-                    friso, task, &idx, task->buffer ) ) != 0; t++ ) 
-    {
+                    friso, task, &idx, task->buffer ) ) != 0; t++ ) {
         if ( friso_whitespace( friso->charset, task ) ) break;
         if ( ! friso_cn_string( friso->charset, task ) ) break;
 
@@ -516,20 +510,17 @@ __STATIC_API__ lex_entry_t next_basic_latin(
 
     //segmentation.
     while ( ( task->bytes = readNextWord( 
-                    friso, task, &idx, task->buffer ) ) != 0 ) 
-    {
+                    friso, task, &idx, task->buffer ) ) != 0 ) {
         //convert full-width to half-width.
         convert_full_to_half(friso, task, __convert);
         _ctype = friso_enchar_type( friso->charset, task );
 
-        if ( _ctype == FRISO_EN_WHITESPACE )
-        {
+        if ( _ctype == FRISO_EN_WHITESPACE ) {
             wspace = 1;
             break;
         }
 
-        if ( _ctype == FRISO_EN_PUNCTUATION )
-        {
+        if ( _ctype == FRISO_EN_PUNCTUATION ) {
             //clear the full-width punctuations.
             if ( task->bytes > 1 ) break;
             if ( ! friso_en_kpunc( config, task->buffer[0] ) ) break;
@@ -538,8 +529,7 @@ __STATIC_API__ lex_entry_t next_basic_latin(
         /* check if is an FRISO_EN_NUMERIC, or FRISO_EN_LETTER.
          *     here just need to make sure it is not FRISO_EN_UNKNOW.
          * */
-        if ( _ctype == FRISO_EN_UNKNOW )
-        {
+        if ( _ctype == FRISO_EN_UNKNOW ) {
             if ( friso_cn_string( friso->charset, task ) ) chkecm = 1;
             break;
         }
@@ -550,8 +540,7 @@ __STATIC_API__ lex_entry_t next_basic_latin(
 
         //sound a little crazy, i did't limit the length of this
         //@Added: 2015-01-16 night
-        if ( (wlen + task->bytes) >= __HITS_WORD_LENGTH__ )
-        {
+        if ( (wlen + task->bytes) >= __HITS_WORD_LENGTH__ ) {
             break;
         }
 
@@ -564,8 +553,7 @@ __STATIC_API__ lex_entry_t next_basic_latin(
          *
          * @TODO: 2013-12-22
          * */
-        if ( _ctype != _TYPE )
-        {
+        if ( _ctype != _TYPE ) {
             tcount++;
             _TYPE = _ctype;
         }
@@ -584,8 +572,7 @@ __STATIC_API__ lex_entry_t next_basic_latin(
     for ( ; sb->length > 0 
             && sb->buffer[ sb->length - 1 ] != '%' 
             && is_en_punctuation( 
-                friso->charset, sb->buffer[ sb->length - 1 ] ); ) 
-    {
+                friso->charset, sb->buffer[ sb->length - 1 ] ); )  {
         //check the english punctuation mixed word.
         if ( friso_dic_match( friso->dic, 
                     __LEX_ENPUN_WORDS__, sb->buffer  ) ) {
@@ -601,8 +588,7 @@ __STATIC_API__ lex_entry_t next_basic_latin(
         task->idx--;
 
         /*check and plus the tcount*/
-        if ( _ctype == 0 )
-        {
+        if ( _ctype == 0 ) {
             tcount--;
             _ctype = 1;
         }
@@ -614,8 +600,7 @@ __STATIC_API__ lex_entry_t next_basic_latin(
     //check the tokenize loop is break by whitespace.
     //    no need for all the following work if it is. 
     //@added 2013-11-19
-    if ( wspace == 1 || task->idx == task->length )
-    {
+    if ( wspace == 1 || task->idx == task->length ) {
         blen = sb->length;
         e = new_lex_entry( string_buffer_devote(sb), NULL, 0, blen, __LEX_OTHER_WORDS__ );
         e->rlen = wlen;
@@ -633,16 +618,13 @@ __STATIC_API__ lex_entry_t next_basic_latin(
          */
         if ( chkunits 
                 && ( friso_numeric_string( friso->charset, sb->buffer ) 
-                    || friso_decimal_string( friso->charset, sb->buffer ) ) ) 
-        {
+                    || friso_decimal_string( friso->charset, sb->buffer ) ) ) {
             idx = task->idx;
             if ( ( task->bytes = readNextWord(
-                            friso, task, &idx, task->buffer ) ) != 0 ) 
-            {
+                    friso, task, &idx, task->buffer ) ) != 0 ) {
                 //check the EC dictionary.
                 if ( friso_dic_match( friso->dic, 
-                            __LEX_CJK_UNITS__, task->buffer ) )
-                {
+                        __LEX_CJK_UNITS__, task->buffer ) ) {
                     fdunits = 1;
                     string_buffer_append(sb, task->buffer);
                     wlen += task->bytes;
@@ -652,7 +634,9 @@ __STATIC_API__ lex_entry_t next_basic_latin(
         } 
 
         //set the START_SS_MASK
-        if ( fdunits != 1 && ssseg ) task_ssseg_open(task);
+        if ( fdunits != 1 && ssseg ) {
+            task_ssseg_open(task);
+        }
 
         //creat the lexicon entry and return it.
         blen = sb->length;
@@ -668,8 +652,7 @@ __STATIC_API__ lex_entry_t next_basic_latin(
     idx = task->idx;
     for ( t = 0; t < config->mix_len 
             && ( task->bytes = readNextWord( 
-                    friso, task, &idx, task->buffer ) ) != 0; t++ ) 
-    {
+                    friso, task, &idx, task->buffer ) ) != 0; t++ ) {
         //if ( ! friso_cn_string( friso->charset, task ) ) {
         //    task->idx -= task->bytes;
         //    break;
@@ -678,7 +661,9 @@ __STATIC_API__ lex_entry_t next_basic_latin(
         //more complex mixed words could be find here. 
         // (no only english and chinese mix word)
         //@date 2013-10-14
-        if ( friso_whitespace( friso->charset, task ) ) break;
+        if ( friso_whitespace( friso->charset, task ) ) {
+            break;
+        }
 
         string_buffer_append( tmp, task->buffer );
 
@@ -696,8 +681,7 @@ __STATIC_API__ lex_entry_t next_basic_latin(
      *     it could be an english and punctuation mixed word, like 'c++'
      * But we don't need to check and set the START_SS_MASK mask here.
      * */
-    if ( e != NULL ) 
-    {
+    if ( e != NULL ) {
         task->idx += (e->length - sb->length);
         free_string_buffer(sb);
         return e;
@@ -707,15 +691,13 @@ __STATIC_API__ lex_entry_t next_basic_latin(
     //no match for mix word, try to find a single unit.
     if ( chkunits 
             && ( friso_numeric_string( friso->charset, sb->buffer ) 
-                || friso_decimal_string( friso->charset, sb->buffer ) ) ) 
-    {
+                || friso_decimal_string( friso->charset, sb->buffer ) ) ) {
         idx = task->idx;
         if ( ( task->bytes = readNextWord( 
-                        friso, task, &idx, task->buffer ) ) != 0 ) {
+                    friso, task, &idx, task->buffer ) ) != 0 ) {
             //check the single chinese units dictionary.
             if ( friso_dic_match( friso->dic, 
-                        __LEX_CJK_UNITS__, task->buffer ) )
-            {
+                        __LEX_CJK_UNITS__, task->buffer ) ) {
                 fdunits = 1;
                 string_buffer_append( sb, task->buffer );
                 wlen += task->bytes;
@@ -725,7 +707,9 @@ __STATIC_API__ lex_entry_t next_basic_latin(
     }
 
     //set the START_SS_MASK.
-    if ( fdunits != 1 && ssseg ) task_ssseg_open(task); 
+    if ( fdunits != 1 && ssseg ) {
+        task_ssseg_open(task); 
+    }
 
     //create the lexicon entry and return it.
     blen = sb->length;
@@ -753,19 +737,15 @@ __STATIC_API__ friso_array_t get_next_match(
         uint_t idx ) 
 {
     register uint_t t;
-    string_buffer_t sb = 
-        new_string_buffer_with_string( task->buffer );
+    string_buffer_t sb = new_string_buffer_with_string( task->buffer );
 
     //create a match dynamic array.
-    friso_array_t match = 
-        new_array_list_with_opacity( config->max_len );
-    array_list_add( match, friso_dic_get( 
-                friso->dic, __LEX_CJK_WORDS__, task->buffer ) );
+    friso_array_t match = new_array_list_with_opacity( config->max_len );
+    array_list_add(match, friso_dic_get(friso->dic, __LEX_CJK_WORDS__, task->buffer));
 
     for ( t = 1; t < config->max_len && ( task->bytes = 
-                readNextWord( friso, task, &idx, task->buffer ) ) != 0; t++ )  
-    {
-        if ( friso_whitespace( friso->charset, task ) )    break;
+                readNextWord( friso, task, &idx, task->buffer ) ) != 0; t++ ) {
+        if ( friso_whitespace( friso->charset, task ) )  break;
         if ( ! friso_cn_string( friso->charset, task ) ) break;
 
         //append the task->buffer to the buffer.
@@ -1090,8 +1070,7 @@ FRISO_API lex_entry_t next_complex_cjk(
      *        if the length of the fmatch is 1, mean we don't have to
      * continue the following work. ( no matter what we get the same result. )
      */
-    if ( fmatch->length == 1 ) 
-    {
+    if ( fmatch->length == 1 ) {
         fe = ( ( lex_entry_t ) fmatch->items[0] );
         free_array_list( fmatch );
 
@@ -1111,23 +1090,18 @@ FRISO_API lex_entry_t next_complex_cjk(
     chunks = new_array_list();
     task->idx -= __idx__;
 
-
-    for ( x = 0; x < fmatch->length; x++ ) 
-    {
+    for ( x = 0; x < fmatch->length; x++ ) {
         /*get the word and try the second layer match*/
         fe = ( lex_entry_t ) array_list_get( fmatch, x );
         __idx__ = task->idx + fe->length;
         readNextWord( friso, task, &__idx__, task->buffer );
 
         if ( task->bytes != 0 
-                && friso_cn_string( friso->charset, task ) 
-                && friso_dic_match( friso->dic, 
-                    __LEX_CJK_WORDS__, task->buffer ) ) 
-        {
+                && friso_cn_string(friso->charset, task ) 
+                && friso_dic_match(friso->dic, __LEX_CJK_WORDS__, task->buffer)) {
             //get the next matchs
             smatch = get_next_match( friso, config, task, __idx__ );
-            for ( y = 0; y < smatch->length; y++ ) 
-            {
+            for ( y = 0; y < smatch->length; y++ ) {
                 /*get the word and try the third layer match*/
                 se = ( lex_entry_t ) array_list_get( smatch, y );
                 __idx__ = task->idx + fe->length + se->length;
@@ -1136,12 +1110,10 @@ FRISO_API lex_entry_t next_complex_cjk(
                 if ( task->bytes != 0 
                         && friso_cn_string( friso->charset, task )
                         && friso_dic_match( friso->dic, 
-                            __LEX_CJK_WORDS__, task->buffer ) ) 
-                {
+                            __LEX_CJK_WORDS__, task->buffer ) ) {
                     //get the matchs.
                     tmatch = get_next_match( friso, config, task, __idx__ );
-                    for ( z = 0; z < tmatch->length; z++ ) 
-                    {
+                    for ( z = 0; z < tmatch->length; z++ ) {
                         te = ( lex_entry_t ) array_list_get( tmatch, z );
                         words = new_array_list_with_opacity(3);
                         array_list_add( words, fe );
@@ -1152,9 +1124,7 @@ FRISO_API lex_entry_t next_complex_cjk(
                     }
                     //free the third matched array list
                     free_array_list( tmatch );
-                } 
-                else 
-                {
+                } else {
                     words = new_array_list_with_opacity(2);
                     array_list_add( words, fe );
                     array_list_add( words, se );
@@ -1165,9 +1135,7 @@ FRISO_API lex_entry_t next_complex_cjk(
             }
             //free the second match array list
             free_array_list( smatch );
-        } 
-        else 
-        {
+        } else {
             words = new_array_list_with_opacity(1);
             array_list_add( words, fe );
             array_list_add( chunks, new_chunk( words, fe->length ) );
@@ -1235,8 +1203,7 @@ __STATIC_API__ void token_sphinx_output(
     len = lex->length;
 
     //append the synoyums words.
-    for ( i = 0; i < lex->syn->length; i++  )
-    {
+    for ( i = 0; i < lex->syn->length; i++  ) {
         _word = ( fstring ) lex->syn->items[i];
         j = strlen(_word);
         if ( ( len + j + 1 ) >= __HITS_WORD_LENGTH__ ) break;
@@ -1267,16 +1234,17 @@ __STATIC_API__ void token_normal_output(
     fstring _word;
     lex_entry_t e;
 
-    for ( i = 0; i < lex->syn->length; i++  ) 
-    {
+    for ( i = 0; i < lex->syn->length; i++  ) {
         _word = ( fstring ) lex->syn->items[i];
         e = new_lex_entry( _word, NULL, 0,     
                 strlen(_word), __LEX_NCSYN_WORDS__ );
         e->offset = lex->offset;
         //add to the buffer.
-        if ( front ) 
+        if ( front ) {
             link_list_add_first( task->pool, e );
-        else link_list_add( task->pool, e);
+        } else {
+            link_list_add( task->pool, e);
+        }
     } 
 }
 /* }}} */
@@ -1307,21 +1275,18 @@ __STATIC_API__ lex_entry_t en_second_seg(
     string_buffer_clear(task->sbuf);
     string_buffer_append_char(task->sbuf, str[0]);
 
-    for ( j = 1; j < lex->length; j++ )
-    {
+    for ( j = 1; j < lex->length; j++ ) {
         //get the type of the char
         _ctype = get_enchar_type(str[j]);
-        if ( _ctype == FRISO_EN_WHITESPACE )
-        {
+        if ( _ctype == FRISO_EN_WHITESPACE ) {
             _TYPE = FRISO_EN_WHITESPACE;
             p++;
             continue;
         }
 
-        if ( _ctype == _TYPE ) 
+        if ( _ctype == _TYPE ) {
             string_buffer_append_char(task->sbuf, str[j]);
-        else
-        {
+        } else {
             start = j - task->sbuf->length - p;
 
             /* If the number of chars of current type
@@ -1330,8 +1295,7 @@ __STATIC_API__ lex_entry_t en_second_seg(
              * */
             if ( task->sbuf->length >= config->st_minl 
                     && ! ( config->clr_stw && friso_dic_match( friso->dic, 
-                            __LEX_STOPWORDS__, task->sbuf->buffer ) ) )
-            {
+                            __LEX_STOPWORDS__, task->sbuf->buffer ) ) ) {
                 /* the allocation of lex_entry_t and its word 
                  *     should be released and the type of the lex_entry_t
                  *     must be __LEX_OTHER_WORDS__.
@@ -1339,8 +1303,11 @@ __STATIC_API__ lex_entry_t en_second_seg(
                 sword = new_lex_entry(strdup(task->sbuf->buffer), 
                         NULL, 0, task->sbuf->length, __LEX_OTHER_WORDS__);
                 sword->offset = lex->offset + start;
-                if ( retfw && fword == NULL ) fword = sword;
-                else link_list_add(task->pool, sword);
+                if ( retfw && fword == NULL ) {
+                    fword = sword;
+                } else {
+                    link_list_add(task->pool, sword);
+                }
             }
 
             string_buffer_clear(task->sbuf);
@@ -1353,14 +1320,16 @@ __STATIC_API__ lex_entry_t en_second_seg(
     //continue to check the last item.
     if ( task->sbuf->length >= config->st_minl 
             && ! ( config->clr_stw && friso_dic_match( friso->dic, 
-                    __LEX_STOPWORDS__, task->sbuf->buffer ) ) )
-    {
+                    __LEX_STOPWORDS__, task->sbuf->buffer ) ) ) {
         start = j - task->sbuf->length;
         sword = new_lex_entry(strdup(task->sbuf->buffer), 
                 NULL, 0, task->sbuf->length, __LEX_OTHER_WORDS__);
         sword->offset = j - task->sbuf->length;
-        if ( retfw && fword == NULL ) fword = sword;
-        else link_list_add(task->pool, sword);
+        if ( retfw && fword == NULL ) {
+            fword = sword;
+        } else {
+            link_list_add(task->pool, sword);
+        }
     }
 
     return fword;
@@ -1426,8 +1395,7 @@ FRISO_API friso_token_t next_mmseg_token(
          *
          * @since: 1.6.0
          * */
-        if ( lex_appensyn_check(lex) ) 
-        {
+        if ( lex_appensyn_check(lex) ) {
             lex_appensyn_close(lex);
             append_en_syn(lex, tmp, 1);
         }
@@ -1446,23 +1414,21 @@ FRISO_API friso_token_t next_mmseg_token(
          * other type:
          *  they must exist in the dictionary, so just pass them.
          */
-        switch ( lex->type ) 
-        {
-            case __LEX_OTHER_WORDS__: 
-                FRISO_FREE( lex->word );
-                free_lex_entry( lex );
-                break;
-            case __LEX_NCSYN_WORDS__:
-                free_lex_entry( lex );
-                break;
+        switch ( lex->type ) {
+        case __LEX_OTHER_WORDS__: 
+            FRISO_FREE( lex->word );
+            free_lex_entry( lex );
+            break;
+        case __LEX_NCSYN_WORDS__:
+            free_lex_entry( lex );
+            break;
         }
 
         return task->token;
     }
     /* }}} */
 
-    while ( task->idx < task->length ) 
-    {
+    while ( task->idx < task->length ) {
         //read the next word from the current position.
         task->bytes = readNextWord( friso, task, &task->idx, task->buffer );
         if ( task->bytes == 0 ) break;
@@ -1471,14 +1437,12 @@ FRISO_API friso_token_t next_mmseg_token(
         if ( friso_whitespace( friso->charset, task ) ) continue;
 
         /* {{{ CJK words recongnize block. */
-        if ( friso_cn_string( friso->charset, task ) ) 
-        {
+        if ( friso_cn_string( friso->charset, task ) ) {
             /* check the dictionary.
              * and return the unrecognized CJK char as a single word.
              * */
             if ( ! friso_dic_match( friso->dic, 
-                        __LEX_CJK_WORDS__, task->buffer) )
-            {
+                        __LEX_CJK_WORDS__, task->buffer) ) {
                 memcpy(task->token->word, task->buffer, task->bytes );
                 task->token->type = __LEX_PUNC_WORDS__;
                 task->token->length = task->bytes;
@@ -1518,8 +1482,7 @@ FRISO_API friso_token_t next_mmseg_token(
             if ( ( task->idx < task->length ) 
                     && ((int)task->text[task->idx]) > 0 
                     && ( friso_en_letter( friso->charset, task ) 
-                        || friso_numeric_letter(friso->charset, task) ) )
-            {
+                        || friso_numeric_letter(friso->charset, task) ) ) {
                 //create a string buffer
                 sb = new_string_buffer_with_string(lex->word);
 
@@ -1532,8 +1495,7 @@ FRISO_API friso_token_t next_mmseg_token(
 
                 //check the CE dictionary.
                 if ( friso_dic_match( friso->dic, 
-                            __LEX_CEM_WORDS__, sb->buffer ) )
-                {
+                            __LEX_CEM_WORDS__, sb->buffer ) ) {
                     j = lex->offset; //bakup the offset.
                     lex = friso_dic_get( friso->dic, 
                             __LEX_CEM_WORDS__, sb->buffer );
@@ -1560,11 +1522,12 @@ FRISO_API friso_token_t next_mmseg_token(
             task->token->word[len] = '\0';
 
             //check and append the synonyms words
-            if ( config->add_syn && lex->syn != NULL ) 
-            {
-                if ( config->spx_out == 1 )
+            if ( config->add_syn && lex->syn != NULL ) {
+                if ( config->spx_out == 1 ) {
                     token_sphinx_output(task, lex);
-                else token_normal_output(task, lex, 0);
+                } else {
+                    token_normal_output(task, lex, 0);
+                }
             }
 
             /* {{{ here: handle the newly found basic latin created when 
@@ -1576,18 +1539,20 @@ FRISO_API friso_token_t next_mmseg_token(
              *
              * @TODO: finished append the synonyms words on 2013-12-19.
              */
-            if ( tmp != NULL && sb != NULL ) 
-            {
+            if ( tmp != NULL && sb != NULL ) {
                 //check the secondary split.
                 if ( config->en_sseg == 1 
-                        && task_ssseg_check(task) )
+                        && task_ssseg_check(task) ) {
                     en_second_seg(friso, config, task, tmp, 0);
+                }
 
                 free_string_buffer( sb );
                 link_list_add( task->pool, tmp );
 
                 //check if append synoyums words.
-                if ( config->add_syn == 1 ) lex_appensyn_open(tmp);
+                if ( config->add_syn == 1 ) {
+                    lex_appensyn_open(tmp);
+                }
 
             }
             /* }}} */
@@ -1598,8 +1563,7 @@ FRISO_API friso_token_t next_mmseg_token(
 
         /* {{{ basic english/latin recongnize block. */
         else if ( friso_halfwidth_en_char( friso->charset, task ) 
-                || friso_fullwidth_en_char( friso->charset, task ) ) 
-        {
+                || friso_fullwidth_en_char( friso->charset, task ) ) {
             /*
              * handle the english punctuation.
              *
@@ -1614,18 +1578,19 @@ FRISO_API friso_token_t next_mmseg_token(
              *     except the keep punctuation(define in file friso_string.c) 
              *     that will make up a word with the english chars around it.
              */
-            if ( friso_en_punctuation( friso->charset, task ) ) 
-            {
+            if ( friso_en_punctuation( friso->charset, task ) ) {
                 if ( config->clr_stw 
                         && friso_dic_match(friso->dic, 
-                            __LEX_STOPWORDS__, task->buffer) )
+                            __LEX_STOPWORDS__, task->buffer) ) {
                     continue;
+                }
+
                 //count the punctuation in.
                 task->token->word[0] = task->buffer[0];
-                task->token->type = __LEX_PUNC_WORDS__;
-                task->token->length = task->bytes;
-                task->token->rlen = task->bytes;
-                task->token->offset = task->idx - task->bytes;
+                task->token->type    = __LEX_PUNC_WORDS__;
+                task->token->length  = task->bytes;
+                task->token->rlen    = task->bytes;
+                task->token->offset  = task->idx - task->bytes;
                 task->token->word[1] = '\0';
                 return task->token;
 
@@ -1642,8 +1607,9 @@ FRISO_API friso_token_t next_mmseg_token(
              * */
             sword = NULL;
             if ( config->en_sseg == 1 
-                    && task_ssseg_check(task) )
+                    && task_ssseg_check(task) ) {
                 sword = en_second_seg(friso, config, task, lex, 1);
+            }
 
             //check if it is a stopword.
             if ( config->clr_stw 
@@ -1653,9 +1619,7 @@ FRISO_API friso_token_t next_mmseg_token(
                 check_free_otlex_entry( lex );
                 if ( sword == NULL ) continue;
                 lex = sword;
-            }
-            else if ( sword != NULL )
-            {
+            } else if ( sword != NULL ) {
                 if ( config->add_syn == 1 ) lex_appensyn_open(lex);
                 link_list_add(task->pool, lex);
 
@@ -1671,9 +1635,9 @@ FRISO_API friso_token_t next_mmseg_token(
             //copy the word to the task token buffer.
             //if ( lex->length >= __HITS_WORD_LENGTH__ ) continue;
             memcpy(task->token->word, lex->word, lex->length);
-            task->token->type = lex->type;
+            task->token->type   = lex->type;
             task->token->length = lex->length;
-            task->token->rlen = lex->rlen;
+            task->token->rlen   = lex->rlen;
             task->token->offset = lex->offset;
             task->token->word[lex->length] = '\0';
 
@@ -1681,7 +1645,9 @@ FRISO_API friso_token_t next_mmseg_token(
              * tye synoyums words for the current lex_entry_t.
              * */
             if ( sword == NULL 
-                    && config->add_syn == 1 ) append_en_syn(lex, tmp, 0);
+                    && config->add_syn == 1 ) {
+                append_en_syn(lex, tmp, 0);
+            }
 
             //free the newly create lex_entry_t
             check_free_otlex_entry( lex );
@@ -1692,15 +1658,16 @@ FRISO_API friso_token_t next_mmseg_token(
 
         /* {{{ Keep the chinese punctuation.
          * @added 2013-08-31) */
-        else if ( friso_cn_punctuation( friso->charset, task ) )
-        {
+        else if ( friso_cn_punctuation( friso->charset, task ) ) {
             if ( config->clr_stw 
                     && friso_dic_match(friso->dic, 
-                        __LEX_STOPWORDS__, task->buffer) )
+                        __LEX_STOPWORDS__, task->buffer) ) {
                 continue;
+            }
+
             //count the punctuation in.
             memcpy(task->token->word, task->buffer, task->bytes);
-            task->token->type = __LEX_PUNC_WORDS__;
+            task->token->type   = __LEX_PUNC_WORDS__;
             task->token->length = task->bytes;
             task->token->offset = task->idx - task->bytes;
             task->token->word[task->bytes] = '\0';
@@ -1716,8 +1683,7 @@ FRISO_API friso_token_t next_mmseg_token(
 
         /* {{{ keep the unrecognized words?
         //@date 2013-10-14 */
-        else if ( config->keep_urec ) 
-        {
+        else if ( config->keep_urec ) {
             memcpy(task->token->word, task->buffer, task->bytes);
             task->token->type = __LEX_UNKNOW_WORDS__;
             task->token->length = task->bytes;
@@ -1745,8 +1711,7 @@ FRISO_API friso_token_t next_detect_token(
     int i, __convert = 0, tbytes, wbytes;
 
     /* {{{ task word pool check */
-    if ( ! link_list_empty( task->pool ) ) 
-    {
+    if ( ! link_list_empty( task->pool ) ) {
         /*
          * load word from the word poll if it is not empty.
          *  this will make the next word more convenient and efficient.
@@ -1754,9 +1719,9 @@ FRISO_API friso_token_t next_detect_token(
          */
         lex = ( lex_entry_t ) link_list_remove_first( task->pool );
         memcpy(task->token->word, lex->word, lex->length);
-        task->token->type = lex->type;
+        task->token->type   = lex->type;
         task->token->length = lex->length;
-        task->token->rlen = lex->rlen;
+        task->token->rlen   = lex->rlen;
         task->token->offset = lex->offset;
         task->token->word[lex->length] = '\0';
 
@@ -1767,8 +1732,7 @@ FRISO_API friso_token_t next_detect_token(
          *         friso->dic, so :
          *     free the lex_entry_t but not its word here.
          */
-        if ( lex->type == __LEX_NCSYN_WORDS__ ) 
-        {
+        if ( lex->type == __LEX_NCSYN_WORDS__ ) {
             free_lex_entry( lex );
         }
 
@@ -1776,8 +1740,7 @@ FRISO_API friso_token_t next_detect_token(
     }
     /* }}} */
 
-    while ( task->idx < task->length ) 
-    {
+    while ( task->idx < task->length ) {
         lex = NULL;
 
         //read the next word from the current position.
@@ -1798,14 +1761,12 @@ FRISO_API friso_token_t next_detect_token(
 
         string_buffer_clear(task->sbuf);
         string_buffer_append(task->sbuf, task->buffer);
-        if ( friso_dic_match(friso->dic, __LEX_CJK_WORDS__, task->sbuf->buffer) )
-        {
+        if ( friso_dic_match(friso->dic, __LEX_CJK_WORDS__, task->sbuf->buffer) ) {
             lex = friso_dic_get(friso->dic, __LEX_CJK_WORDS__, task->sbuf->buffer);
             wbytes = tbytes;
         }
 
-        for ( i = 1; i < config->max_len; i++ )
-        {
+        for ( i = 1; i < config->max_len; i++ ) {
             task->bytes = readNextWord( friso, task, &task->idx, task->buffer );
             if ( task->bytes == 0 ) break;
 
@@ -1817,8 +1778,7 @@ FRISO_API friso_token_t next_detect_token(
             convert_work_apply( friso, task, __convert );
             string_buffer_append(task->sbuf, task->buffer);
 
-            if ( friso_dic_match(friso->dic, __LEX_CJK_WORDS__, task->sbuf->buffer) )
-            {
+            if ( friso_dic_match(friso->dic, __LEX_CJK_WORDS__, task->sbuf->buffer) ) {
                 lex = friso_dic_get(friso->dic, __LEX_CJK_WORDS__, task->sbuf->buffer);
                 wbytes = tbytes;
             }
@@ -1828,8 +1788,7 @@ FRISO_API friso_token_t next_detect_token(
          * matches no word in the dictionary
          *         reset the task->idx to the correct value
          */
-        if ( lex == NULL ) 
-        {
+        if ( lex == NULL ) {
             task->idx -= (tbytes - 1);
             continue;
         }
@@ -1839,18 +1798,19 @@ FRISO_API friso_token_t next_detect_token(
         task->idx -= (tbytes - wbytes);
 
         memcpy(task->token->word, lex->word, lex->length);
-        task->token->type = __LEX_CJK_WORDS__;
+        task->token->type   = __LEX_CJK_WORDS__;
         task->token->length = lex->length;
-        task->token->rlen = wbytes;
+        task->token->rlen   = wbytes;
         task->token->offset = task->idx - wbytes;
         task->token->word[(int)lex->length] = '\0';
 
         //check and append the synonyms words
-        if ( config->add_syn && lex->syn != NULL ) 
-        {
-            if ( config->spx_out == 1 )
+        if ( config->add_syn && lex->syn != NULL ) {
+            if ( config->spx_out == 1 ) {
                 token_sphinx_output(task, lex);
-            else token_normal_output(task, lex, 0);
+            } else {
+                token_normal_output(task, lex, 0);
+            }
         }
 
         return task->token;

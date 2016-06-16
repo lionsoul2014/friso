@@ -26,7 +26,7 @@ __STATIC_API__ fstring create_buffer( uint_t length )
 {
     fstring buffer = ( fstring ) FRISO_MALLOC( length + 1 );
     if ( buffer == NULL ) {
-    ___ALLOCATION_ERROR___
+        ___ALLOCATION_ERROR___
     }
 
     memset( buffer, 0x00, length + 1 );
@@ -67,7 +67,7 @@ FRISO_API string_buffer_t new_string_buffer_with_opacity( uint_t opacity )
     string_buffer_t sb = ( string_buffer_t ) 
     FRISO_MALLOC( sizeof( string_buffer_entry ) );
     if ( sb == NULL ) {
-    ___ALLOCATION_ERROR___
+        ___ALLOCATION_ERROR___
     } 
 
     sb->buffer = create_buffer( opacity );
@@ -84,7 +84,7 @@ FRISO_API string_buffer_t new_string_buffer_with_string( fstring str )
     string_buffer_t sb = ( string_buffer_t ) 
     FRISO_MALLOC( sizeof( string_buffer_entry ) );
     if ( sb == NULL ) {
-    ___ALLOCATION_ERROR___
+        ___ALLOCATION_ERROR___
     }
 
     //initialize
@@ -109,7 +109,7 @@ FRISO_API void string_buffer_append(
 
     //check the necessity to resize the buffer.
     if ( sb->length + __len__ > sb->allocs ) {
-    sb = resize_buffer( sb, ( sb->length + __len__ ) * 2 + 1 );
+        sb = resize_buffer( sb, ( sb->length + __len__ ) * 2 + 1 );
     }
 
     //register uint_t t;
@@ -126,7 +126,7 @@ FRISO_API void string_buffer_append_char(
 {
     //check the necessity to resize the buffer.
     if ( sb->length + 1 > sb->allocs ) {
-    sb = resize_buffer( sb, sb->length * 2 + 1 );
+        sb = resize_buffer( sb, sb->length * 2 + 1 );
     }
 
     sb->buffer[sb->length++] = ch;
@@ -153,7 +153,7 @@ FRISO_API fstring string_buffer_remove(
     uint_t t;
     //move the bytes after the idx + length
     for ( t = idx + length; t < sb->length; t++ ) {
-    sb->buffer[t - length] = sb->buffer[t];
+        sb->buffer[t - length] = sb->buffer[t];
     }
     sb->buffer[t] = '\0';
     //memcpy( sb->buffer + idx, 
@@ -162,7 +162,7 @@ FRISO_API fstring string_buffer_remove(
 
     t = sb->length - idx;
     if ( t > 0 ) {
-    sb->length -= ( t > length ) ? length : t;
+        sb->length -= ( t > length ) ? length : t;
     }
     sb->buffer[sb->length-1] = '\0';
 
@@ -177,7 +177,7 @@ FRISO_API string_buffer_t string_buffer_trim( string_buffer_t sb )
 {
     //resize the buffer.
     if ( sb->length < sb->allocs - 1 ) {
-    sb = resize_buffer( sb, sb->length + 1 );
+        sb = resize_buffer( sb, sb->length + 1 );
     }
     return sb;
 }
@@ -226,7 +226,7 @@ FRISO_API string_split_t new_string_split(
     string_split_t e = ( string_split_t ) 
     FRISO_MALLOC( sizeof( string_split_entry ) );
     if ( e == NULL ) {
-    ___ALLOCATION_ERROR___;
+        ___ALLOCATION_ERROR___;
     }
 
     e->delimiter = delimiter;
@@ -289,30 +289,27 @@ FRISO_API fstring string_split_next(
     //check if reach the end of the fstring
     if ( sst->idx >= sst->srcLen ) return NULL;
 
-    while ( 1 ) 
-    {
-    _ok = 1;
-    for ( i = 0; i < sst->delLen 
-        && (sst->idx + i < sst->srcLen); i++ ) 
-    {
-        if ( sst->source[sst->idx+i] != sst->delimiter[i] ) 
-        {
-        _ok = 0;
-        break;
+    while ( 1 ) {
+        _ok = 1;
+        for ( i = 0; i < sst->delLen 
+            && (sst->idx + i < sst->srcLen); i++ ) {
+            if ( sst->source[sst->idx+i] != sst->delimiter[i] ) {
+                _ok = 0;
+                break;
+            }
+        }    
+
+        //find the delimiter here,
+        //break the loop and self plus the sst->idx, then return the buffer . 
+        if ( _ok == 1 ) {
+            sst->idx += sst->delLen;
+            break;
         }
-    }    
 
-    //find the delimiter here,
-    //break the loop and self plus the sst->idx, then return the buffer . 
-    if ( _ok == 1 ) {
-        sst->idx += sst->delLen;
-        break;
-    }
-
-    //coy the char to the buffer
-    *_dst++ = sst->source[sst->idx++];
-    //check if reach the end of the fstring
-    if ( sst->idx >= sst->srcLen ) break;
+        //coy the char to the buffer
+        *_dst++ = sst->source[sst->idx++];
+        //check if reach the end of the fstring
+        if ( sst->idx >= sst->srcLen ) break;
     }
 
     *_dst = '\0';

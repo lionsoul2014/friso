@@ -23,8 +23,11 @@ FRISO_API int gbk_next_word(
     if ( *idx >= task->length ) return 0;
 
     c = (uchar_t)task->text[*idx];
-    if ( c <= 0x80 ) task->bytes = 1;
-    else task->bytes = 2;
+    if ( c <= 0x80 ) {
+        task->bytes = 1;
+    } else {
+        task->bytes = 2;
+    }
 
     //copy the word to the buffer.
     memcpy(__word, task->text + (*idx), task->bytes);
@@ -42,7 +45,7 @@ FRISO_API int gbk_next_word(
 
 //check if the given buffer is a gbk word (ANSII string).
 //    included the simplified and traditional words.
-FRISO_API int gbk_cn_string( char *str ) 
+FRISO_API int gbk_cn_string(char *str) 
 {
     int c1 = (uchar_t) str[0];
     int c2 = (uchar_t) str[1];
@@ -88,10 +91,11 @@ FRISO_API int gbk_uppercase_letter( char *str )
 {
     int c1 = (uchar_t) str[0];
     int c2 = (uchar_t) str[1];
-    if ( c1 <= 0x80 )        //half-width
-    return ( c1 >= 65 && c1 <= 90 );
-    else            //full-width
-    return ( c1 == 0xa3 && ( c2 >= 0xc1 && c2 <= 0xda ) );
+    if ( c1 <= 0x80 ) { //half-width
+        return ( c1 >= 65 && c1 <= 90 );
+    } else {            //full-width
+        return ( c1 == 0xa3 && ( c2 >= 0xc1 && c2 <= 0xda ) );
+    }
 }
 
 //check if the given char is a lower case char.
@@ -100,10 +104,11 @@ FRISO_API int gbk_lowercase_letter( char *str )
 {
     int c1 = (uchar_t) str[0];
     int c2 = (uchar_t) str[1];
-    if ( c1 <= 0x80 )        //half-width
-    return ( c1 >= 97 && c1 <= 122 );
-    else             //full-width
-    return ( c1 == 0xa3 && ( c2 >= 0xe1 && c2 <= 0xfa ) );
+    if ( c1 <= 0x80 ) { //half-width
+        return ( c1 >= 97 && c1 <= 122 );
+    } else {           //full-width
+        return ( c1 == 0xa3 && ( c2 >= 0xe1 && c2 <= 0xfa ) );
+    }
 }
 
 //check if the given char is a arabic numeric.
@@ -112,10 +117,11 @@ FRISO_API int gbk_numeric_letter( char *str )
 {
     int c1 = (uchar_t) str[0];
     int c2 = (uchar_t) str[1];
-    if ( c1 <= 0x80 )        //half-width
-    return ( c1 >= 48 && c1 <= 57 );
-    else            //full-width
-    return ( ( c1 == 0xa3 ) && ( c2 >= 0xb0 && c2 <= 0xb9 ) );
+    if ( c1 <= 0x80 ) { //half-width
+        return ( c1 >= 48 && c1 <= 57 );
+    } else {            //full-width
+        return ( ( c1 == 0xa3 ) && ( c2 >= 0xb0 && c2 <= 0xb9 ) );
+    }
 }
 
 /*
@@ -128,19 +134,15 @@ FRISO_API int gbk_numeric_string( char *str )
     int c1 = 0;
     int c2 = 0;
 
-    while ( *s != '\0' )
-    {
-    c1 = (uchar_t) (*s++);
-    if ( c1 <= 0x80 )     //half-width
-    {
-        if ( c1 < 48 || c2 > 57 ) return 0;
-    }
-    else             //full-width
-    {
-        if ( c1 != 0xa3 ) return 0;
-        c2 = (uchar_t) (*s++);
-        if ( c2 < 0xb0 || c2 > 0xb9 ) return 0;
-    }
+    while ( *s != '\0' ) {
+        c1 = (uchar_t) (*s++);
+        if ( c1 <= 0x80 ) {     //half-width
+            if ( c1 < 48 || c2 > 57 ) return 0;
+        } else {            //full-width
+            if ( c1 != 0xa3 ) return 0;
+            c2 = (uchar_t) (*s++);
+            if ( c2 < 0xb0 || c2 > 0xb9 ) return 0;
+        }
     }
 
     return 1;
@@ -155,26 +157,21 @@ FRISO_API int gbk_decimal_string( char *str )
     //point header check.
     if ( str[0] == '.' || str[len - 1] == '.' ) return 0;
 
-    for ( i = 0; i < len; )
-    {
-    c1 = (uchar_t) str[i++];
-    //count the number of the points.
-    if ( c1 == 46 ) 
-    {
-        p++;
-        continue;
-    }
+    for ( i = 0; i < len; ) {
+        c1 = (uchar_t) str[i++];
+        //count the number of the points.
+        if ( c1 == 46 ) {
+            p++;
+            continue;
+        }
 
-    if ( c1 <= 0x80 )    //half-width
-    {
-        if ( c1 < 48 || c1 > 57 ) return 0;
-    }
-    else             //full-width
-    {
-        if ( c1 != 0xa3 ) return 0;
-        c2 = (uchar_t) str[i++];
-        if ( c2 < 0xb0 || c2 > 0xb9 ) return 0;
-    }
+        if ( c1 <= 0x80 ) { //half-width
+            if ( c1 < 48 || c1 > 57 ) return 0;
+        } else {            //full-width
+            if ( c1 != 0xa3 ) return 0;
+            c2 = (uchar_t) str[i++];
+            if ( c2 < 0xb0 || c2 > 0xb9 ) return 0;
+        }
     }
 
     return (p == 1);
@@ -186,13 +183,15 @@ FRISO_API int gbk_en_letter( char *str )
 {
     int c1 = (uchar_t) str[0];
     int c2 = (uchar_t) str[1];
-    if ( c1 <= 0x80 )        //half-width
-    return ( (c1 >= 65 && c1 <= 90)         //lowercase
-        || (c1 >= 97 && c1 <= 122));        //uppercase
-    else 
-    return ( (c1 == 0xa3) 
-        && ( ( c2 >= 0xc1 && c2 <= 0xda )     //lowercase
-          || ( c2 >= 0xe1 && c2 <= 0xfa ) ) );    //uppercase
+    if ( c1 <= 0x80 ) {
+        return ( (c1 >= 65 && c1 <= 90)         //lowercase
+            || (c1 >= 97 && c1 <= 122));        //uppercase
+    } else {
+        return ( (c1 == 0xa3) 
+            && ( ( c2 >= 0xc1 && c2 <= 0xda )     //lowercase
+              || ( c2 >= 0xe1 && c2 <= 0xfa ) ) );    //uppercase
+    }
+
     return 0;
 }
 
@@ -202,8 +201,11 @@ FRISO_API int gbk_whitespace( char *str )
 {
     int c1 = (uchar_t) str[0];
     int c2 = (uchar_t) str[1];
-    if ( c1 <= 0x80 ) return (c1 == 32);
-    else return ( c1 == 0xa3 && c2 == 0xa0 );
+    if ( c1 <= 0x80 ) {
+        return (c1 == 32);
+    } else {
+        return ( c1 == 0xa3 && c2 == 0xa0 );
+    }
 }
 
 /* check if the given char is a letter number like 'ⅠⅡ'

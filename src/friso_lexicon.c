@@ -44,8 +44,7 @@ __STATIC_API__ void default_fdic_callback( hash_entry_t e )
     //free the lex->word
     FRISO_FREE( lex->word );    
     //free the lex->syn if it is not NULL
-    if ( lex->syn != NULL ) 
-    {    
+    if ( lex->syn != NULL ) {
         syn = lex->syn;
         for ( i = 0; i < syn->length; i++ ) {
             FRISO_FREE( syn->items[i] );
@@ -85,16 +84,16 @@ FRISO_API lex_entry_t new_lex_entry(
     } 
 
     //initialize.
-    e->word    = word;
+    e->word   = word;
     e->syn    = syn;            //synoyum words array list.
     e->pos    = NULL;            //part of speech array list.
     //e->py    = NULL; //set to NULL first.
     e->fre    = fre;
-    e->length    = (uchar_t) length;    //length
-    e->rlen    = (uchar_t) length;    //set to length by default.
-    e->type     = (uchar_t) type;    //type
-    e->ctrlMask    = 0;            //control mask.
-    e->offset    = -1;
+    e->length = (uchar_t) length;    //length
+    e->rlen   = (uchar_t) length;    //set to length by default.
+    e->type   = (uchar_t) type;    //type
+    e->ctrlMask = 0;            //control mask.
+    e->offset = -1;
 
     return e;
 }
@@ -124,8 +123,7 @@ FRISO_API void friso_dic_add(
         fstring word, 
         friso_array_t syn ) 
 {
-    if ( lex >= 0 && lex < __FRISO_LEXICON_LENGTH__ ) 
-    {
+    if ( lex >= 0 && lex < __FRISO_LEXICON_LENGTH__ ) {
         //printf("lex=%d, word=%s, syn=%s\n", lex, word, syn);
         hash_put_mapping( dic[lex], word, 
                 new_lex_entry( word, syn, 0, 
@@ -159,8 +157,7 @@ FRISO_API fstring file_get_line( fstring __dst, FILE * _stream )
     fstring cs;
 
     cs = __dst;
-    while ( ( c = fgetc( _stream ) ) != EOF ) 
-    {
+    while ( ( c = fgetc( _stream ) ) != EOF ) {
         if ( c == '\n' ) break;
         *cs++ = c; 
     }
@@ -196,7 +193,7 @@ __STATIC_API__ fstring string_copy(
  *     source fstring to the new allocation, and 
  *     you should free it after use it . 
  *
- * @param _src        source fstring
+ * @param _src      source fstring
  * @param blocks    number of bytes to copy
  */
 __STATIC_API__ fstring string_copy_heap( 
@@ -204,8 +201,7 @@ __STATIC_API__ fstring string_copy_heap(
 {
     register uint_t t;
 
-    fstring str = ( fstring ) 
-        FRISO_MALLOC( blocks + 1 );
+    fstring str = ( fstring ) FRISO_MALLOC( blocks + 1 );
     if ( str == NULL ) {
         ___ALLOCATION_ERROR___;
     }
@@ -230,8 +226,9 @@ __STATIC_API__ fstring indexOf( fstring __str, char delimiter )
 
     __length__ = strlen( __str );
     for ( i = 0; i < __length__; i++ ) {
-        if ( __str[i] == delimiter ) 
+        if ( __str[i] == delimiter ) {
             return __str + i;
+        }
     }
 
     return NULL;
@@ -264,18 +261,15 @@ FRISO_API void friso_dic_load(
     friso_array_t sywords;
     uint_t _fre;
 
-    if ( ( _stream = fopen( lex_file, "rb" ) ) != NULL ) 
-    {
-        while ( ( _line = file_get_line( __char, _stream ) ) != NULL ) 
-        {
+    if ( ( _stream = fopen( lex_file, "rb" ) ) != NULL ) {
+        while ( ( _line = file_get_line( __char, _stream ) ) != NULL ) {
             //clear up the notes
             //make sure the length of the line is greater than 1.
             //like the single '#' mark in stopwords dictionary.
             if ( _line[0] == '#' && strlen(_line) > 1 ) continue;
 
             //handle the stopwords.
-            if ( lex == __LEX_STOPWORDS__ )
-            {
+            if ( lex == __LEX_STOPWORDS__ ) {
                 //clean the chinese words that its length is greater than max length.
                 if ( ((int)_line[0]) < 0 && strlen( _line ) > length ) continue;
                 friso_dic_add( friso->dic, __LEX_STOPWORDS__, 
@@ -285,13 +279,14 @@ FRISO_API void friso_dic_load(
 
             //split the fstring with '/'.
             string_split_reset( &sse, "/", _line); 
-            if ( string_split_next( &sse, _buffer ) == NULL ) continue;
+            if ( string_split_next( &sse, _buffer ) == NULL ) {
+                continue;
+            }
 
             //1. get the word.
             _word = string_copy_heap( _buffer, strlen(_buffer) );
 
-            if ( string_split_next( &sse, _buffer ) == NULL ) 
-            {
+            if ( string_split_next( &sse, _buffer ) == NULL ) {
                 //normal lexicon type, 
                 //add them to the dictionary directly
                 friso_dic_add( friso->dic, lex, _word, NULL ); 
@@ -305,21 +300,22 @@ FRISO_API void friso_dic_load(
              *     and __LEX_CEM_WORDS__.
              */
             if ( ! ( lex == __LEX_ECM_WORDS__ || lex == __LEX_CEM_WORDS__ )
-                    && strlen( _word ) > length ) 
-            {
+                    && strlen( _word ) > length ) {
                 FRISO_FREE(_word);
                 continue;
             }
 
             //2. get the synonyms words.
             _syn = NULL;
-            if ( strcmp( _buffer, "null" ) != 0 )
+            if ( strcmp( _buffer, "null" ) != 0 ) {
                 _syn = string_copy( _buffer, _sbuffer, strlen(_buffer) );
+            }
 
             //3. get the word frequency if it available.
             _fre = 0;
-            if ( string_split_next( &sse, _buffer ) != NULL )
+            if ( string_split_next( &sse, _buffer ) != NULL ) {
                 _fre = atoi( _buffer );
+            }
 
             /**
              * Here:
@@ -327,12 +323,10 @@ FRISO_API void friso_dic_load(
              *     and put them in a array list if the synonyms is not NULL
              */
             sywords = NULL;
-            if ( config->add_syn && _syn != NULL ) 
-            {
+            if ( config->add_syn && _syn != NULL ) {
                 string_split_reset( &sse, ",", _sbuffer );
                 sywords = new_array_list_with_opacity(5);
-                while ( string_split_next( &sse, _buffer ) != NULL ) 
-                {
+                while ( string_split_next( &sse, _buffer ) != NULL ) {
                     if ( strlen(_buffer) > length ) continue;
                     array_list_add( sywords, 
                             string_copy_heap(_buffer, strlen(_buffer)) );
@@ -364,38 +358,27 @@ __STATIC_API__ friso_lex_t get_lexicon_type_with_constant( fstring _key )
 {
     if ( strcmp( _key, "__LEX_CJK_WORDS__" ) == 0 ) {
         return __LEX_CJK_WORDS__;
-    } 
-    else if ( strcmp( _key, "__LEX_CJK_UNITS__" ) == 0 ) {
+    } else if ( strcmp( _key, "__LEX_CJK_UNITS__" ) == 0 ) {
         return __LEX_CJK_UNITS__;
-    }
-    else if ( strcmp( _key, "__LEX_ECM_WORDS__" ) == 0 ) {
+    } else if ( strcmp( _key, "__LEX_ECM_WORDS__" ) == 0 ) {
         return __LEX_ECM_WORDS__;
-    }
-    else if ( strcmp( _key, "__LEX_CEM_WORDS__" ) == 0 ) {
+    } else if ( strcmp( _key, "__LEX_CEM_WORDS__" ) == 0 ) {
         return __LEX_CEM_WORDS__;
-    }
-    else if ( strcmp( _key, "__LEX_CN_LNAME__" ) == 0 ) {
+    } else if ( strcmp( _key, "__LEX_CN_LNAME__" ) == 0 ) {
         return __LEX_CN_LNAME__;
-    }
-    else if ( strcmp( _key, "__LEX_CN_SNAME__" ) == 0 ) {
+    } else if ( strcmp( _key, "__LEX_CN_SNAME__" ) == 0 ) {
         return __LEX_CN_SNAME__;
-    }
-    else if ( strcmp( _key, "__LEX_CN_DNAME1__" ) == 0 ) {
+    } else if ( strcmp( _key, "__LEX_CN_DNAME1__" ) == 0 ) {
         return __LEX_CN_DNAME1__;
-    }
-    else if ( strcmp( _key, "__LEX_CN_DNAME2__" ) == 0 ) {
+    } else if ( strcmp( _key, "__LEX_CN_DNAME2__" ) == 0 ) {
         return __LEX_CN_DNAME2__;
-    }
-    else if ( strcmp( _key, "__LEX_CN_LNA__" ) == 0 ) {
+    } else if ( strcmp( _key, "__LEX_CN_LNA__" ) == 0 ) {
         return __LEX_CN_LNA__;
-    }
-    else if ( strcmp( _key, "__LEX_STOPWORDS__" ) == 0 ) {
+    } else if ( strcmp( _key, "__LEX_STOPWORDS__" ) == 0 ) {
         return __LEX_STOPWORDS__;
-    }
-    else if ( strcmp( _key, "__LEX_ENPUN_WORDS__" ) == 0 ) {
+    } else if ( strcmp( _key, "__LEX_ENPUN_WORDS__" ) == 0 ) {
         return __LEX_ENPUN_WORDS__;
-    }
-    else if ( strcmp( _key, "__LEX_EN_WORDS__" ) == 0 ) {
+    } else if ( strcmp( _key, "__LEX_EN_WORDS__" ) == 0 ) {
         return __LEX_EN_WORDS__;
     }
 
@@ -431,19 +414,16 @@ FRISO_API void friso_dic_load_from_ifile(
     string_buffer_append( sb, __FRISO_LEX_IFILE__ );
     //printf("%s\n", sb->buffer);
 
-    if ( ( __stream = fopen( sb->buffer, "rb" ) ) != NULL ) 
-    {
+    if ( ( __stream = fopen( sb->buffer, "rb" ) ) != NULL ) {
         while ( ( __line__ = 
-                    file_get_line( __chars__, __stream ) ) != NULL ) 
-        {
+                    file_get_line( __chars__, __stream ) ) != NULL ) {
             //comment filter.
-            if ( __line__[0] == '#' ) continue;
+            if ( __line__[0] == '#' )  continue;
             if ( __line__[0] == '\0' ) continue;
 
             __length__ = strlen( __line__ );
             //item start
-            if ( __line__[ __length__ - 1 ] == '[' ) 
-            {
+            if ( __line__[ __length__ - 1 ] == '[' ) {
                 //get the type key
                 for ( i = 0; i < __length__
                         && ( __line__[i] == ' ' || __line__[i] == '\t' ); i++ ); 
@@ -459,8 +439,7 @@ FRISO_API void friso_dic_load_from_ifile(
                 if ( lex_t == -1 ) continue; 
 
                 //printf("key=%s, type=%d\n", __key__, lex_t );
-                while ( ( __line__ = file_get_line( __chars__, __stream ) ) != NULL ) 
-                {
+                while ( ( __line__ = file_get_line( __chars__, __stream ) ) != NULL ) {
                     //comments filter.
                     if ( __line__[0] == '#' ) continue;
                     if ( __line__[0] == '\0' ) continue; 

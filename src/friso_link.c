@@ -18,12 +18,12 @@ __STATIC_API__ link_node_t new_node_entry(
     link_node_t node = ( link_node_t ) 
         FRISO_MALLOC( sizeof( link_node_entry ) );
     if ( node == NULL ) {
-    ___ALLOCATION_ERROR___
+        ___ALLOCATION_ERROR___
     }
 
-    node->value    = value;
-    node->prev    = prev;
-    node->next    = next;
+    node->value = value;
+    node->prev  = prev;
+    node->next  = next;
 
     return node;
 }
@@ -34,12 +34,12 @@ FRISO_API friso_link_t new_link_list( void )
     friso_link_t e = ( friso_link_t ) 
         FRISO_MALLOC( sizeof( friso_link_entry ) );
     if ( e == NULL ) {
-    ___ALLOCATION_ERROR___
+        ___ALLOCATION_ERROR___
     }
 
     //initialize the entry
-    e->head     = new_node_entry( NULL, NULL, NULL );    
-    e->tail    = new_node_entry( NULL, e->head, NULL );
+    e->head = new_node_entry( NULL, NULL, NULL );    
+    e->tail = new_node_entry( NULL, e->head, NULL );
     e->head->next = e->tail;
     e->size = 0;
 
@@ -50,11 +50,10 @@ FRISO_API friso_link_t new_link_list( void )
 FRISO_API void free_link_list( friso_link_t link ) 
 {
     link_node_t node, next;
-    for ( node = link->head; node != NULL; ) 
-    {
-    next = node->next;
-    FRISO_FREE( node );
-    node = next;
+    for ( node = link->head; node != NULL; ) {
+        next = node->next;
+        FRISO_FREE( node );
+        node = next;
     }
 
     FRISO_FREE( link );
@@ -66,12 +65,11 @@ FRISO_API friso_link_t link_list_clear(
 {
     link_node_t node, next;
     //free all the middle nodes.
-    for ( node = link->head->next;
-        node != link->tail; ) 
+    for ( node = link->head->next; node != link->tail; ) 
     {
-    next = node->next;
-    FRISO_FREE( node );
-    node = next;
+        next = node->next;
+        FRISO_FREE( node );
+        node = next;
     }
 
     link->head->next = link->tail;
@@ -104,15 +102,15 @@ __STATIC_API__ link_node_t get_node(
 
     if ( idx >= 0 && idx < link->size ) 
     {
-    if ( idx < link->size / 2 ) {        //find from the head.
-        p = link->head;
-        for ( t = 0; t <= idx; t++ )
-        p = p->next; 
-    } else {                            //find from the tail.
-        p = link->tail;
-        for ( t = link->size; t > idx; t-- )
-        p = p->prev;
-    }
+        if ( idx < link->size / 2 ) {        //find from the head.
+            p = link->head;
+            for ( t = 0; t <= idx; t++ )
+            p = p->next; 
+        } else {                            //find from the tail.
+            p = link->tail;
+            for ( t = link->size; t > idx; t-- )
+            p = p->prev;
+        }
     }
 
     return p;
@@ -177,7 +175,7 @@ FRISO_API void link_list_insert_before(
 {
     link_node_t node = get_node( link, idx );
     if ( node != NULL ) {
-    insert_before( link, node, value );
+        insert_before( link, node, value );
     }
 }
 
@@ -191,7 +189,7 @@ FRISO_API void * link_list_get(
 {
     link_node_t node = get_node( link, idx );
     if ( node != NULL ) {
-    return node->value;
+        return node->value;
     }
     return NULL;
 }
@@ -211,8 +209,8 @@ FRISO_API void *link_list_set(
     void * _value = NULL;
 
     if ( node != NULL ) {
-    _value = node->value;
-    node->value = value;
+        _value = node->value;
+        node->value = value;
     }
 
     return _value;
@@ -230,8 +228,8 @@ FRISO_API void *link_list_remove(
     link_node_t node = get_node( link, idx );
 
     if ( node != NULL ) {
-    //printf("idx=%d, node->value=%s\n", idx, (string) node->value );
-    return remove_node( link, node );
+        //printf("idx=%d, node->value=%s\n", idx, (string) node->value );
+        return remove_node( link, node );
     }
 
     return NULL;
@@ -255,7 +253,7 @@ FRISO_API void *link_list_remove_first(
     friso_link_t link ) 
 {
     if ( link->size > 0 ) {
-    return remove_node( link, link->head->next );
+        return remove_node( link, link->head->next );
     }
     return NULL;
 }
@@ -265,7 +263,7 @@ FRISO_API void *link_list_remove_last(
     friso_link_t link ) 
 {
     if ( link->size > 0 ) {
-    return remove_node( link, link->tail->prev );
+        return remove_node( link, link->tail->prev );
     }
     return NULL;
 }

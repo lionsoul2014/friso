@@ -111,8 +111,7 @@ FRISO_API void array_list_insert(
 {
     register uint_t t;
 
-    if ( idx <= array->length ) 
-    {
+    if ( idx <= array->length ) {
         //check the condition to resize the array.
         if ( array->length == array->allocs ) {
             resize_array_list( array, array->length * 2 + 1 );
@@ -122,8 +121,7 @@ FRISO_API void array_list_insert(
         //for ( t = idx; t < array->length; t++ ) {
         //    array->items[t+1] = array->items[t];
         //}
-        for ( t = array->length - 1; t >= idx; t-- )
-        {
+        for ( t = array->length - 1; t >= idx; t-- ) {
             array->items[t+1] = array->items[t];
         }
 
@@ -149,8 +147,7 @@ FRISO_API void * array_list_set(
         void * value ) 
 {
     void * oval = NULL;
-    if ( idx < array->length ) 
-    {
+    if ( idx < array->length ) {
         oval = array->items[idx];
         array->items[idx] = value;
     }
@@ -165,8 +162,7 @@ FRISO_API void * array_list_remove(
     register uint_t t;
     void *oval = NULL;
 
-    if ( idx < array->length ) 
-    {
+    if ( idx < array->length ) {
         oval = array->items[idx];
         //move the elements after idx.
         for ( t = idx; t < array->length - 1; t++ ) {

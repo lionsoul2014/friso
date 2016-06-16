@@ -50,14 +50,13 @@ FRISO_API void print_char_binary( char value )
 {
     register uint_t t;
 
-    for ( t = 0; t < __CHAR_BYTES__; t++ ) 
-    {
-    if ( ( value & 0x80 ) == 0x80 ) {
-        printf("1");
-    } else {
-        printf("0");
-    }
-    value <<= 1;
+    for ( t = 0; t < __CHAR_BYTES__; t++ ) {
+        if ( ( value & 0x80 ) == 0x80 ) {
+            printf("1");
+        } else {
+            printf("0");
+        }
+        value <<= 1;
     }
 }
 
@@ -74,9 +73,9 @@ FRISO_API int get_utf8_bytes( char value )
 
     //one byte ascii char.
     if ( ( value & 0x80 ) == 0 ) return 1;
-
-    for ( ; ( value & 0x80 ) != 0; value <<= 1 ) 
-    t++;
+    for ( ; ( value & 0x80 ) != 0; value <<= 1 ) {
+        t++;
+    }
 
     return t;
 }
@@ -84,7 +83,7 @@ FRISO_API int get_utf8_bytes( char value )
 /*
  * get the unicode serial of a utf-8 char.
  * 
- * @param ch
+ * @param  ch
  * @return int.
  */
 FRISO_API int get_utf8_unicode( const fstring ch ) 
@@ -122,50 +121,50 @@ FRISO_API int get_utf8_unicode( const fstring ch )
 FRISO_API int unicode_to_utf8( uint_t u, fstring __word ) 
 {
     if ( u <= 0x0000007F ) {
-    //U-00000000 - U-0000007F
-    //0xxxxxxx
-    *__word            = ( u & 0x7F );
-    return 1;
+        //U-00000000 - U-0000007F
+        //0xxxxxxx
+        *__word = ( u & 0x7F );
+        return 1;
     } else if ( u >= 0x00000080 && u <= 0x000007FF ) {
-    //U-00000080 - U-000007FF
-    //110xxxxx 10xxxxxx
-    *( __word + 1 ) = ( u & 0x3F) | 0x80;
-    *__word         = ((u >> 6) & 0x1F) | 0xC0;
-    return 2;
+        //U-00000080 - U-000007FF
+        //110xxxxx 10xxxxxx
+        *( __word + 1 ) = ( u & 0x3F) | 0x80;
+        *__word         = ((u >> 6) & 0x1F) | 0xC0;
+        return 2;
     } else if ( u >= 0x00000800 && u <= 0x0000FFFF ) {
-    //U-00000800 - U-0000FFFF
-    //1110xxxx 10xxxxxx 10xxxxxx
-    *( __word + 2 ) = ( u & 0x3F) | 0x80;
-    *( __word + 1 ) = ((u >> 6) & 0x3F) | 0x80;
-    *__word         = ((u >> 12) & 0x0F) | 0xE0;
-    return 3;
+        //U-00000800 - U-0000FFFF
+        //1110xxxx 10xxxxxx 10xxxxxx
+        *( __word + 2 ) = ( u & 0x3F) | 0x80;
+        *( __word + 1 ) = ((u >> 6) & 0x3F) | 0x80;
+        *__word         = ((u >> 12) & 0x0F) | 0xE0;
+        return 3;
     } else if ( u >= 0x00010000 && u <= 0x001FFFFF ) {
-    //U-00010000 - U-001FFFFF
-    //11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
-    *( __word + 3 ) = ( u & 0x3F) | 0x80;
-    *( __word + 2 ) = ((u >>  6) & 0x3F) | 0x80;
-    *( __word + 1 ) = ((u >> 12) & 0x3F) | 0x80;
-    *__word         = ((u >> 18) & 0x07) | 0xF0;
-    return 4;
+        //U-00010000 - U-001FFFFF
+        //11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+        *( __word + 3 ) = ( u & 0x3F) | 0x80;
+        *( __word + 2 ) = ((u >>  6) & 0x3F) | 0x80;
+        *( __word + 1 ) = ((u >> 12) & 0x3F) | 0x80;
+        *__word         = ((u >> 18) & 0x07) | 0xF0;
+        return 4;
     } else if ( u >= 0x00200000 && u <= 0x03FFFFFF ) {
-    //U-00200000 - U-03FFFFFF
-    //111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
-    *( __word + 4 ) = ( u & 0x3F) | 0x80;
-    *( __word + 3 ) = ((u >>  6) & 0x3F) | 0x80;
-    *( __word + 2 ) = ((u >> 12) & 0x3F) | 0x80;
-    *( __word + 1 ) = ((u >> 18) & 0x3F) | 0x80;
-    *__word         = ((u >> 24) & 0x03) | 0xF8;
-    return 5;
+        //U-00200000 - U-03FFFFFF
+        //111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
+        *( __word + 4 ) = ( u & 0x3F) | 0x80;
+        *( __word + 3 ) = ((u >>  6) & 0x3F) | 0x80;
+        *( __word + 2 ) = ((u >> 12) & 0x3F) | 0x80;
+        *( __word + 1 ) = ((u >> 18) & 0x3F) | 0x80;
+        *__word         = ((u >> 24) & 0x03) | 0xF8;
+        return 5;
     } else if ( u >= 0x04000000 && u <= 0x7FFFFFFF ) {
-    //U-04000000 - U-7FFFFFFF
-    //1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
-    *( __word + 5 ) = ( u & 0x3F) | 0x80;
-    *( __word + 4 ) = ((u >>  6) & 0x3F) | 0x80;
-    *( __word + 3 ) = ((u >> 12) & 0x3F) | 0x80;
-    *( __word + 2 ) = ((u >> 18) & 0x3F) | 0x80;
-    *( __word + 1 ) = ((u >> 24) & 0x3F) | 0x80;
-    *__word         = ((u >> 30) & 0x01) | 0xFC;
-    return 6;
+        //U-04000000 - U-7FFFFFFF
+        //1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
+        *( __word + 5 ) = ( u & 0x3F) | 0x80;
+        *( __word + 4 ) = ((u >>  6) & 0x3F) | 0x80;
+        *( __word + 3 ) = ((u >> 12) & 0x3F) | 0x80;
+        *( __word + 2 ) = ((u >> 18) & 0x3F) | 0x80;
+        *( __word + 1 ) = ((u >> 24) & 0x3F) | 0x80;
+        *__word         = ((u >> 30) & 0x01) | 0xFC;
+        return 6;
     }
 
     return 0;
@@ -315,24 +314,23 @@ FRISO_API int utf8_numeric_string( const fstring str )
     fstring s = str;
     int bytes, u;
 
-    while ( *s != '\0' ) 
-    {
-    //if ( ! utf8_numeric_letter( get_utf8_unicode( s++ ) ) ) {
-    //    return 0;
-    //} 
+    while ( *s != '\0' ) {
+        //if ( ! utf8_numeric_letter( get_utf8_unicode( s++ ) ) ) {
+        //    return 0;
+        //} 
 
-    //new implemention.
-    //@date 2013-10-14
-    bytes = 1;
-    if ( *s < 0 )  //full-width chars.
-    {    
-        u = get_utf8_unicode(s);
-        bytes = get_utf8_bytes(*s);
-        if ( u < 65296 || u > 65305 ) return 0;
-    } 
-    else if ( *s < 48 || *s > 57 ) return 0;
+        //new implemention.
+        //@date 2013-10-14
+        bytes = 1;
+        if ( *s < 0 ) { //full-width chars.
+            u = get_utf8_unicode(s);
+            bytes = get_utf8_bytes(*s);
+            if ( u < 65296 || u > 65305 ) return 0;
+        } else if ( *s < 48 || *s > 57 ) {
+            return 0;
+        }
 
-    s += bytes;
+        s += bytes;
     }
 
     return 1;
@@ -345,26 +343,22 @@ FRISO_API int utf8_decimal_string( const fstring str )
 
     if ( str[0] == '.' || str[len-1] == '.' ) return 0;
 
-    for ( i = 1; i < len; bytes = 1 ) 
-    {
-    //count the number of char '.'
-    if ( str[i] == '.' ) 
-    {
-        i++;
-        p++;
-        continue;
-    }
+    for ( i = 1; i < len; bytes = 1 ) {
+        //count the number of char '.'
+        if ( str[i] == '.' ) {
+            i++;
+            p++;
+            continue;
+        } else if ( str[i] < 0 ) {
+            //full-width numeric.
+            u = get_utf8_unicode(str+i);
+            bytes = get_utf8_bytes(str[i]);
+            if ( u < 65296 || u > 65305 ) return 0;
+        } else if ( str[i] < 48 || str[i] > 57 ) {
+            return 0;
+        }
 
-    //full-width numeric.
-    else if ( str[i] < 0 ) 
-    {
-        u = get_utf8_unicode(str+i);
-        bytes = get_utf8_bytes(str[i]);
-        if ( u < 65296 || u > 65305 ) return 0;
-    }
-    else if ( str[i] < 48 || str[i] > 57 ) return 0;
-
-    i += bytes;
+        i += bytes;
     }
 
     return (p == 1);
@@ -378,8 +372,9 @@ FRISO_API int utf8_decimal_string( const fstring str )
  */
 FRISO_API int utf8_whitespace( uint_t u ) 
 {
-    if ( u == 32 || u == 12288 )
-    return 1;
+    if ( u == 32 || u == 12288 ) {
+        return 1;
+    }
     return 0;
 }
 
