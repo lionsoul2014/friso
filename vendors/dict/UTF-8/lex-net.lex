@@ -21,3 +21,6 @@
 白富美/null
 狮子的魂/null
 仓老师/仓井空
+郭德纲/null
+单田芳/null
+李笑笑/null
