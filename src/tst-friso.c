@@ -93,17 +93,16 @@ int main(int argc, char **argv)
         goto err;
     }
 
-    switch ( config->mode ) 
-    {
-        case __FRISO_SIMPLE_MODE__:
-            mode = "Simple";
-            break;
-        case __FRISO_COMPLEX_MODE__:
-            mode = "Complex";
-            break;
-        case __FRISO_DETECT_MODE__:
-            mode = "Detect";
-            break;
+    switch ( config->mode ) {
+    case __FRISO_SIMPLE_MODE__:
+        mode = "Simple";
+        break;
+    case __FRISO_COMPLEX_MODE__:
+        mode = "Complex";
+        break;
+    case __FRISO_DETECT_MODE__:
+        mode = "Detect";
+        break;
     }
 
     //friso_set_mode( config, __FRISO_DETECT_MODE__ );
@@ -121,8 +120,7 @@ int main(int argc, char **argv)
     //set the task.
     task = friso_new_task();
 
-    while ( 1 ) 
-    {
+    while ( 1 ) {
         print("friso>> ");
         getLine( stdin, line );
         //exit the programe
@@ -136,8 +134,7 @@ int main(int argc, char **argv)
         println("分词结果:");
 
         s_time = clock();
-        while ( ( config->next_token( friso, config, task ) ) != NULL ) 
-        {
+        while ( ( config->next_token( friso, config, task ) ) != NULL ) {
             //printf("%s[%d, %d, %d] ", task->token->word, 
             //        task->token->offset, task->token->length, task->token->rlen );
             printf("%s ", task->token->word );

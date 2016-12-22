@@ -81,7 +81,7 @@ FRISO_API lex_entry_t new_lex_entry(
         FRISO_MALLOC( sizeof( lex_entry_cdt ) );
     if ( e == NULL ) {
         ___ALLOCATION_ERROR___
-    } 
+    }
 
     //initialize.
     e->word   = word;
@@ -106,13 +106,35 @@ FRISO_API lex_entry_t new_lex_entry(
  * 3. free its pos. (friso_array_t)
  * 4. free the lex_entry_t.
  */
+FRISO_API void free_lex_entry_full( lex_entry_t e ) 
+{
+    register uint_t i;
+    friso_array_t syn;
+
+    //free the lex->word
+    FRISO_FREE( e->word );
+    //free the lex->syn if it is not NULL
+    if ( e->syn != NULL ) {
+        syn = e->syn;
+        for ( i = 0; i < syn->length; i++ ) {
+            FRISO_FREE( syn->items[i] );
+        }
+        free_array_list( syn );
+    }
+
+    //free the e->_val
+    //@date 2014-01-28 posted by mlemay@gmail.com
+    FRISO_FREE(e);
+}
+
 FRISO_API void free_lex_entry( lex_entry_t e ) 
 {
     //if ( e->syn != NULL ) {
     //    if ( flag == 1 ) free_array_list( e->syn);
     //    else free_array_list( e->syn );
     //}
-    FRISO_FREE( e );
+
+    FRISO_FREE(e);
 }
 
 
@@ -123,11 +145,15 @@ FRISO_API void friso_dic_add(
         fstring word, 
         friso_array_t syn ) 
 {
+    void *olex = NULL;
     if ( lex >= 0 && lex < __FRISO_LEXICON_LENGTH__ ) {
         //printf("lex=%d, word=%s, syn=%s\n", lex, word, syn);
-        hash_put_mapping( dic[lex], word, 
+        olex = hash_put_mapping( dic[lex], word, 
                 new_lex_entry( word, syn, 0, 
                     (uint_t) strlen(word),  (uint_t) lex ) );
+        if ( olex != NULL ) {
+            free_lex_entry_full((lex_entry_t)olex);
+        }
     }
 }
 
@@ -138,10 +164,14 @@ FRISO_API void friso_dic_add_with_fre(
         friso_array_t syn, 
         uint_t frequency ) 
 {
+    void *olex = NULL;
     if ( lex >= 0 && lex < __FRISO_LEXICON_LENGTH__ ) {
-        hash_put_mapping( dic[lex], word, 
+        olex = hash_put_mapping( dic[lex], word, 
                 new_lex_entry( word, syn, frequency, 
                     ( uint_t ) strlen(word), ( uint_t ) lex ) );
+        if ( olex != NULL ) {
+            free_lex_entry_full((lex_entry_t)olex);
+        }
     }
 }
 
@@ -207,7 +237,7 @@ __STATIC_API__ fstring string_copy_heap(
     }
 
     for ( t = 0; t < blocks; t++ ) {
-        if ( *_src == '\0' ) break;
+        //if ( *_src == '\0' ) break;
         str[t] = *_src++;
     }
 

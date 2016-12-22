@@ -206,6 +206,7 @@ FRISO_API void *hash_put_mapping(
             || ( key != NULL && e->_key != NULL 
                 && strcmp( key, e->_key ) == 0 ) ) {
             oval = e->_val;     //bak the old value
+            e->_key = key;
             e->_val = value;
             return oval;
         }

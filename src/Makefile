@@ -13,6 +13,7 @@ INCLUDE = .
 CFLAGS = -g -Wall
 #complile flags for products
 FFLAGS = -O2 -Wall -fPIC
+#FFLAGS = -g -Wall -fPIC
 #extension libs for friso
 ELIB = m
 LIB_FILE = libfriso.so
@@ -22,15 +23,19 @@ INCLUDE_DIR = /usr/include/friso
 INSTALL_DIR = /usr/local/bin
 
 
-SOURCE = friso.o friso_array.o friso_hash.o friso_lexicon.o friso_link.o friso_string.o friso_ctype.o friso_UTF8.o friso_GBK.o
+OBJECT = friso.o friso_array.o friso_hash.o friso_lexicon.o friso_link.o friso_string.o friso_ctype.o friso_UTF8.o friso_GBK.o
+SOURCE = friso_ctype.c friso_hash.c friso_UTF8.c friso_lexicon.c friso_array.c friso_GBK.c friso_link.c friso.c friso_string.c
 
 all: share friso
 
-static: $(SOURCE)
-	ar -cr $(STA_FILE) $(SOURCE)
+static: $(OBJECT)
+	ar -cr $(STA_FILE) $(OBJECT)
 
-share: $(SOURCE)
-	$(CC) $(FFLAGS) $(SOURCE) -fPIC -shared -l$(ELIB) -o $(LIB_FILE)
+share: $(OBJECT)
+	$(CC) $(FFLAGS) $(OBJECT) -fPIC -shared -l$(ELIB) -o $(LIB_FILE)
+
+##debug: $(SOURCE)
+##    $(CC) $(CFLAGS) $(SOURCE) -o friso
 
 friso: tst-friso.o
 	$(CC) tst-friso.o -o ./friso -L. -lfriso

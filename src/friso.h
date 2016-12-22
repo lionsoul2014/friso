@@ -11,7 +11,7 @@
 #include <stdio.h>
 
 /* {{{ friso main interface define :: start*/
-#define FRISO_VERSION "1.6.1"
+#define FRISO_VERSION "1.6.2"
 #define friso_version() FRISO_VERSION
 
 
@@ -306,6 +306,7 @@ FRISO_API lex_entry_t new_lex_entry( fstring, friso_array_t, uint_t, uint_t, uin
 //free the given lexicon entry.
 //free all the allocations that its synonyms word's items pointed to
 //when the second arguments is 1
+FRISO_API void free_lex_entry_full( lex_entry_t );
 FRISO_API void free_lex_entry( lex_entry_t );
 
 /*
