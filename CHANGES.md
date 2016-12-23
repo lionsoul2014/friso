@@ -1,5 +1,5 @@
 <pre>
-friso-1.6.3:
+friso-1.6.3 (future):
 
 1. sphinx token filter
 
@@ -23,7 +23,7 @@ friso-1.6.3:
 
 8. 词库更新自动加载。
 
-friso-1.6.2:                    --done
+friso-1.6.2 (current version):                    --done
 
 1. memory leak bug fixed
 
