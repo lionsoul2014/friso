@@ -25,7 +25,41 @@ friso-1.6.3 (future):
 
 friso-1.6.2 (current version):                    --done
 
-1. memory leak bug fixed
+1. memory leak bug fixed, test result:
+
+```
+lionsoul@lionsoul-ThundeRobot:/Code/C/friso/src$ valgrind --tool=memcheck --leak-check=full friso -init ../friso.ini 
+==6752== Memcheck, a memory error detector
+==6752== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==6752== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
+==6752== Command: friso -init ../friso.ini
+==6752== 
+Initialized in 1.620453sec
+Mode: Complex
++-Version: 1.6.2 (UTF-8)
++-----------------------------------------------------------+
+| friso - a chinese word segmentation writen by c.          |
+| bug report email - chenxin619315@gmail.com.               |
+| or: visit http://code.google.com/p/friso.                 |
+|     java edition for http://code.google.com/p/jcseg       |
+| type 'quit' to exit the program.                          |
++-----------------------------------------------------------+
+friso>> 研究生命起源
+分词结果:
+研究 琢磨 研讨 钻研 生命 起源 
+Done, cost < 0.027772sec
+friso>> quit
+Thanks for trying friso.
+==6752== 
+==6752== HEAP SUMMARY:
+==6752==     in use at exit: 0 bytes in 0 blocks
+==6752==   total heap usage: 555,930 allocs, 555,930 frees, 18,237,934 bytes allocated
+==6752== 
+==6752== All heap blocks were freed -- no leaks are possible
+==6752== 
+==6752== For counts of detected and suppressed errors, rerun with: -v
+==6752== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+```
 
 friso-1.6.1:
 
