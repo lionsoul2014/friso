@@ -56,7 +56,7 @@ Friso是使用c语言开发的一款开源的高性能中文分词器，使用�
 歧义 和 同义词 : 研究 琢磨 研讨 钻研 生命 起源 ， 混合词 : 做 b超 检查 身体 ， x射线 本质 是 什么 ， 今天 去 奇都ktv 唱 卡拉ok 去 ， 哆啦a梦 是 一个 动漫 中 的 主角 ， 单位 和 全角 : 2009年 8月 6日 开始 大学 之旅 ， 岳阳 今天 的 气温 为 38.6℃ , 也就是 101.48℉ , 英文 英语 数字 : bug report chenxin 619315 gmail com chenxin619315@gmail.com or visit http : / / code google com code.google.com / p / jcseg , we all admire appreciate like love enjoy the hacker spirit mind ! 特殊 数字 : ① ⑩ ⑽ ㈩ .
 
 
-<h3>四。Friso其他主页: </h3> 
-Friso官方主页: https://code.google.com/p/friso/ <br />
-Friso开源中国: http://www.oschina.net/p/friso <br />
+<h3>四。开发文档: </h3> 
+
+请参考git项目下的friso-help-doc.pdf
 
