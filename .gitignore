@@ -1,5 +1,7 @@
 help/
 *.o
+*.lo
+*.la
 *.so
 # lib/ #
 CHANGES.txt
@@ -7,3 +9,4 @@ CHANGES.txt
 *.swp
 *.vim
 *.viminfo
+.libs/

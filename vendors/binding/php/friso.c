@@ -198,7 +198,9 @@ PHP_FUNCTION(friso_split)
 
 	size_t slen, klen;
 
-    zval *ret, *cfg, **data;
+    zval *cfg, **data;
+    zval *ret;
+
     //used for multiple item return.
     zval *item;
 
@@ -245,14 +247,14 @@ PHP_FUNCTION(friso_split)
 		{
             if ( strcmp(_key, "kpuncs") == 0 ) 
             {
-				nconfig->kpuncs  = zend_string_copy(Z_STR_P(val));
+				//*(nconfig->kpuncs)  = zend_string_copy(Z_STR_P(val));
                 //memcpy(nconfig->kpuncs, (*val).value.str, (*val).value.str.len);
 				//nconfig->kpuncs[(*val)->value.str.len] = '\0';
             }
             else 
             {
                 //convert the data to long.
-                convert_to_long_ex(data);
+                convert_to_long_ex(val);
                 if ( strcmp(_key, "max_len") == 0 )
                     nconfig->max_len = (ushort_t) val->value.lval;
                // else if ( strcmp(_key, "r_name") == 0 )
@@ -283,9 +285,7 @@ PHP_FUNCTION(friso_split)
 		} ZEND_HASH_FOREACH_END();
     }
  
-    //initialize the array.
-    MAKE_STD_ZVAL( ret );
-    array_init( ret );
+    array_init(ret);
     config = ( nconfig == NULL ) ? friso_globals.config : nconfig;
 
     //create a new friso task.
@@ -294,9 +294,9 @@ PHP_FUNCTION(friso_split)
     friso_set_text(task, _str);
     while ( config->next_token( friso_globals.friso, config, task ) != NULL ) 
     {
-        MAKE_STD_ZVAL(item);
         array_init(item);
-        add_assoc_string(item, "word", task->token->word, 1);
+        add_assoc_string(item, "word", task->token->word);
+
         //check the append of type
         if ( (rargs & FRISO_RET_TYPE) != 0 )
             add_assoc_long(item, "type", task->token->type);
@@ -307,7 +307,7 @@ PHP_FUNCTION(friso_split)
         if ( (rargs & FRISO_RET_OFF) != 0 )
             add_assoc_long(item, "off", task->token->offset);
         if ( (rargs & FRISO_RET_POS) != 0 )
-            add_assoc_stringl(item, "pos", &task->token->pos, 1, 1);
+            add_assoc_stringl(item, "pos", &task->token->pos, 1);
         
         //append the sub result.
         add_index_zval( ret, idx++, item );
@@ -326,7 +326,7 @@ PHP_FUNCTION(friso_split)
    Return the current version of Friso. */
 PHP_FUNCTION(friso_version)
 {
-    RETURN_STRINGL(FRISO_VERSION, strlen(FRISO_VERSION), 1);
+    RETURN_STRINGL(FRISO_VERSION, strlen(FRISO_VERSION));
 }
 /* }}} */
 
@@ -335,7 +335,7 @@ PHP_FUNCTION(friso_version)
 PHP_FUNCTION(friso_charset)
 {
     char *charset = friso_globals.friso->charset == FRISO_UTF8 ? "UTF-8" : "GBK";
-    RETURN_STRINGL(charset, strlen(charset), 1);
+    RETURN_STRINGL(charset, strlen(charset));
 }
 /* }}} */
 
@@ -381,7 +381,6 @@ PHP_FUNCTION(friso_dic_get)
     if ( friso_globals.friso->dic == NULL )
         RETURN_BOOL(0);
 
-    MAKE_STD_ZVAL( entry );
     array_init( entry );
 
     if ( type < 0 || type >= __FRISO_LEXICON_LENGTH__ ) 
@@ -452,7 +451,7 @@ PHP_FUNCTION(friso_ucode_utf8)
     _bytes = unicode_to_utf8( ( size_t ) ucode, word );
     word[_bytes] = '\0';
 
-    RETURN_STRINGL( word, _bytes, 1 );
+    RETURN_STRINGL( word, _bytes );
 }
 /* }}} */
 

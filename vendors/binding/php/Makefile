@@ -1,7 +1,7 @@
-srcdir = /home/slayer/workspace/friso/vendors/binding/php
-builddir = /home/slayer/workspace/friso/vendors/binding/php
-top_srcdir = /home/slayer/workspace/friso/vendors/binding/php
-top_builddir = /home/slayer/workspace/friso/vendors/binding/php
+srcdir = /data0/workplace/friso/vendors/binding/php
+builddir = /data0/workplace/friso/vendors/binding/php
+top_srcdir = /data0/workplace/friso/vendors/binding/php
+top_builddir = /data0/workplace/friso/vendors/binding/php
 EGREP = /bin/grep -E
 SED = /bin/sed
 CONFIGURE_COMMAND = './configure'
@@ -21,7 +21,7 @@ prefix = /usr
 exec_prefix = $(prefix)
 libdir = ${exec_prefix}/lib
 prefix = /usr
-phplibdir = /home/slayer/workspace/friso/vendors/binding/php/modules
+phplibdir = /data0/workplace/friso/vendors/binding/php/modules
 phpincludedir = /usr/include/php/20151012
 CC = cc
 CFLAGS = -g -O2
@@ -189,8 +189,8 @@ prof-use:
 
 .PHONY: all clean install distclean test prof-gen prof-clean prof-use
 .NOEXPORT:
-friso.lo: /home/slayer/workspace/friso/vendors/binding/php/friso.c
-	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/slayer/workspace/friso/vendors/binding/php $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/slayer/workspace/friso/vendors/binding/php/friso.c -o friso.lo 
+friso.lo: /data0/workplace/friso/vendors/binding/php/friso.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/data0/workplace/friso/vendors/binding/php $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /data0/workplace/friso/vendors/binding/php/friso.c -o friso.lo 
 $(phplibdir)/friso.la: ./friso.la
 	$(LIBTOOL) --mode=install cp ./friso.la $(phplibdir)
 

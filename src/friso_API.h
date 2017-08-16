@@ -382,5 +382,30 @@ FRISO_API hash_entry_t hash_remove_mapping( friso_hash_t, fstring );
 /* }}} hashtable interface define :: end*/
 
 
+/* {{{ utf8 string interface define :: start*/
+
+/*
+ * Function: get_utf8_bytes
+ *
+ * */
+FRISO_API int get_utf8_bytes(char);
+
+
+/*
+ * Function: get_utf8_unicode
+ *
+ * */
+FRISO_API int get_utf8_unicode(const fstring);
+
+
+/*
+ * Function: unicode_to_utf8
+ *
+ * */
+FRISO_API int unicode_to_utf8(uint_t, fstring);
+
+
+/* }}} utf8 string interface define :: start*/
+
 #endif /*end ifndef*/
 

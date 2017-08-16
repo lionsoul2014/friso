@@ -1,5 +1,5 @@
-friso.lo: /home/slayer/workspace/friso/vendors/binding/php/friso.c
-	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/slayer/workspace/friso/vendors/binding/php $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/slayer/workspace/friso/vendors/binding/php/friso.c -o friso.lo 
+friso.lo: /data0/workplace/friso/vendors/binding/php/friso.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/data0/workplace/friso/vendors/binding/php $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /data0/workplace/friso/vendors/binding/php/friso.c -o friso.lo 
 $(phplibdir)/friso.la: ./friso.la
 	$(LIBTOOL) --mode=install cp ./friso.la $(phplibdir)
 

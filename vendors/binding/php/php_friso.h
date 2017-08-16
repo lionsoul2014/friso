@@ -1,4 +1,3 @@
-
 #ifndef PHP_FRISO_H
 #define PHP_FRISO_H
 

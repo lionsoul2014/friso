@@ -1,4 +1,4 @@
-m4trace:aclocal.m4:3117: -1- m4_include([build/ax_check_compile_flag.m4])
+m4trace:aclocal.m4:3119: -1- m4_include([build/ax_check_compile_flag.m4])
 m4trace:configure.in:4: -1- AC_INIT([config.m4])
 m4trace:configure.in:4: -1- m4_pattern_forbid([^_?A[CHUM]_])
 m4trace:configure.in:4: -1- m4_pattern_forbid([_AC_])
@@ -157,8 +157,8 @@ m4trace:configure.in:7: -1- AC_SUBST([EGREP])
 m4trace:configure.in:7: -1- AC_SUBST_TRACE([EGREP])
 m4trace:configure.in:7: -1- m4_pattern_allow([^EGREP$])
 m4trace:configure.in:7: -1- _m4_warn([obsolete], [The macro `LT_AC_PROG_SED' is obsolete.
-You should run autoupdate.], [aclocal.m4:11406: LT_AC_PROG_SED is expanded from...
-aclocal.m4:2664: PHP_CONFIG_NICE is expanded from...
+You should run autoupdate.], [aclocal.m4:11408: LT_AC_PROG_SED is expanded from...
+aclocal.m4:2666: PHP_CONFIG_NICE is expanded from...
 configure.in:7: the top level])
 m4trace:configure.in:7: -1- AC_SUBST([SED])
 m4trace:configure.in:7: -1- AC_SUBST_TRACE([SED])
@@ -287,7 +287,7 @@ m4trace:config.m4:62: -1- AH_OUTPUT([COMPILE_DL_FRISO], [/* Whether to build fri
 @%:@undef COMPILE_DL_FRISO])
 m4trace:configure.in:149: -1- AC_PROG_LIBTOOL
 m4trace:configure.in:149: -1- _m4_warn([obsolete], [The macro `AC_PROG_LIBTOOL' is obsolete.
-You should run autoupdate.], [aclocal.m4:3216: AC_PROG_LIBTOOL is expanded from...
+You should run autoupdate.], [aclocal.m4:3218: AC_PROG_LIBTOOL is expanded from...
 configure.in:149: the top level])
 m4trace:configure.in:149: -1- LT_INIT
 m4trace:configure.in:149: -1- m4_pattern_forbid([^_?LT_[A-Z_]+$])
