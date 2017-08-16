@@ -193,8 +193,10 @@ PHP_MINFO_FUNCTION(friso)
 PHP_FUNCTION(friso_split)
 {
     char *_str = NULL, *_key;
-    int slen, idx, klen, rargs = 0;
+    int idx, rargs = 0;
     int arg_count;
+
+	size_t slen, klen;
 
     zval *ret, *cfg, **data;
     //used for multiple item return.
@@ -222,6 +224,10 @@ PHP_FUNCTION(friso_split)
             WRONG_PARAM_COUNT;
     }
 
+	zend_ulong num_key;
+	zend_string *key;
+	zval *val;
+
     //make sure the RB_RET_WORD will be returned.
     //rargs |= FRISO_RET_WORD; 
 
@@ -231,53 +237,50 @@ PHP_FUNCTION(friso_split)
         nconfig = friso_new_config();
         memcpy(nconfig, friso_globals.config, sizeof(friso_config_entry));
 
+
         //check the new setting.
         cfgArr = Z_ARRVAL_P(cfg);
-        //zend_printf("array length: %d", zend_hash_num_elements(cfgArr));
-        for ( zend_hash_internal_pointer_reset_ex(cfgArr, &pointer); 
-            zend_hash_get_current_data_ex(cfgArr, (void **)&data, &pointer) == SUCCESS;
-            zend_hash_move_forward_ex(cfgArr, &pointer) ) 
-        {
-            zend_hash_get_current_key_ex(cfgArr, &_key, &klen, NULL, 0, &pointer);
-            //zend_printf("key: %s, value: %d<br />", _key, (*data)->value.lval);
-            
+
+		ZEND_HASH_FOREACH_KEY_VAL(cfgArr, num_key, key, val) 
+		{
             if ( strcmp(_key, "kpuncs") == 0 ) 
             {
-                memcpy(nconfig->kpuncs, (*data)->value.str.val, (*data)->value.str.len);
-                nconfig->kpuncs[(*data)->value.str.len] = '\0';
+				nconfig->kpuncs  = zend_string_copy(Z_STR_P(val));
+                //memcpy(nconfig->kpuncs, (*val).value.str, (*val).value.str.len);
+				//nconfig->kpuncs[(*val)->value.str.len] = '\0';
             }
             else 
             {
                 //convert the data to long.
                 convert_to_long_ex(data);
                 if ( strcmp(_key, "max_len") == 0 )
-                    nconfig->max_len = (ushort_t)(*data)->value.lval;
-                else if ( strcmp(_key, "r_name") == 0 )
-                    nconfig->r_name = (ushort_t)(*data)->value.lval;
-                else if ( strcmp(_key, "mix_len") == 0 )
-                    nconfig->mix_len = (ushort_t)(*data)->value.lval;
-                else if ( strcmp(_key, "lna_len") == 0 )
-                    nconfig->lna_len = (ushort_t)(*data)->value.lval;
-                else if ( strcmp(_key, "add_syn") == 0 )
-                    nconfig->add_syn = (ushort_t)(*data)->value.lval;
-                else if ( strcmp(_key, "clr_stw") == 0 )
-                    nconfig->clr_stw = (ushort_t)(*data)->value.lval;
-                else if ( strcmp(_key, "add_syn") == 0 )
-                    nconfig->add_syn = (ushort_t)(*data)->value.lval;
-                else if ( strcmp(_key, "keep_urec") == 0 )
-                    nconfig->keep_urec = (ushort_t)(*data)->value.lval;
-                else if ( strcmp(_key, "spx_out") == 0 )
-                    nconfig->spx_out = (ushort_t)(*data)->value.lval;
-                else if ( strcmp(_key, "nthreshold") == 0 )
-                    nconfig->nthreshold = (uint_t) (*data)->value.lval;
-                else if ( strcmp(_key, "mode") == 0 )
-                    friso_set_mode(nconfig, (friso_mode_t)((*data)->value.lval));
-                else if ( strcmp(_key, "en_sseg") == 0 )
-                    nconfig->en_sseg = (ushort_t) (*data)->value.lval;
-                else if ( strcmp(_key, "st_minl") == 0 )
-                    nconfig->st_minl = (ushort_t) (*data)->value.lval;
+                    nconfig->max_len = (ushort_t) val->value.lval;
+               // else if ( strcmp(_key, "r_name") == 0 )
+               //     nconfig->r_name = (ushort_t)(*data)->value.lval;
+               // else if ( strcmp(_key, "mix_len") == 0 )
+               //     nconfig->mix_len = (ushort_t)(*data)->value.lval;
+               // else if ( strcmp(_key, "lna_len") == 0 )
+               //     nconfig->lna_len = (ushort_t)(*data)->value.lval;
+               // else if ( strcmp(_key, "add_syn") == 0 )
+               //     nconfig->add_syn = (ushort_t)(*data)->value.lval;
+               // else if ( strcmp(_key, "clr_stw") == 0 )
+               //     nconfig->clr_stw = (ushort_t)(*data)->value.lval;
+               // else if ( strcmp(_key, "add_syn") == 0 )
+               //     nconfig->add_syn = (ushort_t)(*data)->value.lval;
+               // else if ( strcmp(_key, "keep_urec") == 0 )
+               //     nconfig->keep_urec = (ushort_t)(*data)->value.lval;
+               // else if ( strcmp(_key, "spx_out") == 0 )
+               //     nconfig->spx_out = (ushort_t)(*data)->value.lval;
+               // else if ( strcmp(_key, "nthreshold") == 0 )
+               //     nconfig->nthreshold = (uint_t) (*data)->value.lval;
+               // else if ( strcmp(_key, "mode") == 0 )
+               //     friso_set_mode(nconfig, (friso_mode_t)((*data)->value.lval));
+               // else if ( strcmp(_key, "en_sseg") == 0 )
+               //     nconfig->en_sseg = (ushort_t) (*data)->value.lval;
+               // else if ( strcmp(_key, "st_minl") == 0 )
+               //     nconfig->st_minl = (ushort_t) (*data)->value.lval;
             }
-        }
+		} ZEND_HASH_FOREACH_END();
     }
  
     //initialize the array.
