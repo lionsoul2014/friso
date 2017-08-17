@@ -1,8 +1,0 @@
-friso.lo: /home/slayer/workspace/friso/vendors/binding/php7/friso.c
-	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/slayer/workspace/friso/vendors/binding/php7 $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/slayer/workspace/friso/vendors/binding/php7/friso.c -o friso.lo 
-$(phplibdir)/friso.la: ./friso.la
-	$(LIBTOOL) --mode=install cp ./friso.la $(phplibdir)
-
-./friso.la: $(shared_objects_friso) $(FRISO_SHARED_DEPENDENCIES)
-	$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_friso) $(FRISO_SHARED_LIBADD)
-
