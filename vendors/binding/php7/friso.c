@@ -354,7 +354,7 @@ PHP_FUNCTION(friso_split)
             add_assoc_long(&item, "off", task->token->offset);
 
         if ( (rargs & FRISO_RET_POS) != 0 )
-            add_assoc_stringl(&item, "pos", &task->token->pos, 1);
+            add_assoc_stringl(&item, "pos", task->token->pos, 1);
         
         //append the sub result.
         add_index_zval( &ret, idx++, &item );
