@@ -10,3 +10,4 @@ CHANGES.txt
 *.vim
 *.viminfo
 .libs/
+.idea/
