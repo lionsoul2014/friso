@@ -207,7 +207,7 @@ PHP_MINFO_FUNCTION(friso)
     php_info_print_table_row(2, "Friso Support", "enabled");
     php_info_print_table_row(2, "Version", FRISO_VERSION);
     php_info_print_table_row(2, "Bug Report", "dongyado@gmail.com");
-    php_info_print_table_row(2, "Home page", "http://code.google.com/p/friso");
+    php_info_print_table_row(2, "Home page", "https://github.com/lionsoul2014/friso");
     php_info_print_table_end();
 
     DISPLAY_INI_ENTRIES();
