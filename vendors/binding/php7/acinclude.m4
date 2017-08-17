@@ -2339,15 +2339,13 @@ AC_DEFUN([PHP_SETUP_OPENSSL],[
 
   dnl If pkg-config is found try using it
   if test "$PHP_OPENSSL_DIR" = "yes" && test -x "$PKG_CONFIG" && $PKG_CONFIG --exists openssl; then
-    if $PKG_CONFIG --atleast-version=1.1 openssl; then
-      AC_MSG_ERROR([OpenSSL version >= 1.1 is not supported.])
-    elif $PKG_CONFIG --atleast-version=0.9.8 openssl; then
+    if $PKG_CONFIG --atleast-version=0.9.8 openssl; then
       found_openssl=yes
       OPENSSL_LIBS=`$PKG_CONFIG --libs openssl`
       OPENSSL_INCS=`$PKG_CONFIG --cflags-only-I openssl`
       OPENSSL_INCDIR=`$PKG_CONFIG --variable=includedir openssl`
     else
-      AC_MSG_ERROR([OpenSSL version >= 0.9.8 and < 1.1 required.])
+      AC_MSG_ERROR([OpenSSL version 0.9.8 or greater required.])
     fi
 
     if test -n "$OPENSSL_LIBS"; then
@@ -2689,7 +2687,7 @@ EOF
   done
 
   echo "'[$]0' \\" >> $1
-  if test `expr -- [$]0 : "'.*"` = 0; then
+  if test `expr " [$]0" : " '.*"` = 0; then
     CONFIGURE_COMMAND="$CONFIGURE_COMMAND '[$]0'"
   else 
     CONFIGURE_COMMAND="$CONFIGURE_COMMAND [$]0"

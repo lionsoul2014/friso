@@ -1,7 +1,7 @@
-srcdir = /data0/workplace/friso/vendors/binding/php
-builddir = /data0/workplace/friso/vendors/binding/php
-top_srcdir = /data0/workplace/friso/vendors/binding/php
-top_builddir = /data0/workplace/friso/vendors/binding/php
+srcdir = /home/slayer/workspace/friso/vendors/binding/php7
+builddir = /home/slayer/workspace/friso/vendors/binding/php7
+top_srcdir = /home/slayer/workspace/friso/vendors/binding/php7
+top_builddir = /home/slayer/workspace/friso/vendors/binding/php7
 EGREP = /bin/grep -E
 SED = /bin/sed
 CONFIGURE_COMMAND = './configure'
@@ -11,6 +11,7 @@ SHLIB_DL_SUFFIX_NAME = so
 ZEND_EXT_TYPE = zend_extension
 RE2C = exit 0;
 AWK = nawk
+FRISO_SHARED_LIBADD = -lfriso
 shared_objects_friso = friso.lo
 PHP_PECL_EXTENSION = friso
 PHP_MODULES = $(phplibdir)/friso.la
@@ -21,7 +22,7 @@ prefix = /usr
 exec_prefix = $(prefix)
 libdir = ${exec_prefix}/lib
 prefix = /usr
-phplibdir = /data0/workplace/friso/vendors/binding/php/modules
+phplibdir = /home/slayer/workspace/friso/vendors/binding/php7/modules
 phpincludedir = /usr/include/php/20151012
 CC = cc
 CFLAGS = -g -O2
@@ -35,7 +36,7 @@ EXTENSION_DIR = /usr/lib/php/20151012
 PHP_EXECUTABLE = /usr/bin/php7.0
 EXTRA_LDFLAGS =
 EXTRA_LIBS =
-INCLUDES = -I/usr/include/php/20151012 -I/usr/include/php/20151012/main -I/usr/include/php/20151012/TSRM -I/usr/include/php/20151012/Zend -I/usr/include/php/20151012/ext -I/usr/include/php/20151012/ext/date/lib
+INCLUDES = -I/usr/include/php/20151012 -I/usr/include/php/20151012/main -I/usr/include/php/20151012/TSRM -I/usr/include/php/20151012/Zend -I/usr/include/php/20151012/ext -I/usr/include/php/20151012/ext/date/lib -I/usr/
 LFLAGS =
 LDFLAGS =
 SHARED_LIBTOOL =
@@ -189,8 +190,8 @@ prof-use:
 
 .PHONY: all clean install distclean test prof-gen prof-clean prof-use
 .NOEXPORT:
-friso.lo: /data0/workplace/friso/vendors/binding/php/friso.c
-	$(LIBTOOL) --mode=compile $(CC)  -I. -I/data0/workplace/friso/vendors/binding/php $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /data0/workplace/friso/vendors/binding/php/friso.c -o friso.lo 
+friso.lo: /home/slayer/workspace/friso/vendors/binding/php7/friso.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/slayer/workspace/friso/vendors/binding/php7 $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/slayer/workspace/friso/vendors/binding/php7/friso.c -o friso.lo 
 $(phplibdir)/friso.la: ./friso.la
 	$(LIBTOOL) --mode=install cp ./friso.la $(phplibdir)
 

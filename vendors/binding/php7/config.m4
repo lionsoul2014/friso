@@ -20,44 +20,46 @@ Make sure that the comment is aligned:
 if test "$PHP_FRISO" != "no"; then
   dnl Write more examples of tests here...
 
-  dnl # --with-friso -> check with-path
-  dnl SEARCH_PATH="/usr/local /usr"     # you might want to change this
-  dnl SEARCH_FOR="/include/friso.h"  # you most likely want to change this
-  dnl if test -r $PHP_FRISO/$SEARCH_FOR; then # path given as parameter
-  dnl   FRISO_DIR=$PHP_FRISO
-  dnl else # search default path list
-  dnl   AC_MSG_CHECKING([for friso files in default path])
-  dnl   for i in $SEARCH_PATH ; do
-  dnl     if test -r $i/$SEARCH_FOR; then
-  dnl       FRISO_DIR=$i
-  dnl       AC_MSG_RESULT(found in $i)
-  dnl     fi
-  dnl   done
-  dnl fi
-  dnl
-  dnl if test -z "$FRISO_DIR"; then
-  dnl   AC_MSG_RESULT([not found])
-  dnl   AC_MSG_ERROR([Please reinstall the friso distribution])
-  dnl fi
+   # --with-friso -> check with-path
+     SEARCH_PATH="/usr/local /usr"      # you might want to change this
+     SEARCH_FOR="lib/libfriso.so"                       # you most likely want to change this
 
-  dnl # --with-friso -> add include path
-  dnl PHP_ADD_INCLUDE($FRISO_DIR/include)
+     if test -r $PHP_FRISO/$SEARCH_FOR; then # path given as parameter
+       FRISO_DIR=$PHP_FRISO
 
-  dnl # --with-friso -> check for lib and symbol presence
-  dnl LIBNAME=friso # you may want to change this
-  dnl LIBSYMBOL=friso # you most likely want to change this 
+     else # search default path list
+       AC_MSG_CHECKING([for friso files in default path])
+       for i in $SEARCH_PATH ; do
+         if test -r $i/$SEARCH_FOR; then
+           FRISO_DIR=$i
+           AC_MSG_RESULT(found in $i)
+         fi
+       done
+     fi
+   
+     if test -z "$FRISO_DIR"; then
+       AC_MSG_RESULT([not found])
+       AC_MSG_ERROR([Please reinstall the friso distribution, cd friso/src, run make and sudo make install ])
+     fi
 
-  dnl PHP_CHECK_LIBRARY($LIBNAME,$LIBSYMBOL,
-  dnl [
-  dnl   PHP_ADD_LIBRARY_WITH_PATH($LIBNAME, $FRISO_DIR/lib, FRISO_SHARED_LIBADD)
-  dnl   AC_DEFINE(HAVE_FRISOLIB,1,[ ])
-  dnl ],[
-  dnl   AC_MSG_ERROR([wrong friso lib version or lib not found])
-  dnl ],[
-  dnl   -L$FRISO_DIR/lib -lm
-  dnl ])
-  dnl
-  dnl PHP_SUBST(FRISO_SHARED_LIBADD)
+    # --with-friso -> add include path
+    PHP_ADD_INCLUDE($FRISO_DIR/)
+
+    # --with-friso -> check for lib and symbol presence
+    LIBNAME=friso # you may want to change this
+    LIBSYMBOL=friso_new # you most likely want to change this 
+
+    PHP_CHECK_LIBRARY($LIBNAME,$LIBSYMBOL,
+    [
+      PHP_ADD_LIBRARY_WITH_PATH($LIBNAME, $FRISO_DIR/lib, FRISO_SHARED_LIBADD)
+      AC_DEFINE(HAVE_FRISOLIB,1,[ ])
+    ],[
+      AC_MSG_ERROR([wrong friso lib version or lib not found])
+    ],[
+      -L$FRISO_DIR/lib -lm
+    ])
+   
+    PHP_SUBST(FRISO_SHARED_LIBADD)
 
   PHP_NEW_EXTENSION(friso, friso.c, $ext_shared)
 fi

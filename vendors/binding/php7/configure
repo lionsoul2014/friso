@@ -2330,7 +2330,7 @@ EOF
   done
 
   echo "'$0' \\" >> config.nice
-  if test `expr -- $0 : "'.*"` = 0; then
+  if test `expr " $0" : " '.*"` = 0; then
     CONFIGURE_COMMAND="$CONFIGURE_COMMAND '$0'"
   else
     CONFIGURE_COMMAND="$CONFIGURE_COMMAND $0"
@@ -3921,8 +3921,328 @@ $as_echo "$ext_output" >&6; }
 
 if test "$PHP_FRISO" != "no"; then
 
+   # --with-friso -> check with-path
+     SEARCH_PATH="/usr/local /usr"      # you might want to change this
+     SEARCH_FOR="lib/libfriso.so"                       # you most likely want to change this
+
+     if test -r $PHP_FRISO/$SEARCH_FOR; then # path given as parameter
+       FRISO_DIR=$PHP_FRISO
+     else # search default path list
+       { $as_echo "$as_me:${as_lineno-$LINENO}: checking for friso files in default path" >&5
+$as_echo_n "checking for friso files in default path... " >&6; }
+       for i in $SEARCH_PATH ; do
+         if test -r $i/$SEARCH_FOR; then
+           FRISO_DIR=$i
+           { $as_echo "$as_me:${as_lineno-$LINENO}: result: found in $i" >&5
+$as_echo "found in $i" >&6; }
+         fi
+       done
+     fi
+
+     if test -z "$FRISO_DIR"; then
+       { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
+$as_echo "not found" >&6; }
+       as_fn_error $? "Please reinstall the friso distribution" "$LINENO" 5
+     fi
+
+    # --with-friso -> add include path
+
+  if test "$FRISO_DIR/" != "/usr/include"; then
+
+  if test -z "$FRISO_DIR/" || echo "$FRISO_DIR/" | grep '^/' >/dev/null ; then
+    ai_p=$FRISO_DIR/
+  else
+
+    ep_dir=`echo $FRISO_DIR/|$SED 's%/*[^/][^/]*/*$%%'`
+
+    ep_realdir=`(cd "$ep_dir" && pwd)`
+    ai_p="$ep_realdir"/`basename "$FRISO_DIR/"`
+  fi
 
 
+
+  unique=`echo $ai_p|$SED 's/[^a-zA-Z0-9]/_/g'`
+
+  cmd="echo $ac_n \"\$INCLUDEPATH$unique$ac_c\""
+  if test -n "$unique" && test "`eval $cmd`" = "" ; then
+    eval "INCLUDEPATH$unique=set"
+
+      if test ""; then
+        INCLUDES="-I$ai_p $INCLUDES"
+      else
+        INCLUDES="$INCLUDES -I$ai_p"
+      fi
+
+  fi
+
+  fi
+
+
+    # --with-friso -> check for lib and symbol presence
+    LIBNAME=friso # you may want to change this
+    LIBSYMBOL=friso_new # you most likely want to change this
+
+
+  save_old_LDFLAGS=$LDFLAGS
+  ac_stuff="
+      -L$FRISO_DIR/lib -lm
+    "
+
+  save_ext_shared=$ext_shared
+  ext_shared=yes
+
+  for ac_i in $ac_stuff; do
+    case $ac_i in
+    -pthread)
+      if test "$ext_shared" = "yes"; then
+        LDFLAGS="$LDFLAGS -pthread"
+      else
+
+
+  unique=`echo $ac_i|$SED 's/[^a-zA-Z0-9]/_/g'`
+
+  cmd="echo $ac_n \"\$EXTRA_LDFLAGS$unique$ac_c\""
+  if test -n "$unique" && test "`eval $cmd`" = "" ; then
+    eval "EXTRA_LDFLAGS$unique=set"
+    EXTRA_LDFLAGS="$EXTRA_LDFLAGS $ac_i"
+  fi
+
+      fi
+    ;;
+    -l*)
+      ac_ii=`echo $ac_i|cut -c 3-`
+
+
+  case $ac_ii in
+  c|c_r|pthread*) ;;
+  *)
+    if test "$ext_shared" = "yes"; then
+        LDFLAGS="$LDFLAGS -l$ac_ii"
+    else
+
+
+  case $ac_ii in
+  c|c_r|pthread*) ;;
+  *)
+      LIBS="$LIBS -l$ac_ii"
+   ;;
+  esac
+
+
+    fi
+   ;;
+  esac
+
+
+    ;;
+    -L*)
+      ac_ii=`echo $ac_i|cut -c 3-`
+
+  if test "$ac_ii" != "/usr/$PHP_LIBDIR" && test "$ac_ii" != "/usr/lib"; then
+
+  if test -z "$ac_ii" || echo "$ac_ii" | grep '^/' >/dev/null ; then
+    ai_p=$ac_ii
+  else
+
+    ep_dir=`echo $ac_ii|$SED 's%/*[^/][^/]*/*$%%'`
+
+    ep_realdir=`(cd "$ep_dir" && pwd)`
+    ai_p="$ep_realdir"/`basename "$ac_ii"`
+  fi
+
+
+      if test "$ext_shared" = "yes"; then
+        LDFLAGS="-L$ai_p $LDFLAGS"
+        test "x$PHP_RPATH" != "xno" && \
+        test -n "$ld_runpath_switch" && LDFLAGS="$ld_runpath_switch$ai_p $LDFLAGS"
+      else
+
+
+
+  unique=`echo $ai_p|$SED 's/[^a-zA-Z0-9]/_/g'`
+
+  cmd="echo $ac_n \"\$LIBPATH$unique$ac_c\""
+  if test -n "$unique" && test "`eval $cmd`" = "" ; then
+    eval "LIBPATH$unique=set"
+
+    test "x$PHP_RPATH" != "xno" &&
+    test -n "$ld_runpath_switch" && LDFLAGS="$LDFLAGS $ld_runpath_switch$ai_p"
+    LDFLAGS="$LDFLAGS -L$ai_p"
+    PHP_RPATHS="$PHP_RPATHS $ai_p"
+
+  fi
+
+
+      fi
+
+  fi
+
+    ;;
+    esac
+  done
+
+  as_ac_Lib=`$as_echo "ac_cv_lib_$LIBNAME''_$LIBSYMBOL" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $LIBSYMBOL in -l$LIBNAME" >&5
+$as_echo_n "checking for $LIBSYMBOL in -l$LIBNAME... " >&6; }
+if eval \${$as_ac_Lib+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-l$LIBNAME  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char $LIBSYMBOL ();
+int
+main ()
+{
+return $LIBSYMBOL ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  eval "$as_ac_Lib=yes"
+else
+  eval "$as_ac_Lib=no"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+eval ac_res=\$$as_ac_Lib
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
+
+    LDFLAGS=$save_old_LDFLAGS
+    ext_shared=$save_ext_shared
+
+
+
+  if test "$ext_shared" = "yes"; then
+    FRISO_SHARED_LIBADD="-l$LIBNAME $FRISO_SHARED_LIBADD"
+    if test -n "$FRISO_DIR/lib"; then
+
+  if test "$FRISO_DIR/lib" != "/usr/$PHP_LIBDIR" && test "$FRISO_DIR/lib" != "/usr/lib"; then
+
+  if test -z "$FRISO_DIR/lib" || echo "$FRISO_DIR/lib" | grep '^/' >/dev/null ; then
+    ai_p=$FRISO_DIR/lib
+  else
+
+    ep_dir=`echo $FRISO_DIR/lib|$SED 's%/*[^/][^/]*/*$%%'`
+
+    ep_realdir=`(cd "$ep_dir" && pwd)`
+    ai_p="$ep_realdir"/`basename "$FRISO_DIR/lib"`
+  fi
+
+
+      if test "$ext_shared" = "yes"; then
+        FRISO_SHARED_LIBADD="-L$ai_p $FRISO_SHARED_LIBADD"
+        test "x$PHP_RPATH" != "xno" && \
+        test -n "$ld_runpath_switch" && FRISO_SHARED_LIBADD="$ld_runpath_switch$ai_p $FRISO_SHARED_LIBADD"
+      else
+
+
+
+  unique=`echo $ai_p|$SED 's/[^a-zA-Z0-9]/_/g'`
+
+  cmd="echo $ac_n \"\$LIBPATH$unique$ac_c\""
+  if test -n "$unique" && test "`eval $cmd`" = "" ; then
+    eval "LIBPATH$unique=set"
+
+    test "x$PHP_RPATH" != "xno" &&
+    test -n "$ld_runpath_switch" && LDFLAGS="$LDFLAGS $ld_runpath_switch$ai_p"
+    LDFLAGS="$LDFLAGS -L$ai_p"
+    PHP_RPATHS="$PHP_RPATHS $ai_p"
+
+  fi
+
+
+      fi
+
+  fi
+
+    fi
+  else
+
+
+  if test -n "$FRISO_DIR/lib"; then
+
+  if test "$FRISO_DIR/lib" != "/usr/$PHP_LIBDIR" && test "$FRISO_DIR/lib" != "/usr/lib"; then
+
+  if test -z "$FRISO_DIR/lib" || echo "$FRISO_DIR/lib" | grep '^/' >/dev/null ; then
+    ai_p=$FRISO_DIR/lib
+  else
+
+    ep_dir=`echo $FRISO_DIR/lib|$SED 's%/*[^/][^/]*/*$%%'`
+
+    ep_realdir=`(cd "$ep_dir" && pwd)`
+    ai_p="$ep_realdir"/`basename "$FRISO_DIR/lib"`
+  fi
+
+
+
+
+
+  unique=`echo $ai_p|$SED 's/[^a-zA-Z0-9]/_/g'`
+
+  cmd="echo $ac_n \"\$LIBPATH$unique$ac_c\""
+  if test -n "$unique" && test "`eval $cmd`" = "" ; then
+    eval "LIBPATH$unique=set"
+
+    test "x$PHP_RPATH" != "xno" &&
+    test -n "$ld_runpath_switch" && LDFLAGS="$LDFLAGS $ld_runpath_switch$ai_p"
+    LDFLAGS="$LDFLAGS -L$ai_p"
+    PHP_RPATHS="$PHP_RPATHS $ai_p"
+
+  fi
+
+
+
+  fi
+
+  fi
+
+
+  case $LIBNAME in
+  c|c_r|pthread*) ;;
+  *)
+      LIBS="-l$LIBNAME $LIBS"
+   ;;
+  esac
+
+
+
+
+  fi
+
+
+
+$as_echo "#define HAVE_FRISOLIB 1" >>confdefs.h
+
+
+
+else
+
+    LDFLAGS=$save_old_LDFLAGS
+    ext_shared=$save_ext_shared
+    unset ac_cv_lib_$LIBNAME_$LIBSYMBOL
+
+      as_fn_error $? "wrong friso lib version or lib not found" "$LINENO" 5
+
+
+fi
+
+
+
+  PHP_VAR_SUBST="$PHP_VAR_SUBST FRISO_SHARED_LIBADD"
 
 
 
