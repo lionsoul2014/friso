@@ -220,8 +220,8 @@ PHP_MINFO_FUNCTION(friso)
 PHP_FUNCTION(friso_split)
 {
     char *_str = NULL, *_key;
-    int idx, rargs = 0;
-    int arg_count;
+    int idx, arg_count;
+    zend_long rargs = 0;
 
 	size_t slen, klen;
     zval ret, item;
@@ -235,7 +235,7 @@ PHP_FUNCTION(friso_split)
 
     //get the arugments from the php layer.
     arg_count = ZEND_NUM_ARGS();
-    switch ( arg_count ) 
+    switch ( arg_count )
     {
         case 2:
             if ( zend_parse_parameters(arg_count TSRMLS_CC, "sz",
@@ -251,12 +251,12 @@ PHP_FUNCTION(friso_split)
 
 
     //make sure the RB_RET_WORD will be returned.
-    rargs |= FRISO_RET_WORD; 
+    rargs |= FRISO_RET_WORD;
 
     friso_config_t config = NULL, nconfig = NULL;
 
     //check and initialize the friso.
-    if ( Z_TYPE_P(cfg) != IS_NULL ) 
+    if ( Z_TYPE_P(cfg) != IS_NULL )
     {
         nconfig = friso_new_config();
         memcpy(nconfig, friso_globals.config, sizeof(friso_config_entry));
@@ -264,12 +264,12 @@ PHP_FUNCTION(friso_split)
         //check the new setting.
         cfgArr = Z_ARRVAL_P(cfg);
 
-		ZEND_HASH_FOREACH_KEY_VAL(cfgArr, num_key, key, setting) 
+		ZEND_HASH_FOREACH_KEY_VAL(cfgArr, num_key, key, setting)
 		{
-            if ( strcmp(ZSTR_VAL(key), "kpuncs") == 0 ) 
+            if ( strcmp(ZSTR_VAL(key), "kpuncs") == 0 )
             {
 				// memcpy(nconfig->kpuncs, val->value.str->val, val->value.str->len);
-                memcpy(nconfig->kpuncs, Z_STRVAL_P(setting), Z_STRLEN_P(setting)); 
+                memcpy(nconfig->kpuncs, Z_STRVAL_P(setting), Z_STRLEN_P(setting));
 				nconfig->kpuncs[Z_STRLEN_P(setting)] = '\0';
 
 				//php_printf("key : %s => %s, len : %ld", ZSTR_VAL(key), Z_STRVAL_P(setting), Z_STRLEN_P(seting));
@@ -319,7 +319,7 @@ PHP_FUNCTION(friso_split)
             }
 		} ZEND_HASH_FOREACH_END();
     }
- 
+
 
     array_init(&ret);
     config = ( nconfig == NULL ) ? friso_globals.config : nconfig;
@@ -335,7 +335,7 @@ PHP_FUNCTION(friso_split)
         RETURN_BOOL(0);
 	}
 
-    while ( config->next_token( friso_globals.friso, config, task ) != NULL ) 
+    while ( config->next_token( friso_globals.friso, config, task ) != NULL )
     {
         array_init(&item);
         add_assoc_string(&item, "word", task->token->word);
@@ -354,11 +354,11 @@ PHP_FUNCTION(friso_split)
             add_assoc_long(&item, "off", task->token->offset);
 
         if ( (rargs & FRISO_RET_POS) != 0 )
-            add_assoc_stringl(&item, "pos", task->token->pos, 1);
-        
+            add_assoc_string(&item, "pos", &(task->token->pos));
+
         //append the sub result.
         add_index_zval( &ret, idx++, &item );
-	} 
+	}
 
     //free the friso task.
     friso_free_task(task);
@@ -442,7 +442,7 @@ PHP_FUNCTION(friso_dic_get)
     e = friso_dic_get( friso_globals.friso->dic, type, word );
     if ( e != NULL ) {
         add_assoc_long( &entry, "length", e->length);
-        add_assoc_long( &entry, "freq", e->fre );
+        add_assoc_long( &entry, "freq", e->fre);
         *( return_value ) = entry;
         return;
     }

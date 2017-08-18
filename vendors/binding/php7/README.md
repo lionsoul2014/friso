@@ -22,13 +22,15 @@
         extension=friso.so
         friso.ini_file=/path/to/friso.ini // 这个文件是 friso 的配置文件, (查看 friso/friso.ini)
 
-通常的做法是在 ／etc/php/7.0/mods-available 中新建 friso.ini, 然后分别在 cli/fpm
+通常的做法是在 ／etc/php/7.0/mods-available 中新建 friso.ini, 然后分别在 cli 和 fpm
 的 conf.d 目录下新建一个软链接指向上面的 /etc/php/7.0/mods-available/friso.ini
-
-* 
-
 
 * 测试 
     
-    demo 目录下有对应的测试脚本
+    demo 目录下有对应的测试脚本，执行
+    
+    ~~~shell
+    $ cd demo
+    $ php friso.fun.php
+    ~~~
 
