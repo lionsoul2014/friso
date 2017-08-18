@@ -193,7 +193,8 @@ PHP_MINFO_FUNCTION(friso)
 PHP_FUNCTION(friso_split)
 {
     char *_str = NULL, *_key;
-    int slen, idx, klen, rargs = 0;
+    int slen, idx, klen;
+	long rargs = 0;
     int arg_count;
 
     zval *ret, *cfg, **data;
