@@ -36,7 +36,7 @@ if ( friso_charset() == 'UTF-8' )
     //2.返回选项：
     //词条: FRISO_RET_WORD, 类别：FRISO_RET_TYPE, 长度：FRISO_RET_LENGTH, 真实长度：FRISO_RET_RLEN, 偏移量：FRISO_RET_OFF
     //词性：FRISO_RET_POS(待实现)
-    $_rargs = FRISO_RET_TYPE | FRISO_RET_LEN | FRISO_RET_RLEN | FRISO_RET_OFF | FRISO_RET_POS;
+    $_rargs = FRISO_RET_TYPE | FRISO_RET_LEN | FRISO_RET_RLEN | FRISO_RET_OFF ;// | FRISO_RET_POS;
     //$_rargs = 0;
 
     //3.切分类别：
