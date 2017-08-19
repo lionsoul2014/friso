@@ -89,7 +89,7 @@ int main(int argc, char **argv)
       friso_set_dic( friso, dic );
       friso_set_mode( friso, __FRISO_COMPLEX_MODE__ );*/
     if ( friso_init_from_ifile(friso, config, __path__) != 1 ) {
-        printf("fail to initialize friso and config.");
+        printf("fail to initialize friso and config.\n");
         goto err;
     }
 

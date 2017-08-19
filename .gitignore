@@ -11,3 +11,4 @@ CHANGES.txt
 *.viminfo
 .libs/
 .idea/
+src/friso

@@ -371,7 +371,8 @@ FRISO_API void friso_dic_load(
 
         fclose( _stream );
     } else {
-        printf("Warning: Fail to open lexicon file %s\n", lex_file);
+        fprintf(stderr, "Warning: Fail to open lexicon file %s\n", lex_file);
+        fprintf(stderr, "Warning: Without lexicon file, segment results will not correct \n");
     } 
 }
 
@@ -440,6 +441,7 @@ FRISO_API void friso_dic_load_from_ifile(
 
     //get the lexicon configruation file path
     sb = new_string_buffer();
+
     string_buffer_append( sb, _path );
     string_buffer_append( sb, __FRISO_LEX_IFILE__ );
     //printf("%s\n", sb->buffer);
@@ -500,7 +502,8 @@ FRISO_API void friso_dic_load_from_ifile(
 
         fclose( __stream );
     } else {
-        printf("Warning: Fail to open the lexicon configuration file %s\n", sb->buffer);
+        fprintf(stderr, "Warning: Fail to open the lexicon configuration file %s\n", sb->buffer);
+        fprintf(stderr, "Warning: Without lexicon file, segment results will not correct \n");
     }
 
     free_string_buffer(sb);    

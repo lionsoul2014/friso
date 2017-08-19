@@ -156,8 +156,8 @@ FRISO_API int friso_init_from_ifile(
             if ( __lexi__[0] != '/' && flen != 0 ) {
 #endif
                 if ( (flen + __hit__) > sizeof(lexpath) - 1 ) {
-                    printf("[Error]: Buffer is not long enough to hold the final lexicon path");
-                    printf(" with a length of {%d} at function friso.c#friso_init_from_ifile", flen + __hit__);
+                    fprintf(stderr, "[Error]: Buffer is not long enough to hold the final lexicon path");
+                    fprintf(stderr, " with a length of {%d} at function friso.c#friso_init_from_ifile", flen + __hit__);
                     return 0;
                 }
 
@@ -176,12 +176,14 @@ FRISO_API int friso_init_from_ifile(
                 }
             }
 
-            //printf("lexpath=%s\n", lexpath);
 
             friso->dic = friso_dic_new();
             //add charset check for max word length counting
             friso_dic_load_from_ifile( friso, config, 
                     lexpath, config->max_len * (friso->charset == FRISO_UTF8 ? 3 : 2) );
+        } else {
+             fprintf(stderr, "[Error]: failed get lexicon path, check lex_dir in friso.ini \n");
+             return 0;
         }
 
         fclose( __stream );
