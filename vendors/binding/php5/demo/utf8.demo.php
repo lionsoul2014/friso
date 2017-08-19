@@ -107,8 +107,8 @@ function timer() {
             </div>
             <div>
                 <label>分词模式: </label>
-                <input type="radio" name="config[mode]" value="<?=RB_SMODE?>" <?=isset($_cfg['mode'])&&$_cfg['mode']==1?'checked="checked"':''?> />简易模式
-                <input type="radio" name="config[mode]" value="<?=RB_CMODE?>" <?=isset($_cfg['mode'])&&$_cfg['mode']==2?'checked="checked"':''?> />复杂模式
+                <input type="radio" name="config[mode]" value="<?=FRISO_SIMPLE?>" <?=isset($_cfg['mode'])&&$_cfg['mode']==1?'checked="checked"':''?> />简易模式
+                <input type="radio" name="config[mode]" value="<?=FRISO_COMPLEX?>" <?=isset($_cfg['mode'])&&$_cfg['mode']==2?'checked="checked"':''?> />复杂模式
             </div>
         </div>
         

@@ -38,7 +38,7 @@ function timer() {
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
-    <title>GBK - robbe分词测试程序 </title>
+    <title>GBK - robbe?执什??猿??? </title>
     <meta http-equiv="content-type" content="text/html;charset=GBK" />
     <style type="text/css">
         #box {width: 1000px}
@@ -67,61 +67,61 @@ function timer() {
 <body>
     <div id="box">
         <form name="robbe" method="post" action="gbk.demo.php">
-        <div class="title-item">分词配置：</div>
+        <div class="title-item">?执????茫?</div>
         <div id="cfg-box">
             <div>
-                <label>最大词长: </label>
+                <label>?????食?: </label>
                 <input type="text" name="config[max_len]" value="<?=isset($_cfg['max_len'])?$_cfg['max_len']:5?>" class="input" />
             </div>
             <div>
-                <label>混合词中文词长: </label>
+                <label>???洗????拇食?: </label>
                 <input type="text" name="config[mix_len]" value="<?=isset($_cfg['mix_len'])?$_cfg['mix_len']:2?>" class="input" />
             </div>
             <div>
-                <label>英文二次切分: </label>
+                <label>英?亩????蟹?: </label>
                 <input type="checkbox" name="config[en_sseg]" <?=isset($_cfg['en_sseg'])&&$_cfg['en_sseg']==1?'checked="checked"':''?> value="1" />
             </div>
             <div>
-                <label>二次切分子Token最小长度: </label>
+                <label>?????蟹???Token??小????: </label>
                 <input type="text" name="config[st_minl]" value="<?=isset($_cfg['st_minl'])?$_cfg['st_minl']:2?>" class="input" />
             </div>
             <div>
-                <label>英文Token中保留的标点: </label>
+                <label>英??Token?斜????谋???: </label>
                 <input type="text" name="config[kpuncs]" value="<?=isset($_cfg['kpuncs'])?$_cfg['kpuncs']:'@%.#&+'?>" class="input" />
             </div>
             <div>
-                <label>同义词追加: </label>
+                <label>同????追??: </label>
                 <input type="checkbox" name="config[add_syn]" <?=isset($_cfg['add_syn'])&&$_cfg['add_syn']==1?'checked="checked"':''?> value="1" />
             </div>
             <div>
-                <label>过滤停止词: </label>
+                <label>????停止??: </label>
                 <input type="checkbox" name="config[clr_stw]" <?=isset($_cfg['clr_stw'])&&$_cfg['clr_stw']==1?'checked="checked"':''?> value="1" />
             </div>
             <div>
-                <label>保留未识别词: </label>
+                <label>????未识????: </label>
                 <input type="checkbox" name="config[keep_urec]" <?=isset($_cfg['keep_urec'])&&$_cfg['keep_urec']==1?'checked="checked"':''?> value="1" />
             </div>
             <div>
-                <label>sphinx定制输出: </label>
+                <label>sphinx????????: </label>
                 <input type="checkbox" name="config[spx_out]" <?=isset($_cfg['spx_out'])&&$_cfg['spx_out']==1?'checked="checked"':''?> value="1" />
             </div>
             <div>
-                <label>分词模式: </label>
-                <input type="radio" name="config[mode]" value="<?=RB_SMODE?>" <?=isset($_cfg['mode'])&&$_cfg['mode']==1?'checked="checked"':''?> />简易模式
-                <input type="radio" name="config[mode]" value="<?=RB_CMODE?>" <?=isset($_cfg['mode'])&&$_cfg['mode']==2?'checked="checked"':''?> />复杂模式
+                <label>?执?模式: </label>
+                <input type="radio" name="config[mode]" value="<?=FRISO_SIMPLE?>" <?=isset($_cfg['mode'])&&$_cfg['mode']==1?'checked="checked"':''?> />????模式
+                <input type="radio" name="config[mode]" value="<?=FRISO_COMPLEX?>" <?=isset($_cfg['mode'])&&$_cfg['mode']==2?'checked="checked"':''?> />????模式
             </div>
         </div>
         
-        <div class="title-item">分词内容：</div>
+        <div class="title-item">?执????荩?</div>
         <div class="r-item"><textarea name="text" class="input-text" id="text"><?=$text?></textarea></div>
         <input type="hidden" name="_act" value="split"/>
-        <a href="javascript:;" onclick="do_submit();return false;" id="submit-link">robbe分词</a>
+        <a href="javascript:;" onclick="do_submit();return false;" id="submit-link">robbe?执?</a>
         </form>
 
         <?php
         if ( $_act == 'split' ) {
         ?>
-        <div class="title-item">分词结果：</div>
+        <div class="title-item">?执式?????</div>
         <div><textarea class="input-text"><?php foreach ( $_ret as $_val ) echo $_val['word'].' ';?>
         </textarea></div>
         <div class="link-box"><a id="info-link">
