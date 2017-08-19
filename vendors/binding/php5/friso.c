@@ -4,6 +4,7 @@
 #endif
 
 #include "php.h"
+#include <zend_exceptions.h>
 #include "php_ini.h"
 #include "ext/standard/info.h"
 #include "php_friso.h"
@@ -290,6 +291,15 @@ PHP_FUNCTION(friso_split)
     task = friso_new_task();
     idx = 0;
     friso_set_text(task, _str);
+
+
+	if (friso_globals.friso->dic == NULL) {
+		zend_throw_exception(zend_exception_get_default(TSRMLS_C), 
+				"[Error] Can not load dictionry with lex_dir from friso.ini, please check the ini file", 0 TSRMLS_CC);
+
+        RETURN_BOOL(0);
+	}
+
     while ( config->next_token( friso_globals.friso, config, task ) != NULL ) 
     {
         MAKE_STD_ZVAL(item);

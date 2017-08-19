@@ -21,6 +21,7 @@
 #endif
 
 #include "php.h"
+#include <zend_exceptions.h>
 #include "php_ini.h"
 #include "ext/standard/info.h"
 #include "php_friso.h"
@@ -332,6 +333,9 @@ PHP_FUNCTION(friso_split)
 
 	// to prevent segfault error when dic file not configure correct
 	if (friso_globals.friso->dic == NULL) {
+		zend_throw_exception(zend_exception_get_default(TSRMLS_C), 
+				"[Error] can not load dictionry with lex_dir from ini file, please check the friso.ini", 0 TSRMLS_CC);
+
         RETURN_BOOL(0);
 	}
 
