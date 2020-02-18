@@ -73,7 +73,7 @@ Mode: Complex
 
 
 
-# Friso 安装
+# Friso安装
 
 ### Linux:
 cd到friso的根目录，运行：
@@ -88,13 +88,94 @@ make testing
 
 ### Winnt:
 1. 使用 VS 编译得到 dll 和 lib 文件，具体可以参考 Friso 讨论：http://www.oschina.net/question/853816_135216
-2. 使用 cygwin 从源码编译：
-安装好 cygwin 后, 删除原有的 Makefile, 更改 Makefile.cygwin 为 Makefile, 打开 cygwin 的终端。
-cd 到 Friso 的 src 目录，运行:
+2. 使用 cygwin 从源码编译； 删除原有的 Makefile, 更改 Makefile.cygwin 为 Makefile, 打开 cygwin 的终端，cd 到 Friso 的 src 目录，运行:
 ```shell
 make
 ```
 备注：在Friso的src目录下即可得到friso.exe和friso.dll文件。
+
+
+
+# Friso配置
+Friso 要做的配置工作很简单，找到 friso.ini 配置文件, 使用文本编辑器打开即可
+
+### 配置说明：
+
+```
+# friso configuration file.
+#	do not change the name of the left key.
+# @email	chenxin619315@gmail.com
+# @date		2012-12-20
+#
+
+# charset, only UTF8 and GBK support.
+# set it with UTF8(0) or GBK(1)
+friso.charset = 0
+
+# lexicon directory absolute path.
+#	the value must end with '/'
+# this will tell friso how to find friso.lex.ini configuration file and all the lexicon files.
+#
+# if it is not start with '/' for linux, or matches no ':' for winnt in its value 
+#	friso will search the friso.lex.ini relative to friso.ini
+# absolute path search:
+# linux:	friso.lex_dir = /c/products/friso/dict/UTF-8/
+# Winnt:	friso.lex_dir = D:/products/friso/dict/UTF-8/
+# relative path search (All system)
+friso.lex_dir = ./vendors/dict/UTF-8/
+
+# the maximum matching length.
+friso.max_len = 5 
+
+# 1 for recognition chinese name.
+#	and 0 for closed it.
+friso.r_name = 1
+
+# the maximum length for the cjk words in a
+#	chinese and english mixed word.
+friso.mix_len = 2
+
+# the maxinum length for the chinese last name adron.
+friso.lna_len = 1
+
+# append the synonyms words
+friso.add_syn = 1
+
+# clear the stopwords or not (1 to open it and 0 to close it)
+# @date 2013-06-13
+friso.clr_stw = 0
+
+# keep the unrecongized words or not (1 to open it and 0 to close it)
+# @date 2013-06-13
+friso.keep_urec = 0
+
+# use sphinx output style like 'admire|love|enjoy einsten'
+# @date 2013-10-25
+friso.spx_out = 0
+
+# start the secondary segmentation for complex english token.
+friso.en_sseg = 1
+
+# min length of the secondary segmentation token. (better larger than 1)
+friso.st_minl = 2
+
+# default keep punctuations for english token.
+friso.kpuncs = @%.#&+
+
+# the threshold value for a char not a part of a chinese name.
+friso.nthreshold = 2000000
+
+# default mode for friso.
+# 1 : simple mode - simply maxmum matching algorithm.
+# 2 : complex mode - four rules of mmseg alogrithm.
+# 3 : detect mode - only return the words that the do exists in the lexicon
+friso.mode = 2
+```
+
+### 词库的配置：
+
+1. friso.ini中 friso.lex_dir 指向friso依赖的词库目录, 修改其值为词库目录绝对地址, 并且必须以”/”结尾。例如：friso.lex_dir = /usr/lib/friso/dict/
+2. 词库分为UTF-8和GBK编码的，根据你使用的编码需要选择加载对应编码的词库。
 
 
 
