@@ -1,9 +1,9 @@
 /*
- * friso hash table implements functions
- *     defined in header file "friso_API.h".
- * 
- * @author    chenxin <chenxin619315@gmail.com>
+ * friso hash table functions implementation defined in header file "friso_API.h".
+
+ * @author  lionsoul<chenxin619315@gmail.com>
  */
+
 #include "friso_API.h"
 #include <stdlib.h>
 #include <string.h>

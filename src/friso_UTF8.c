@@ -1,9 +1,10 @@
 /**
- * Friso utf8 about function implements source file.
- *     @package src/friso_UTF8.c .
+ * Friso utf8 serial function implementation source file.
+ * @package src/friso_UTF8.c .
  *
- * @author chenxin <chenxin619315@gmail.com>
+ * @author  lionsoul<chenxin619315@gmail.com>
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

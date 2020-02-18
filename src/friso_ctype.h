@@ -2,11 +2,12 @@
  * Friso charset about function interface header file.
  *     @package src/friso_charset.h .
  * Available charset for now:
- * 1. UTF8    - function start with utf8
- * 2. GBK    - function start with gbk
+ * 1. UTF8  - function start with utf8
+ * 2. GBK   - function start with gbk
  *
- * @author chenxin <chenxin619315@gmail.com>
+ * @author  lionsoul<chenxin619315@gmail.com>
  */
+
 #ifndef _friso_charset_h
 #define _friso_charset_h
 

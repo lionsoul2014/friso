@@ -1,9 +1,10 @@
 /*
- * friso main file implemented the friso main functions.
- *         starts with friso_ in the friso header file "friso.h";
+ * friso main source file with the the friso main functions implemented.
+ * starts with friso_ in the friso header file "friso.h";
  * 
- * @author    chenxin <chenxin619315@gmail.com>
+ * @author  lionsoul<chenxin619315@gmail.com>
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

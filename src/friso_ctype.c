@@ -1,10 +1,11 @@
 /**
- * friso string type check function interface, 
- *     like english/CJK, full-wdith/half-width, punctuation or not. 
- * @ses    friso_UTF8.c and friso_GBK.c for detail.
+ * friso string type check functions, 
+ * like english/CJK, full-wdith/half-width, punctuation or not. 
+ * @see friso_UTF8.c and friso_GBK.c for detail.
  *
- * @author chenxin <chenxin619315@gmail.com>
+ * @author  lionsoul<chenxin619315@gmail.com>
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

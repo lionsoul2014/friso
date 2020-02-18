@@ -1,9 +1,7 @@
 /*
- * friso dynamaic interface implemented functions file
- *        that defined in header file "friso_API.h".
- *    never use it for commercial use.
+ * friso dynamaic Array interface implementation defined in header file "friso_API.h".
  *
- * @author    chenxini <chenxin619315@gmail.com>
+ * @author  lionsoul<chenxin619315@gmail.com>
  */
 
 #include "friso_API.h"

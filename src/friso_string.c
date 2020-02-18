@@ -1,11 +1,10 @@
 /*
- * utf-8 handle function implements.
- *         you could modify it or re-release it but never for commercial use.
+ * utf-8 handle functions implementation.
  * 
- * @author    chenxin <chenxin619315@gmail.com>
+ * @author  lionsoul<chenxin619315@gmail.com>
  */
-#include "friso_API.h"
 
+#include "friso_API.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

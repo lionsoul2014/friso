@@ -1,11 +1,11 @@
 /*
- * link list implemented functions
- *    defined in header file "friso_API.h".
+ * link list functions implementation defined in header file "friso_API.h".
  * when the link_node is being deleted, here we just free
- *    the allocation of the node, not the allcation of it's value.
+ * the allocation of the node, not the allcation of it's value.
  *
- * @author    chenxin <chenxin619315@gmail.com>
+ * @author  lionsoul<chenxin619315@gmail.com>
  */
+
 #include "friso_API.h"
 #include <stdlib.h>
 

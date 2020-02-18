@@ -1,9 +1,10 @@
 /*
- * main interface file for friso - free soul.
- *         you could modify it and re-release it but never for commercial use.
+ * main interface file for friso tokenizer.
+ * you could modify it and re-release and free for commercial use.
  * 
- * @author    chenxin <chenxin619315@gmail.com>
+ * @author  lionsoul<chenxin619315@gmail.com>
  */
+
 #ifndef _friso_h
 #define _friso_h
 

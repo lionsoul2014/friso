@@ -1,9 +1,10 @@
 /*
- * friso lexicon implemented functions.
- *         used to deal with the friso lexicon, like: load,remove,match...
+ * friso lexicon functions implementation.
+ * used to deal with the friso lexicon, like: load,remove,match...
  * 
- * @author    chenxin <chenxin619315@gmail.com>
+ * @author  lionsoul<chenxin619315@gmail.com>
  */
+
 #include <stdlib.h>
 #include <string.h>
 #include "friso_API.h"

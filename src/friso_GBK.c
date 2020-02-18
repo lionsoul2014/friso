@@ -1,9 +1,10 @@
 /**
- * Friso GBK about function implements source file.
- *     @package src/friso_GBK.c .
+ * Friso GBK serial functions implementation source file.
+ * @package src/friso_GBK.c .
  *
- * @author chenxin <chenxin619315@gmail.com>
+ * @author  lionsoul<chenxin619315@gmail.com>
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
