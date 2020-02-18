@@ -45,7 +45,7 @@ Friso 是使用 c 语言开发的一款开源的高性能中文分词器，使�
 5. 在光标处输入文本开始测试
 
 ```
-Initialized in 0.093152sec
+Initialized in 0.088911sec
 Mode: Complex
 +-Version: 1.6.2 (UTF-8)
 +---------------------------------------------------------------+
@@ -55,6 +55,7 @@ Mode: Complex
 |     java edition for https://github.com/lionsoul2014/jcseg    |
 | type 'quit' to exit the program.                              |
 +---------------------------------------------------------------+
+friso>> 
 ```
 
 #### 测试样板：

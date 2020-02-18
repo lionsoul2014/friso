@@ -3,6 +3,7 @@
 *.la
 *.so
 *.out
+src/friso
 src/*-testing
 # lib/ #
 CHANGES.txt
@@ -12,4 +13,3 @@ CHANGES.txt
 *.viminfo
 .libs/
 .idea/
-./src/friso
