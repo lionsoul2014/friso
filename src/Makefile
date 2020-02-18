@@ -1,8 +1,8 @@
 #############################################################
-# friso chinese word segmentation makefile.		    #
-#		do not use it for commercial use.	    #
-# @author	chenxin 				    #
-# @email	chenxin619315@gmail.com   		    #
+# friso chinese word segmentation makefile.		            #
+#		do not use it for commercial use.	                #
+# @author	lionsoul 				                        #
+# @email	chenxin619315@gmail.com   		                #
 #############################################################
 
 #complie
@@ -19,7 +19,7 @@ ELIB = m
 LIB_FILE = libfriso.so
 STA_FILE = libfriso.a
 LIBRARY_DIR = /usr/lib
-INCLUDE_DIR = /usr/include/friso
+INCLUDE_DIR = /usr/local/include/friso
 INSTALL_DIR = /usr/local/bin
 
 
