@@ -1,10 +1,10 @@
-## **Friso**是什么？
+# **Friso**是什么？
 
 Friso 是使用 c 语言开发的一款开源的高性能中文分词器，使用流行的mmseg算法实现。完全基于模块化设计和实现，可以很方便的植入其他程序中，
 例如：MySQL，PHP，源码无需修改就能在各种平台下编译使用，加载完 20 万的词条，内存占用稳定为 14.5M.
 
 
-## **Friso**核心功能：
+# **Friso**核心功能：
 
 - [x] 中文分词：mmseg算法 + **Friso** 独创的优化算法，四种切分模式。
 - [ ] 关键字提取：基于textRank算法。
@@ -12,7 +12,7 @@ Friso 是使用 c 语言开发的一款开源的高性能中文分词器，使�
 - [ ] 关键句子提取：基于textRank算法。
 
 
-## **Friso**中文分词：
+# **Friso**中文分词：
 
 四种切分模式：
 - [x] 简易模式：FMM 算法，适合速度要求场合。
@@ -34,7 +34,7 @@ Friso 是使用 c 语言开发的一款开源的高性能中文分词器，使�
 12. 多配置支持, 安全的应用于多进程/多线程环境。
 
 
-## **Friso**快速体验：
+# **Friso**快速体验：
 
 #### 终端测试：
 
@@ -73,7 +73,33 @@ Mode: Complex
 
 
 
-## 相关附录
+# Friso 安装
+
+### Linux:
+cd到friso的根目录，运行：
+```shell
+make
+sudo make install
+
+# for testing
+make testing
+```
+备注：如果是 64 位的系统，请将/usr/lib/libfriso.so 拷贝一份到/usr/lib64 中
+
+### Winnt:
+1. 使用 VS 编译得到 dll 和 lib 文件，具体可以参考 Friso 讨论：http://www.oschina.net/question/853816_135216
+2. 使用 cygwin 从源码编译：
+安装好 cygwin 后, 删除原有的 Makefile, 更改 Makefile.cygwin 为 Makefile, 打开 cygwin 的终端。
+cd 到 Friso 的 src 目录，运行:
+```shell
+make
+```
+备注：在Friso的src目录下即可得到friso.exe和friso.dll文件。
+
+
+
+
+# 相关附录
 
 ### 1，参考文献：
 * 1，MMSEG算法原著：http://technology.chtsai.org/mmseg/
