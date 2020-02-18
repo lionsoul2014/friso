@@ -126,7 +126,7 @@ int main(int argc, char **argv)
         print("friso>> ");
         getLine( stdin, line );
         //exit the programe
-        if (strcasecmp( line, "quit" ) == 0) {
+        if (strcasecmp( line, "quit") == 0) {
             ___EXIT_INFO___
         }
 

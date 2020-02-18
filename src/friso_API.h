@@ -38,13 +38,12 @@ exit(1);
 #define println(str) printf("%s\n", str )
 
 /*
- * memory allocation macro definition.
- *         cause we should use emalloc,ecalloc .ege. in php.
- * so you could make it better apdat the php environment.
+ * memory allocation macro definition which make it more more convenient
+ * to change to use your favorite or a better memory manage library.
  */
-#define FRISO_CALLOC(_bytes, _blocks)     calloc(_bytes, _blocks)
-#define FRISO_MALLOC(_bytes)         malloc(_bytes)
-#define FRISO_FREE( _ptr )        free( _ptr )
+#define FRISO_CALLOC(_bytes, _blocks) calloc(_bytes, _blocks)
+#define FRISO_MALLOC(_bytes) malloc(_bytes)
+#define FRISO_FREE(_ptr) free( _ptr )
 
 typedef unsigned short ushort_t;
 typedef unsigned char uchar_t;
@@ -382,6 +381,8 @@ FRISO_API hash_entry_t hash_remove_mapping( friso_hash_t, fstring );
 /* }}} hashtable interface define :: end*/
 
 
+
+
 /* {{{ utf8 string interface define :: start*/
 
 /*
@@ -407,5 +408,5 @@ FRISO_API int unicode_to_utf8(uint_t, fstring);
 
 /* }}} utf8 string interface define :: start*/
 
-#endif /*end ifndef*/
 
+#endif /*end ifndef*/

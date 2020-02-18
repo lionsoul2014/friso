@@ -2,7 +2,7 @@
 # @Author	chenxin<chenxin619315@gmail.com>
 
 # Targets start here.
-all static share install clean:
+all testing static share install clean:
 	cd src && $(MAKE) $@
 
 # echo config parameters

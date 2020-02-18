@@ -421,10 +421,10 @@ __STATIC_API__ friso_lex_t get_lexicon_type_with_constant( fstring _key )
  * load the lexicon configuration file.
  *        and load all the valid lexicon from the configuration file.
  *
- * @param friso        friso instance
- * @param    config    friso_config instance
- * @param _path        dictionary directory
- * @param _limitts    words length limit    
+ * @param friso     friso instance
+ * @param config    friso_config instance
+ * @param _path     dictionary directory
+ * @param _limitts  words length limit    
  */
 FRISO_API void friso_dic_load_from_ifile( 
         friso_t friso, 

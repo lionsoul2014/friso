@@ -1,8 +1,9 @@
-help/
 *.o
 *.lo
 *.la
 *.so
+*.out
+src/*-testing
 # lib/ #
 CHANGES.txt
 # vim #

@@ -75,10 +75,21 @@ friso_GBK.o: friso_API.h friso_ctype.h friso_GBK.c
 clean:
 	find . -name \*.so | xargs rm -f
 	find . -name \*.o  | xargs rm -f
+	find . -name \*-testing  | xargs rm -f
 	@if [ -f friso ];\
 	    then\
 	    rm -f friso;\
 	fi
+
+testing: 
+	@echo -n "Try to make all the testing executable files ... \n"
+	$(CC) $(FFLAGS) friso_array.c tst-array.c -o array-testing
+	$(CC) $(FFLAGS) friso_hash.c tst-hash.c -o hash-testing
+	$(CC) $(FFLAGS) friso_link.c tst-link.c -o link-testing
+	$(CC) $(FFLAGS) friso_string.c tst-split.c -o split-testing
+	$(CC) $(FFLAGS) friso_string.c tst-split.c -o split-testing
+	$(CC) $(FFLAGS) friso_string.c friso_UTF8.c tst-string.c -o string-testing
+	$(CC) $(FFLAGS) friso.c friso_lexicon.c friso_string.c friso_array.c friso_hash.c friso_link.c friso_ctype.c friso_UTF8.c friso_GBK.c tst-lex.c -lm -o lex-testing
 
 #install friso
 install: friso
