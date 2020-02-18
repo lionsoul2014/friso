@@ -1,11 +1,10 @@
 /*
  * dynamatic array test program.
  *
- * @author    chenxin
- * @email    chenxin619315@gmail.com
+ * @author  lionsoul<chenxin619315@gmail.com>
  */
+
 #include "friso_API.h"
- 
 #include <stdio.h>
 #include <stdlib.h>
 

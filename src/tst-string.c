@@ -1,10 +1,10 @@
 /*
  * fstring handle mode test program.
  *
- * @author    chenxin <chenxin619315@gmail.com>
+ * @author  lionsoul<chenxin619315@gmail.com>
  */
-#include "friso_API.h"
 
+#include "friso_API.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,14 +19,19 @@ int main( int argc, char **args ) {
     printf("str=%s, length=%d\n", str, length );
 
 
-    for ( t = 0; t < length; t += bytes ) {
-    bytes = get_utf8_bytes( *(str + t) );
-    if ( bytes == 0 ) continue;
-    for ( j = 0; j < bytes; j++ )
-        word[j] = *(str + t + j );
-    word[j] = '\0';
-    string_buffer_append( sb, word );
-    printf("word=%s\n", word );
+    for (t = 0; t < length; t += bytes) {
+        bytes = get_utf8_bytes(*(str + t));
+        if ( bytes == 0 ) {
+            continue;
+        }
+
+        for ( j = 0; j < bytes; j++ ) {
+            word[j] = *(str + t + j );
+        }
+
+        word[j] = '\0';
+        string_buffer_append( sb, word );
+        printf("word=%s\n", word );
     }
 
     printf("length=%d, buffer=%s\n", sb->length, sb->buffer );

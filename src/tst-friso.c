@@ -5,8 +5,9 @@
  *     defferent threads/proccess use defferent friso_task_t.
  * and you could share the friso_config_t if you wish...
  *
- * @author chenxin <chenxin619315@gmail.com>
+ * @author lionsoul<chenxin619315@gmail.com>
  */
+
 #include "friso_API.h"
 #include "friso.h"
 
@@ -68,12 +69,13 @@ int main(int argc, char **argv)
     friso_config_t config;
     friso_task_t task;
 
-    //get the lexicon directory
+    // get the lexicon directory from command line arguments
     for ( i = 0; i < argc; i++ ) {
         if ( strcasecmp( "-init", argv[i] ) == 0 ) {
             __path__ = argv[i+1];
         }
     }
+
     if ( __path__ == NULL ) {
         println("Usage: friso -init lexicon path");
         exit(0);
@@ -82,7 +84,7 @@ int main(int argc, char **argv)
     s_time = clock();
 
     //initialize
-    friso = friso_new();
+    friso  = friso_new();
     config = friso_new_config();
     /*friso_dic_t dic = friso_dic_new();
       friso_dic_load_from_ifile( dic, __path__, __LENGTH__ );
@@ -124,7 +126,7 @@ int main(int argc, char **argv)
         print("friso>> ");
         getLine( stdin, line );
         //exit the programe
-        if ( strcasecmp( line, "quit" ) == 0 ) {
+        if (strcasecmp( line, "quit" ) == 0) {
             ___EXIT_INFO___
         }
 
@@ -135,9 +137,14 @@ int main(int argc, char **argv)
 
         s_time = clock();
         while ( ( config->next_token( friso, config, task ) ) != NULL ) {
-            //printf("%s[%d, %d, %d] ", task->token->word, 
-            //        task->token->offset, task->token->length, task->token->rlen );
-            printf("%s ", task->token->word );
+            // printf(
+            //     "%s[%d, %d, %d] ", 
+            //     task->token->word, 
+            //     task->token->offset, 
+            //     task->token->length, 
+            //     task->token->rlen
+            // );
+            printf("%s ", task->token->word);
         }
         //}
         e_time = clock();
@@ -145,13 +152,12 @@ int main(int argc, char **argv)
 
     }
 
-    friso_free_task( task );
+    friso_free_task(task);
 
     //error block.
 err:
     friso_free_config(config);
     friso_free(friso);
-    
 
     return 0;
 }
