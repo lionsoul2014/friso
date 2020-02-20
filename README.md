@@ -1,7 +1,7 @@
 # **Friso**是什么？
 
 Friso 是使用 c 语言开发的一款开源的高性能中文分词器，使用流行的mmseg算法实现。完全基于模块化设计和实现，可以很方便的植入其他程序中，
-例如：MySQL，PHP，源码无需修改就能在各种平台下编译使用，加载完 20 万的词条，内存占用稳定为 14.5M.
+例如：MySQL，PHP，并且提供了php5, php7, ocaml, lua的插件实现。源码无需修改就能在各种平台下编译使用，加载完 20 万的词条，内存占用稳定为 14.5M.
 
 
 # **Friso**核心功能：
@@ -94,6 +94,21 @@ make testing
 make
 ```
 备注：在Friso的src目录下即可得到friso.exe和friso.dll文件。
+
+
+
+
+# Friso插件安装
+
+Friso目前提供了对php5, php7, ocaml, lua的分词插件：
+
+语言 | binding | 作者 | 状态
+:-: | :-: | :-: | :-:
+php | [php5-binding](binding/php5) | dongyado&lt;dongyado@gmail.com&gt; | 已完成
+php | [php7-binding](binding/php7) | dongyado&lt;dongyado@gmail.com&gt; | 已完成
+ocaml | [ocaml-binding](binding/ocaml) | https://github.com/kandu | 已完成
+sphinx | [sphinx-binding](binding/sphinx) | lionsoul&lt;chenxin619315@gmail.com&gt; | 开发中
+lua | [lua-binding](binding/lua) | lionsoul&lt;chenxin619315@gmail.com&gt; | 开发中
 
 
 
