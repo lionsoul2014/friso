@@ -98,20 +98,6 @@ make
 
 
 
-# Friso插件安装
-
-Friso目前提供了对php5, php7, ocaml, lua的分词插件：
-
-语言 | binding | 作者 | 状态
-:-: | :-: | :-: | :-:
-php | [php5-binding](binding/php5) | dongyado&lt;dongyado@gmail.com&gt; | 已完成
-php | [php7-binding](binding/php7) | dongyado&lt;dongyado@gmail.com&gt; | 已完成
-ocaml | [ocaml-binding](binding/ocaml) | https://github.com/kandu | 已完成
-sphinx | [sphinx-binding](binding/sphinx) | lionsoul&lt;chenxin619315@gmail.com&gt; | 开发中
-lua | [lua-binding](binding/lua) | lionsoul&lt;chenxin619315@gmail.com&gt; | 开发中
-
-
-
 # Friso配置
 Friso 要做的配置工作很简单，找到 friso.ini 配置文件, 使用文本编辑器打开即可
 
@@ -193,6 +179,67 @@ friso.mode = 2
 1. friso.ini中 friso.lex_dir 指向friso依赖的词库目录, 修改其值为词库目录绝对地址, 并且必须以”/”结尾。例如：friso.lex_dir = /usr/lib/friso/dict/
 2. 词库分为UTF-8和GBK编码的，根据你使用的编码需要选择加载对应编码的词库。
 
+
+
+
+# Friso插件
+
+Friso目前提供了对php5, php7, ocaml, lua的分词插件：
+
+语言 | binding | 作者 | 状态
+:-: | :-: | :-: | :-:
+php | [php5-binding](binding/php5) | dongyado&lt;dongyado@gmail.com&gt; | 已完成
+php | [php7-binding](binding/php7) | dongyado&lt;dongyado@gmail.com&gt; | 已完成
+ocaml | [ocaml-binding](binding/ocaml) | https://github.com/kandu | 已完成
+sphinx | [sphinx-binding](binding/sphinx) | lionsoul&lt;chenxin619315@gmail.com&gt; | 开发中
+lua | [lua-binding](binding/lua) | lionsoul&lt;chenxin619315@gmail.com&gt; | 开发中
+
+
+
+# Friso分词接口
+
+### 一个完整的demo: 
+```c
+/* 第一步：申明三个对象 */
+friso_t friso;          /* Friso 分词对象 */
+friso_config_t config;  /* Friso 配置对象 */
+friso_task_t task;      /* Friso 任务对象 */
+
+/* 第二步：初始化相应的对象 */
+friso  = friso_new();
+config = friso_new_config();
+task   = friso_new_task();
+
+/* 从friso.ini配置文件中初始化 friso */
+if (friso_init_from_ifile(friso, config, "friso.ini文件地址") != 1) {
+    /* friso 初始化失败 */
+}
+
+/* 第三步：设置分词内容（） */
+friso_set_text(task, "分词的文本");
+
+/* 第四步：获取分词内容 */
+while (config->next_token(friso, config, task) != NULL) {
+    /* 
+      task存储了分词的结果，
+      task->token->word: 词条内容
+      task->token->offset: 词条在原始文本的offset
+      task->token->length: 词条的长度(字节数)
+      task->token->rlen: 词条的真正字节数(Friso转换后的长度-字节数)
+    */
+    printf("%s ", task->token->word);
+}
+
+
+/* 第五步：释放对象 */
+friso_free_task(task);
+friso_free_config(config);
+friso_free(friso);
+```
+
+### 备注：
+1. 第三步和第四步可以反复调用，使用friso_set_setx重置分词内容即可。
+2. 对于多线程环境，不同线程共享friso和config对象，需要分别初始化task使用对象。
 
 
 
