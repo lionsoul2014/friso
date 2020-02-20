@@ -215,7 +215,19 @@ if (friso_init_from_ifile(friso, config, "friso.ini文件地址") != 1) {
     /* friso 初始化失败 */
 }
 
-/* 第三步：设置分词内容（） */
+/*
+  切分模式默认来自friso.ini中的设置
+  可以通过friso_set_mode函数自定义切分模式(简易，复杂，检测模式)
+  简易模式：__FRISO_SIMPLE_MODE__
+  复杂模式：__FRISO_COMPLEX_MODE__
+  检测模式：__FRISO_DETECT_MODE__
+
+  例如，次数设置为使用复杂模式分词：
+*/
+friso_set_mode(config, __FRISO_COMPLEX_MODE__);
+
+
+/* 第三步：设置分词内容 */
 friso_set_text(task, "分词的文本");
 
 /* 第四步：获取分词内容 */
@@ -243,13 +255,158 @@ friso_free(friso);
 
 
 
+
+
+# Friso词库管理
+
+### 词库分类定义
+
+Friso 内部对词库进行了分类, 在管理词库前你需要先了解Friso的词库类别，分类整型值以及含义如下：
+
+```
+typedef enum {
+ __LEX_CJK_WORDS__ = 0,     // 普通 CJK 词库
+ __LEX_CJK_UNITS__ = 1,     // CJK 单位词库
+ __LEX_ECM_WORDS__ = 2,     // 英中混合词(例如: b 超)
+ __LEX_CEM_WORDS__ = 3,     // 中英混合词(例如: 卡拉 ok).
+ __LEX_CN_LNAME__  = 4,     // 中文姓氏
+ __LEX_CN_SNAME__  = 5,     // 中文单姓名词库
+ __LEX_CN_DNAME1__ = 6,     // 中文双姓名首字词库
+ __LEX_CN_DNAME2__ = 7,     // 中文双姓名尾字词库
+ __LEX_CN_LNA__ = 8,        // 中文姓氏修饰词词库
+ __LEX_STOPWORDS__ = 9,     // 停止词词库
+ __LEX_ENPUN_WORDS__ = 10,  // 英文和标点混合词库(例如: c++)
+ __LEX_OTHER_WORDS__ = 15,  // 无用
+ __LEX_NCSYN_WORDS__ = 16   // 无用
+} friso_lex_t;
+```
+
+### 词库配置文件
+
+词库目录下的 friso.lex.ini 配置文件存储了词库类别以及对应类别下的词库文件名称，是一对多的关系，默认的配置如下：
+```
+# main lexion
+__LEX_CJK_WORDS__ :[
+	lex-main.lex;
+	lex-admin.lex;
+	lex-chars.lex;
+	lex-cn-mz.lex;
+	lex-cn-place.lex;
+	lex-company.lex;
+	lex-festival.lex;
+	lex-flname.lex;
+	lex-food.lex;
+	lex-lang.lex;
+	lex-nation.lex;
+	lex-net.lex;
+	lex-org.lex;
+	lex-touris.lex;
+# add more here
+]
+# single chinese unit lexicon
+__LEX_CJK_UNITS__ :[
+	lex-units.lex;
+]
+# chinese and english mixed word lexicon like "b超".
+__LEX_ECM_WORDS__:[
+	lex-ecmixed.lex;
+]
+# english and chinese mixed word lexicon like "卡拉ok".
+__LEX_CEM_WORDS__:[
+	lex-cemixed.lex;
+]
+# chinese last name lexicon.
+__LEX_CN_LNAME__:[
+	lex-lname.lex;
+]
+# single name words lexicon.
+__LEX_CN_SNAME__:[
+	lex-sname.lex;
+]
+# first word of a double chinese name.
+__LEX_CN_DNAME1__:[
+	lex-dname-1.lex;
+]
+# second word of a double chinese name.
+__LEX_CN_DNAME2__:[
+	lex-dname-2.lex;
+]
+# chinese last name decorate word.
+__LEX_CN_LNA__:[
+	lex-ln-adorn.lex;
+]
+# stopwords lexicon
+__LEX_STOPWORDS__:[
+	lex-stopword.lex;
+]
+# english and punctuation mixed words lexicon.
+__LEX_ENPUN_WORDS__:[
+	lex-en-pun.lex;
+]
+# english words(for synonyms words)
+__LEX_EN_WORDS__:[
+	lex-en.lex;
+]
+```
+
+### 新增词库文件
+
+1. 确认类别：首先确认你要加入的词库文件的类别. 
+2. 新建词库：例如: 我想添加一个词库文件专门用来存储植物的名字, 在dict/下新建 lex-plants.lex文件, 然后按照一个词条一行的规则加入词条到该文件中.
+3. 启用词库：接下来还有一个重要的步骤就是将该词库归类到 friso.lex.ini 中去, 通常的词库都是 CJK 词库, 也就是将lex-plants.lex 作为一行加入到 __LEX_CJK_WORDS__ 类别下即可。
+
+```
+# main lexion
+__LEX_CJK_WORDS__ :[
+	lex-main.lex;
+	lex-admin.lex;
+	lex-chars.lex;
+	lex-cn-mz.lex;
+	lex-cn-place.lex;
+	lex-company.lex;
+	lex-festival.lex;
+	lex-flname.lex;
+	lex-food.lex;
+	lex-lang.lex;
+	lex-nation.lex;
+	lex-net.lex;
+	lex-org.lex;
+	lex-touris.lex;
+# 新增的植物名称词库
+    lex-plants.lex;
+# add more here
+]
+```
+
+### 给词库新增词条
+
+找到对应的词库文件, 使用文本编辑器打开, 将要加入的词条按照下面的格式作为一行加入即可(备注：加入前建议先确认下相同的词条不存在)。
+
+Friso 词库词条格式:
+
+```
+词条/同义词集合
+```
+
+同义词没有使用 null 代替, 多个同义词使用英文逗号隔开，例如：
+
+```
+你好/null
+研究/琢磨,研讨,钻研
+```
+
+
+
+
 # 相关附录
 
-### 1，参考文献：
+
+### 2，参考文献
+
 * 1，MMSEG算法原著：http://technology.chtsai.org/mmseg/
 
+### 3，技术交流分享
 
-### 2，技术交流分享
 * 1，旧版的参考pdf参考文献：请参考项目下的 friso-help-doc.pdf
 * 2，使用案例典范：[RediSearch~信息检索](https://github.com/RediSearch/RediSearch)
 * 3，NLP交流分享：微信：lionsoul2014(请备注Friso)，ＱＱ：1187582057(很少关注)
