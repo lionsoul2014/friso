@@ -20,15 +20,15 @@ Friso 是使用 c 语言开发的一款开源的高性能中文分词器，使�
 - [x] 检测模式：只返回词库中已有的词条，很适合某些应用场合。(1.6.1版本开始)。
 - [ ] 最多模式：细粒度切分，专为检索而生，除了中文处理外（不具备中文的人名，数字识别等智能功能）其他与复杂模式一致（英文，组合词等）。
 
-1. 同时支持对 UTF-8/GBK 编码的切分，支持 php5 和 php7 扩展和 sphinx token 插件。
-2. 支持自定义词库。在 dict 文件夹下，可以随便添加/删除/更改词库和词库词条，并且对词库进行了分类。
-3. 简体/繁体/简体混合支持, 可以方便的针对简体，繁体或者简繁体切分。同时还可以以此实现简繁体的相互检索。
-4. 支持中英/英中混合词的识别(维护词库可以识别任何一种组合)。例如：卡拉ok, 漂亮mm, c语言，IC卡，哆啦a梦。
-5. 很好的英文支持，英文标点组合词识别, 例如c++, c#, 电子邮件，网址，小数，百分数。
-6. 自定义保留标点：你可以自定义保留在切分结果中的标点，这样可以识别出一些复杂的组合，例如：c++, k&r，code.google.com。
-7. 复杂英文切分的二次切分：默认 Friso 会保留数字和字母的原组合，开启此功能，可以进行二次切分提高检索的命中率。例如：qq2013会被切分成：qq/ 2013/ qq2013。
-8. 支持阿拉伯数字/小数基本单字单位的识别，例如2012年，1.75米，5吨，120斤，38.6℃。
-9. 自动英文圆角/半角，大写/小写转换。
+01. 同时支持对 UTF-8/GBK 编码的切分，支持 php5 和 php7 扩展和 sphinx token 插件。
+02. 支持自定义词库。在 dict 文件夹下，可以随便添加/删除/更改词库和词库词条，并且对词库进行了分类。
+03. 简体/繁体/简体混合支持, 可以方便的针对简体，繁体或者简繁体切分。同时还可以以此实现简繁体的相互检索。
+04. 支持中英/英中混合词的识别(维护词库可以识别任何一种组合)。例如：卡拉ok, 漂亮mm, c语言，IC卡，哆啦a梦。
+05. 很好的英文支持，英文标点组合词识别, 例如c++, c#, 电子邮件，网址，小数，百分数。
+06. 自定义保留标点：你可以自定义保留在切分结果中的标点，这样可以识别出一些复杂的组合，例如：c++, k&r，code.google.com。
+07. 复杂英文切分的二次切分：默认 Friso 会保留数字和字母的原组合，开启此功能，可以进行二次切分提高检索的命中率。例如：qq2013会被切分成：qq/ 2013/ qq2013。
+08. 支持阿拉伯数字/小数基本单字单位的识别，例如2012年，1.75米，5吨，120斤，38.6℃。
+09. 自动英文圆角/半角，大写/小写转换。
 10. 同义词匹配：自动中文/英文同义词追加. (需要在 friso.ini 中开启 friso.add_syn 选项)。
 11. 自动中英文停止词过滤。(需要在 friso.ini 中开启 friso.clr_stw 选项)。
 12. 多配置支持, 安全的应用于多进程/多线程环境。
@@ -216,13 +216,12 @@ if (friso_init_from_ifile(friso, config, "friso.ini文件地址") != 1) {
 }
 
 /*
-  切分模式默认来自friso.ini中的设置
-  可以通过friso_set_mode函数自定义切分模式(简易，复杂，检测模式)
-  简易模式：__FRISO_SIMPLE_MODE__
-  复杂模式：__FRISO_COMPLEX_MODE__
-  检测模式：__FRISO_DETECT_MODE__
-
-  例如，次数设置为使用复杂模式分词：
+ * 切分模式默认来自friso.ini中的设置
+ * 可以通过friso_set_mode函数自定义切分模式(简易，复杂，检测模式)
+ * 简易模式：__FRISO_SIMPLE_MODE__
+ * 复杂模式：__FRISO_COMPLEX_MODE__
+ * 检测模式：__FRISO_DETECT_MODE__
+ * 例如，这里设置为使用复杂模式分词：
 */
 friso_set_mode(config, __FRISO_COMPLEX_MODE__);
 
@@ -287,65 +286,65 @@ typedef enum {
 ```
 # main lexion
 __LEX_CJK_WORDS__ :[
-	lex-main.lex;
-	lex-admin.lex;
-	lex-chars.lex;
-	lex-cn-mz.lex;
-	lex-cn-place.lex;
-	lex-company.lex;
-	lex-festival.lex;
-	lex-flname.lex;
-	lex-food.lex;
-	lex-lang.lex;
-	lex-nation.lex;
-	lex-net.lex;
-	lex-org.lex;
-	lex-touris.lex;
+    lex-main.lex;
+    lex-admin.lex;
+    lex-chars.lex;
+    lex-cn-mz.lex;
+    lex-cn-place.lex;
+    lex-company.lex;
+    lex-festival.lex;
+    lex-flname.lex;
+    lex-food.lex;
+    lex-lang.lex;
+    lex-nation.lex;
+    lex-net.lex;
+    lex-org.lex;
+    lex-touris.lex;
 # add more here
 ]
 # single chinese unit lexicon
 __LEX_CJK_UNITS__ :[
-	lex-units.lex;
+    lex-units.lex;
 ]
 # chinese and english mixed word lexicon like "b超".
 __LEX_ECM_WORDS__:[
-	lex-ecmixed.lex;
+    lex-ecmixed.lex;
 ]
 # english and chinese mixed word lexicon like "卡拉ok".
 __LEX_CEM_WORDS__:[
-	lex-cemixed.lex;
+    lex-cemixed.lex;
 ]
 # chinese last name lexicon.
 __LEX_CN_LNAME__:[
-	lex-lname.lex;
+    lex-lname.lex;
 ]
 # single name words lexicon.
 __LEX_CN_SNAME__:[
-	lex-sname.lex;
+    lex-sname.lex;
 ]
 # first word of a double chinese name.
 __LEX_CN_DNAME1__:[
-	lex-dname-1.lex;
+    lex-dname-1.lex;
 ]
 # second word of a double chinese name.
 __LEX_CN_DNAME2__:[
-	lex-dname-2.lex;
+    lex-dname-2.lex;
 ]
 # chinese last name decorate word.
 __LEX_CN_LNA__:[
-	lex-ln-adorn.lex;
+    lex-ln-adorn.lex;
 ]
 # stopwords lexicon
 __LEX_STOPWORDS__:[
-	lex-stopword.lex;
+    lex-stopword.lex;
 ]
 # english and punctuation mixed words lexicon.
 __LEX_ENPUN_WORDS__:[
-	lex-en-pun.lex;
+    lex-en-pun.lex;
 ]
 # english words(for synonyms words)
 __LEX_EN_WORDS__:[
-	lex-en.lex;
+    lex-en.lex;
 ]
 ```
 
@@ -358,20 +357,20 @@ __LEX_EN_WORDS__:[
 ```
 # main lexion
 __LEX_CJK_WORDS__ :[
-	lex-main.lex;
-	lex-admin.lex;
-	lex-chars.lex;
-	lex-cn-mz.lex;
-	lex-cn-place.lex;
-	lex-company.lex;
-	lex-festival.lex;
-	lex-flname.lex;
-	lex-food.lex;
-	lex-lang.lex;
-	lex-nation.lex;
-	lex-net.lex;
-	lex-org.lex;
-	lex-touris.lex;
+    lex-main.lex;
+    lex-admin.lex;
+    lex-chars.lex;
+    lex-cn-mz.lex;
+    lex-cn-place.lex;
+    lex-company.lex;
+    lex-festival.lex;
+    lex-flname.lex;
+    lex-food.lex;
+    lex-lang.lex;
+    lex-nation.lex;
+    lex-net.lex;
+    lex-org.lex;
+    lex-touris.lex;
 # 新增的植物名称词库
     lex-plants.lex;
 # add more here
