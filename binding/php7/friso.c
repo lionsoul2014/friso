@@ -119,12 +119,12 @@ static void php_friso_globals_destruct(zend_friso_globals *friso_globals)
 }
 /* }}} */
 
-#define FRISO_RET_WORD        (1 << 0)
-#define FRISO_RET_TYPE        (1 << 1)
-#define FRISO_RET_OFF        (1 << 2)
-#define FRISO_RET_LEN         (1 << 3)
-#define FRISO_RET_RLEN        (1 << 4)
-#define FRISO_RET_POS        (1 << 5)
+#define FRISO_RET_WORD  (1 << 0)
+#define FRISO_RET_TYPE  (1 << 1)
+#define FRISO_RET_OFF   (1 << 2)
+#define FRISO_RET_LEN   (1 << 3)
+#define FRISO_RET_RLEN  (1 << 4)
+#define FRISO_RET_POS   (1 << 5)
 
 
 /* {{{ PHP_MINIT_FUNCTION
@@ -132,32 +132,31 @@ static void php_friso_globals_destruct(zend_friso_globals *friso_globals)
 PHP_MINIT_FUNCTION(friso)
 {
     /*
-     * register some contants that robbe may use
-     *        at its following work.
+     * register some contants that robbe may use at its following work.
      *    the constant is case sensitive and persitent.
      */
-    REGISTER_LONG_CONSTANT("FRISO_SIMPLE",        __FRISO_SIMPLE_MODE__, CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("FRISO_COMPLEX",        __FRISO_COMPLEX_MODE__, CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("FRISO_DETECT",        __FRISO_DETECT_MODE__, CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("FRISO_LEX_CJK",        __LEX_CJK_WORDS__, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("FRISO_SIMPLE",      __FRISO_SIMPLE_MODE__, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("FRISO_COMPLEX",     __FRISO_COMPLEX_MODE__, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("FRISO_DETECT",      __FRISO_DETECT_MODE__, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("FRISO_LEX_CJK",     __LEX_CJK_WORDS__, CONST_CS | CONST_PERSISTENT);
     REGISTER_LONG_CONSTANT("FRISO_LEX_STOP",    __LEX_STOPWORDS__, CONST_CS | CONST_PERSISTENT);
 
     //return parts for rb_split.
-    REGISTER_LONG_CONSTANT("FRISO_RET_WORD",     FRISO_RET_WORD, CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("FRISO_RET_TYPE",     FRISO_RET_TYPE, CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("FRISO_RET_OFF",        FRISO_RET_OFF, CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("FRISO_RET_LEN",        FRISO_RET_LEN, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("FRISO_RET_WORD",    FRISO_RET_WORD, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("FRISO_RET_TYPE",    FRISO_RET_TYPE, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("FRISO_RET_OFF",     FRISO_RET_OFF, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("FRISO_RET_LEN",     FRISO_RET_LEN, CONST_CS | CONST_PERSISTENT);
     REGISTER_LONG_CONSTANT("FRISO_RET_RLEN",    FRISO_RET_RLEN, CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("FRISO_RET_POS",      FRISO_RET_POS, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("FRISO_RET_POS",     FRISO_RET_POS, CONST_CS | CONST_PERSISTENT);
 
     //lex type constants.
-    REGISTER_LONG_CONSTANT("FRISO_TYP_CJK",      __LEX_CJK_WORDS__, CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("FRISO_TYP_ECM",      __LEX_ECM_WORDS__, CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("FRISO_TYP_CEM",      __LEX_CEM_WORDS__, CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("FRISO_TYP_EPUN",      __LEX_ENPUN_WORDS__, CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("FRISO_TYP_PUN",      __LEX_OTHER_WORDS__, CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("FRISO_TYP_UNK",      __LEX_UNKNOW_WORDS__, CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("FRISO_TYP_OTR",      __LEX_OTHER_WORDS__, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("FRISO_TYP_CJK",     __LEX_CJK_WORDS__, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("FRISO_TYP_ECM",     __LEX_ECM_WORDS__, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("FRISO_TYP_CEM",     __LEX_CEM_WORDS__, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("FRISO_TYP_EPUN",    __LEX_ENPUN_WORDS__, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("FRISO_TYP_PUN",     __LEX_OTHER_WORDS__, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("FRISO_TYP_UNK",     __LEX_UNKNOW_WORDS__, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("FRISO_TYP_OTR",     __LEX_OTHER_WORDS__, CONST_CS | CONST_PERSISTENT);
 
     REGISTER_INI_ENTRIES();
     /*initialize the globals variables.*/
@@ -207,7 +206,7 @@ PHP_MINFO_FUNCTION(friso)
     php_info_print_table_start();
     php_info_print_table_row(2, "Friso Support", "enabled");
     php_info_print_table_row(2, "Version", FRISO_VERSION);
-    php_info_print_table_row(2, "Bug Report", "dongyado@gmail.com");
+    php_info_print_table_row(2, "Bug Report", "dongyado&lt;dongyado@gmail.com&gt;,lionsoul&lt;chenxin619315@gmail.com&gt;");
     php_info_print_table_row(2, "Home page", "https://github.com/lionsoul2014/friso");
     php_info_print_table_end();
 
@@ -236,18 +235,17 @@ PHP_FUNCTION(friso_split)
 
     //get the arugments from the php layer.
     arg_count = ZEND_NUM_ARGS();
-    switch ( arg_count )
-    {
-        case 2:
-            if ( zend_parse_parameters(arg_count TSRMLS_CC, "sz",
-                 &_str, &slen, &cfg) == FAILURE ) return;
-            break;
-        case 3:
-            if (zend_parse_parameters( arg_count TSRMLS_CC, "szl",
-                 &_str, &slen, &cfg, &rargs) == FAILURE ) return;
-            break;
-        default:
-            WRONG_PARAM_COUNT;
+    switch ( arg_count ) {
+    case 2:
+        if ( zend_parse_parameters(arg_count TSRMLS_CC, "sz",
+             &_str, &slen, &cfg) == FAILURE ) return;
+        break;
+    case 3:
+        if (zend_parse_parameters( arg_count TSRMLS_CC, "szl",
+             &_str, &slen, &cfg, &rargs) == FAILURE ) return;
+        break;
+    default:
+        WRONG_PARAM_COUNT;
     }
 
 
@@ -257,18 +255,14 @@ PHP_FUNCTION(friso_split)
     friso_config_t config = NULL, nconfig = NULL;
 
     //check and initialize the friso.
-    if ( Z_TYPE_P(cfg) != IS_NULL )
-    {
+    if ( Z_TYPE_P(cfg) != IS_NULL ) {
         nconfig = friso_new_config();
         memcpy(nconfig, friso_globals.config, sizeof(friso_config_entry));
 
         //check the new setting.
         cfgArr = Z_ARRVAL_P(cfg);
-
-		ZEND_HASH_FOREACH_KEY_VAL(cfgArr, num_key, key, setting)
-		{
-            if ( strcmp(ZSTR_VAL(key), "kpuncs") == 0 )
-            {
+		ZEND_HASH_FOREACH_KEY_VAL(cfgArr, num_key, key, setting) {
+            if ( strcmp(ZSTR_VAL(key), "kpuncs") == 0 ) {
 				// memcpy(nconfig->kpuncs, val->value.str->val, val->value.str->len);
                 memcpy(nconfig->kpuncs, Z_STRVAL_P(setting), Z_STRLEN_P(setting));
 				nconfig->kpuncs[Z_STRLEN_P(setting)] = '\0';
@@ -281,41 +275,29 @@ PHP_FUNCTION(friso_split)
                 //convert_to_long_ex(val);
                 if ( strcmp(ZSTR_VAL(key), "max_len") == 0 )
                     nconfig->max_len = (ushort_t) Z_LVAL_P(setting);
-
-               else if ( strcmp(ZSTR_VAL(key), "r_name") == 0 )
-                    nconfig->r_name = (ushort_t) Z_LVAL_P(setting);
-
-               else if ( strcmp(ZSTR_VAL(key), "mix_len") == 0 )
-                   nconfig->mix_len = (ushort_t) Z_LVAL_P(setting);
-
-               else if ( strcmp(ZSTR_VAL(key), "lna_len") == 0 )
-                   nconfig->lna_len = (ushort_t) Z_LVAL_P(setting);
-
-               else if ( strcmp(ZSTR_VAL(key), "add_syn") == 0 )
-                   nconfig->add_syn = (ushort_t) Z_LVAL_P(setting);
-
-               else if ( strcmp(ZSTR_VAL(key), "clr_stw") == 0 )
-                   nconfig->clr_stw = (ushort_t) Z_LVAL_P(setting);
-
-               else if ( strcmp(ZSTR_VAL(key), "add_syn") == 0 )
-                   nconfig->add_syn = (ushort_t) Z_LVAL_P(setting);
-
-               else if ( strcmp(ZSTR_VAL(key), "keep_urec") == 0 )
-                   nconfig->keep_urec = (ushort_t) Z_LVAL_P(setting);
-
-               else if ( strcmp(ZSTR_VAL(key), "spx_out") == 0 )
-                   nconfig->spx_out = (ushort_t) Z_LVAL_P(setting);
-
-               else if ( strcmp(ZSTR_VAL(key), "nthreshold") == 0 )
-                   nconfig->nthreshold = (uint_t) Z_LVAL_P(setting);
-
-               else if ( strcmp(ZSTR_VAL(key), "mode") == 0 )
-                   friso_set_mode(nconfig, (friso_mode_t)(Z_LVAL_P(setting)));
-
-               else if ( strcmp(ZSTR_VAL(key), "en_sseg") == 0 )
-                   nconfig->en_sseg = (ushort_t) Z_LVAL_P(setting);
-
-               else if ( strcmp(ZSTR_VAL(key), "st_minl") == 0)
+                else if ( strcmp(ZSTR_VAL(key), "r_name") == 0 )
+                     nconfig->r_name = (ushort_t) Z_LVAL_P(setting);
+                else if ( strcmp(ZSTR_VAL(key), "mix_len") == 0 )
+                    nconfig->mix_len = (ushort_t) Z_LVAL_P(setting);
+                else if ( strcmp(ZSTR_VAL(key), "lna_len") == 0 )
+                    nconfig->lna_len = (ushort_t) Z_LVAL_P(setting);
+                else if ( strcmp(ZSTR_VAL(key), "add_syn") == 0 )
+                    nconfig->add_syn = (ushort_t) Z_LVAL_P(setting);
+                else if ( strcmp(ZSTR_VAL(key), "clr_stw") == 0 )
+                    nconfig->clr_stw = (ushort_t) Z_LVAL_P(setting);
+                else if ( strcmp(ZSTR_VAL(key), "add_syn") == 0 )
+                    nconfig->add_syn = (ushort_t) Z_LVAL_P(setting);
+                else if ( strcmp(ZSTR_VAL(key), "keep_urec") == 0 )
+                    nconfig->keep_urec = (ushort_t) Z_LVAL_P(setting);
+                else if ( strcmp(ZSTR_VAL(key), "spx_out") == 0 )
+                    nconfig->spx_out = (ushort_t) Z_LVAL_P(setting);
+                else if ( strcmp(ZSTR_VAL(key), "nthreshold") == 0 )
+                    nconfig->nthreshold = (uint_t) Z_LVAL_P(setting);
+                else if ( strcmp(ZSTR_VAL(key), "mode") == 0 )
+                    friso_set_mode(nconfig, (friso_mode_t)(Z_LVAL_P(setting)));
+                else if ( strcmp(ZSTR_VAL(key), "en_sseg") == 0 )
+                    nconfig->en_sseg = (ushort_t) Z_LVAL_P(setting);
+                else if ( strcmp(ZSTR_VAL(key), "st_minl") == 0)
                    nconfig->st_minl = (ushort_t) Z_LVAL_P(setting);
             }
 		} ZEND_HASH_FOREACH_END();
@@ -339,8 +321,7 @@ PHP_FUNCTION(friso_split)
         RETURN_BOOL(0);
 	}
 
-    while ( config->next_token( friso_globals.friso, config, task ) != NULL )
-    {
+    while ( config->next_token( friso_globals.friso, config, task ) != NULL ) {
         array_init(&item);
         add_assoc_string(&item, "word", task->token->word);
 
