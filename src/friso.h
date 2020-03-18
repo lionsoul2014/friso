@@ -12,7 +12,7 @@
 #include <stdio.h>
 
 /* {{{ friso main interface define :: start*/
-#define FRISO_VERSION "1.6.2"
+#define FRISO_VERSION "1.6.4"
 #define friso_version() FRISO_VERSION
 
 
