@@ -100,7 +100,7 @@ __STATIC_API__ link_node_t get_node(
     link_node_t p = NULL;
     register uint_t t;
 
-    if ( idx >= 0 && idx < link->size ) 
+    if ( idx < link->size ) 
     {
         if ( idx < link->size / 2 ) {        //find from the head.
             p = link->head;
