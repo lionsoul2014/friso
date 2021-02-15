@@ -1,0 +1,17 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+bindir=@bindir@
+sbindir=@sbindir@
+libdir=@libdir@
+includedir=@includedir@
+datarootdir=@datarootdir@
+datadir=@datadir@
+friso=${bindir}/friso@EXEEXT@
+friso_init=${datadir}/friso/friso.ini
+
+Version: @VERSION@
+Name: Friso
+Description: Chinese word segmenter library
+Version: @VERSION@
+Libs: -L${libdir} -lfriso
+Cflags: -I${includedir}/friso
