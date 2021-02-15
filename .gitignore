@@ -13,3 +13,13 @@ CHANGES.txt
 *.viminfo
 .libs/
 .idea/
+
+# About the autotools
+m4/
+*.m4
+autom4te.cache/
+config.h.in
+*.log
+*.status
+config/
+configure
