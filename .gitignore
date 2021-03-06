@@ -23,3 +23,10 @@ config.h.in
 *.status
 config/
 configure
+Makefile
+*.in
+stamp-h1
+config.h
+*.pc
+libtool
+.deps

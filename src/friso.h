@@ -1,6 +1,5 @@
 /*
  * main interface file for friso tokenizer.
- * you could modify it and re-release and free for commercial use.
  * 
  * @author  lionsoul<chenxin619315@gmail.com>
  */

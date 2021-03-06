@@ -1,8 +1,7 @@
 #############################################################
-# friso chinese word segmentation makefile.		    #
-#		do not use it for commercial use.	    #
-# @author	lionsoul 				    #
-# @email	chenxin619315@gmail.com   		    #
+# friso chinese word segmentation makefile.		            #
+# @author	lionsoul 				                        #
+# @email	chenxin619315@gmail.com   		                #
 #############################################################
 
 bin_PROGRAMS = friso
