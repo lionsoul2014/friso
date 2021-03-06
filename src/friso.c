@@ -298,7 +298,7 @@ FRISO_API friso_task_t friso_new_task()
 /* {{{ free the specified task*/
 FRISO_API void friso_free_task( friso_task_t task ) 
 {
-    //free the allocation of the poll link list.
+    //free the allocation of the pool link list.
     if ( task->pool != NULL ) {
         free_link_list( task->pool );
     }
@@ -341,7 +341,7 @@ FRISO_API friso_token_t friso_new_token( void )
 /* {{{ set the text of the current segmentation.
  *        that means we could re-use the segment.
  *    also we have to reset the idx and the length of the segmentation.
- * and the most important one - clear the poll link list.
+ * and the most important one - clear the pool link list.
  */
 FRISO_API void friso_set_text( 
         friso_task_t task, fstring text ) 
@@ -349,7 +349,7 @@ FRISO_API void friso_set_text(
     task->text = text;
     task->idx = 0;                                    //reset the index
     task->length = strlen( text );
-    task->pool = link_list_clear( task->pool );        //clear the word poll
+    task->pool = link_list_clear( task->pool );        //clear the word pool
     string_buffer_clear( task->sbuf );                //crear the string buffer.
 }
 /* }}} */
@@ -1376,9 +1376,9 @@ FRISO_API friso_token_t next_mmseg_token(
     /* {{{ task word pool check */
     if ( ! link_list_empty( task->pool ) ) {
         /*
-         * load word from the word poll if it is not empty.
+         * load word from the word pool if it is not empty.
          *  this will make the next word more convenient and efficient.
-         *     often synonyms, newly created word will be stored in the poll.
+         *     often synonyms, newly created word will be stored in the pool.
          */
         lex = ( lex_entry_t ) link_list_remove_first( task->pool );
         memcpy(task->token->word, lex->word, lex->length);
@@ -1716,9 +1716,9 @@ FRISO_API friso_token_t next_detect_token(
     /* {{{ task word pool check */
     if ( ! link_list_empty( task->pool ) ) {
         /*
-         * load word from the word poll if it is not empty.
+         * load word from the word pool if it is not empty.
          *  this will make the next word more convenient and efficient.
-         *     often synonyms, newly created word will be stored in the poll.
+         *     often synonyms, newly created word will be stored in the pool.
          */
         lex = ( lex_entry_t ) link_list_remove_first( task->pool );
         memcpy(task->token->word, lex->word, lex->length);
