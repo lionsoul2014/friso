@@ -24,7 +24,7 @@ break;
 
 #define ___ABOUT___                    \
     println("+---------------------------------------------------------------+");    \
-    println("| Friso - a Chinese word segmentation writen by c.              |");    \
+    println("| Friso - a Chinese word segmentation written by c.             |");    \
     println("| bug report email - chenxin619315@gmail.com.                   |");    \
     println("| or: visit https://github.com/lionsoul2014/friso.              |");    \
     println("|     java version for https://github.com/lionsoul2014/jcseg    |");    \
