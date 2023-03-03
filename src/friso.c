@@ -180,6 +180,9 @@ FRISO_API int friso_init_from_ifile(
 
             friso->dic = friso_dic_new();
             //add charset check for max word length counting
+#ifdef FRISO_WINNT
+            lexpath[strlen(lexpath)-2] = 0;
+#endif
             friso_dic_load_from_ifile( friso, config, 
                     lexpath, config->max_len * (friso->charset == FRISO_UTF8 ? 3 : 2) );
         } else {
