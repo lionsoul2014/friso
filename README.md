@@ -410,4 +410,4 @@ Friso 词库词条格式:
 
 1. 旧版的参考pdf参考文献：请参考项目下的 friso-help-doc.pdf
 2. 使用案例典范：[RediSearch~信息检索](https://github.com/RediSearch/RediSearch)
-3. NLP交流分享：微信：lionsoul2014(请备注Friso)，ＱＱ：1187582057(很少关注)
+3. NLP博客分享：微信公众号：lionsoul-org(狮子的魂)
